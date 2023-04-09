@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:jayandra_01/screens/add_device_screen.dart';
+import 'package:jayandra_01/screens/bottom_bar.dart';
+import 'package:jayandra_01/screens/main_screen.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
+  static const String title = "Jayandra";
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.black),
+    );
+    return MaterialApp.router(
+      routerDelegate: _router.routerDelegate,
+      routeInformationParser: _router.routeInformationParser,
+      routeInformationProvider: _router.routeInformationProvider,
+      debugShowCheckedModeBanner: false,
+    );
+  }
+
+  final GoRouter _router = GoRouter(
+    routes: <GoRoute>[
+      GoRoute(
+        path: "/",
+        builder: (BuildContext context, GoRouterState state) =>
+            const MainScreen(),
+        routes: <GoRoute>[
+          GoRoute(
+            path: "page2",
+            name: "add_device",
+            builder: (BuildContext context, GoRouterState state) =>
+                const AddDevice(),
+          ),
+        ],
+      ),
+    ],
+  );
+}
