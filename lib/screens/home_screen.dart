@@ -71,11 +71,23 @@ class HomeScreen extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                SocketView(
-                  socketIcon: Icons.bed,
-                  status: false,
-                  socketName: "Kamar Adik",
+                TerminalView(
+                  terminalIcon: Icons.bed,
+                  terminalName: "Kamar Adik",
                   activeSocket: 3,
+                  terminalStatus: true,
+                ),
+                TerminalView(
+                  terminalIcon: Icons.soup_kitchen_rounded,
+                  terminalName: "Dapur",
+                  activeSocket: 3,
+                  terminalStatus: false,
+                ),
+                TerminalView(
+                  terminalIcon: Icons.family_restroom_rounded,
+                  terminalName: "Ruang Keluarga",
+                  activeSocket: 3,
+                  terminalStatus: true,
                 ),
               ],
             ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/widget/list_tile_view.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -18,11 +19,17 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // ===================================
+                // Page Title
+                // ===================================
                 Text(
                   "Profil",
                   style: Styles.headingStyle1,
                 ),
                 const Gap(32),
+                // ===================================
+                // User Profile
+                // ===================================
                 Container(
                   decoration: BoxDecoration(
                       color: Styles.secondaryColor,
@@ -51,6 +58,9 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 const Gap(16),
+                // ===================================
+                // Account Section
+                // ===================================
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -66,37 +76,22 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      ListTile(
-                        leading: Icon(
-                          Icons.money,
-                          color: Styles.textColor3,
-                        ),
-                        title: Text(
-                          "Golongan Listrik",
-                          style: Styles.title,
-                        ),
-                        trailing: Icon(
-                          Icons.keyboard_arrow_right_rounded,
-                          color: Styles.textColor3,
-                        ),
+                      CustomListTile(
+                        icon: Icons.money,
+                        title: "Golongan Listrik",
+                        onTap: () {},
                       ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.logout_rounded,
-                          color: Styles.textColor3,
-                        ),
-                        title: Text(
-                          "Keluar",
-                          style: Styles.title,
-                        ),
-                        trailing: Icon(
-                          Icons.keyboard_arrow_right_rounded,
-                          color: Styles.textColor3,
-                        ),
+                      CustomListTile(
+                        icon: Icons.logout_rounded,
+                        title: "Keluar",
+                        onTap: () {},
                       ),
                     ],
                   ),
                 ),
+                // ===================================
+                // Other section
+                // ===================================
                 const Gap(16),
                 Align(
                   alignment: Alignment.topLeft,
@@ -113,19 +108,10 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      ListTile(
-                        leading: Icon(
-                          Icons.info_outline_rounded,
-                          color: Styles.textColor3,
-                        ),
-                        title: Text(
-                          "Tentang Aplikasi",
-                          style: Styles.title,
-                        ),
-                        trailing: Icon(
-                          Icons.keyboard_arrow_right_rounded,
-                          color: Styles.textColor3,
-                        ),
+                      CustomListTile(
+                        icon: Icons.info_outline_rounded,
+                        title: "Tentang Aplikasi",
+                        onTap: () {},
                       ),
                     ],
                   ),

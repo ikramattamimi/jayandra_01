@@ -1,25 +1,62 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
-class SocketView extends StatelessWidget {
-  const SocketView(
+class TerminalView extends StatefulWidget {
+  const TerminalView(
       {super.key,
-      required this.socketIcon,
-      required this.socketName,
-      required this.status,
-      required this.activeSocket});
-  final IconData socketIcon;
-  final String socketName;
-  final bool status;
+      required this.terminalIcon,
+      required this.terminalName,
+      required this.activeSocket,
+      required this.terminalStatus});
+  final IconData terminalIcon;
+  final String terminalName;
   final int activeSocket;
+  final bool terminalStatus;
+
+  @override
+  State<TerminalView> createState() => _TerminalViewState();
+}
+
+class _TerminalViewState extends State<TerminalView> {
+  late bool _toggleStatus;
+  late IconData _toggleIcon;
+  late Color _toggleColor;
+  late String _activeSocket;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _toggleStatus = widget.terminalStatus;
+    getTogglesStatus();
+  }
+
+  void getTogglesStatus() {
+    if (_toggleStatus == true) {
+      _activeSocket = "${widget.activeSocket} Socket Aktif";
+      _toggleStatus = false;
+      _toggleIcon = Icons.toggle_on;
+      _toggleColor = Styles.accentColor;
+    } else {
+      _activeSocket = "Nonaktif";
+      _toggleStatus = true;
+      _toggleIcon = Icons.toggle_off;
+      _toggleColor = Styles.textColor3;
+    }
+  }
+
+  void setToggle() {
+    setState(() {
+      getTogglesStatus();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = AppLayout.getSize(context);
+    // final size = AppLayout.getSize(context);
     return SizedBox(
-      width: size.width / 2.2,
+      width: 170,
       height: 140,
       child: Container(
         margin: const EdgeInsets.only(
@@ -37,70 +74,45 @@ class SocketView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ===================================
+            // Icon dan Toggle
+            // ===================================
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
-                  socketIcon,
+                  widget.terminalIcon,
                   size: 30,
                 ),
-                SocketTogleIcon()
+                IconButton(
+                  onPressed: setToggle,
+                  icon: Icon(
+                    _toggleIcon,
+                    color: _toggleColor,
+                    size: 40,
+                  ),
+                )
               ],
             ),
+            // ===================================
+            // Nama terminal dan status socket
+            // ===================================
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  socketName,
+                  widget.terminalName,
                   style: Styles.title,
                 ),
                 Text(
-                  'Socket Aktif',
+                  '${_activeSocket}',
                   style: Styles.bodyTextGrey3,
                 ),
               ],
             )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class SocketTogleIcon extends StatefulWidget {
-  const SocketTogleIcon({super.key});
-
-  @override
-  State<SocketTogleIcon> createState() => _SocketTogleIconState();
-}
-
-class _SocketTogleIconState extends State<SocketTogleIcon> {
-  bool status = false;
-  IconData icon = Icons.toggle_off;
-  Color color = Styles.textColor3;
-
-  void setToggle() {
-    setState(() {
-      if (status == true) {
-        status = false;
-        icon = Icons.toggle_on;
-        color = Styles.accentColor;
-      } else {
-        status = true;
-        icon = Icons.toggle_off;
-        color = Styles.textColor3;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: setToggle,
-      icon: Icon(
-        icon,
-        color: color,
-        size: 40,
       ),
     );
   }

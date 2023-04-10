@@ -40,7 +40,7 @@ class ReportView extends StatelessWidget {
                         Radius.circular(20),
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       vertical: 3,
                       horizontal: 8,
                     ),
