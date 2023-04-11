@@ -111,7 +111,9 @@ class ProfileScreen extends StatelessWidget {
                       CustomListTile(
                         icon: Icons.info_outline_rounded,
                         title: "Tentang Aplikasi",
-                        onTap: () {},
+                        onTap: () {
+                          context.goNamed("about_page");
+                        },
                       ),
                     ],
                   ),

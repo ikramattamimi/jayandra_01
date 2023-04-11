@@ -1,5 +1,6 @@
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jayandra_01/screens/home_screen.dart';
 import 'package:jayandra_01/screens/profile_screen.dart';
@@ -29,6 +30,13 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Styles.primaryColor,
+        statusBarIconBrightness: Brightness.dark,
+        // statusBarBrightness: Brightness.light,
+      ),
+    );
     return Scaffold(
       body: Center(
         child: _widgetoptions[_selectedIndex],

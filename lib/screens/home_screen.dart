@@ -2,7 +2,7 @@ import 'package:carbon_icons/carbon_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/screens/report_view.dart';
-import 'package:jayandra_01/widget/socket_view.dart';
+import 'package:jayandra_01/widget/terminal_view.dart';
 import '../utils/app_styles.dart';
 import 'package:flutter/material.dart';
 

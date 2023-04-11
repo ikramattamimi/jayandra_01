@@ -108,4 +108,10 @@ class Styles {
     color: accentColor,
     fontWeight: FontWeight.w700,
   );
+
+  static TextStyle pageTitle = TextStyle(
+    fontSize: 20,
+    color: textColor,
+    fontWeight: FontWeight.w500,
+  );
 }
