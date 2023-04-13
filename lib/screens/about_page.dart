@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/widget/circle_icon_container.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -65,18 +66,13 @@ class AboutPage extends StatelessWidget {
               style: Styles.bodyTextGrey2,
             ),
             const Gap(16),
-            Container(
+            CircleIconContainer(
               width: 80,
               height: 80,
-              decoration: BoxDecoration(
-                color: Styles.secondaryColor,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.electric_bolt_rounded,
-                size: 50,
-                color: Styles.accentColor,
-              ),
+              color: Styles.secondaryColor,
+              icon: Icons.electric_bolt_rounded,
+              iconSize: 40,
+              iconColor: Styles.accentColor,
             ),
             const Gap(16),
             ElevatedButton(
@@ -88,7 +84,7 @@ class AboutPage extends StatelessWidget {
                 backgroundColor: Styles.accentColor,
               ),
               child: const Text("Lisensi"),
-            )
+            ),
           ],
         ),
       ),

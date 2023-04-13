@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jayandra_01/page/golongan_listrik/electricity_class_page.dart';
 import 'package:jayandra_01/screens/about_page.dart';
 import 'package:jayandra_01/screens/add_device_screen.dart';
 import 'package:jayandra_01/screens/bottom_bar.dart';
@@ -52,6 +53,12 @@ class MyApp extends StatelessWidget {
             name: "about_page",
             builder: (BuildContext context, GoRouterState state) =>
                 const AboutPage(),
+          ),
+          GoRoute(
+            path: "electricity_class",
+            name: "electricity_class_page",
+            builder: (BuildContext context, GoRouterState state) =>
+                const ElectricityClassPage(),
           ),
         ],
       ),

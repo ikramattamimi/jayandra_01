@@ -98,14 +98,24 @@ class Styles {
     color: textColor,
     fontWeight: FontWeight.w700,
   );
-  static TextStyle button = TextStyle(
+  static TextStyle buttonTextBlue = TextStyle(
     fontSize: 14,
     color: accentColor,
     fontWeight: FontWeight.w700,
   );
-  static TextStyle button2 = TextStyle(
+  static TextStyle buttonTextBlue2 = TextStyle(
     fontSize: 12,
     color: accentColor,
+    fontWeight: FontWeight.w700,
+  );
+  static TextStyle buttonTextWhite = TextStyle(
+    fontSize: 14,
+    color: secondaryColor,
+    fontWeight: FontWeight.w700,
+  );
+  static TextStyle buttonTextWhite2 = TextStyle(
+    fontSize: 12,
+    color: secondaryColor,
     fontWeight: FontWeight.w700,
   );
 
