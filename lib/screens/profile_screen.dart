@@ -106,7 +106,7 @@ class ProfileScreen extends StatelessWidget {
                                     children: [
                                       ElevatedButton(
                                         onPressed: () {
-                                          Navigator.pop(context, 'Oke');
+                                          context.goNamed("landing_page");
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(

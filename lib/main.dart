@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jayandra_01/page/golongan_listrik/electricity_class_page.dart';
+import 'package:jayandra_01/page/login/landing_page.dart';
+import 'package:jayandra_01/page/login/login_page.dart';
 import 'package:jayandra_01/screens/about_page.dart';
 import 'package:jayandra_01/screens/add_device_screen.dart';
 import 'package:jayandra_01/screens/bottom_bar.dart';
@@ -31,6 +33,13 @@ class MyApp extends StatelessWidget {
       routeInformationParser: _router.routeInformationParser,
       routeInformationProvider: _router.routeInformationProvider,
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Styles.accentColor,
+          secondary: Styles.accentColor2,
+        ),
+        textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
+      ),
     );
   }
 
@@ -59,6 +68,20 @@ class MyApp extends StatelessWidget {
             name: "electricity_class_page",
             builder: (BuildContext context, GoRouterState state) =>
                 const ElectricityClassPage(),
+          ),
+          GoRoute(
+            path: "landing_page",
+            name: "landing_page",
+            builder: (BuildContext context, GoRouterState state) =>
+                const LandingPage(),
+            routes: <GoRoute>[
+              GoRoute(
+                path: "login_page",
+                name: "login_page",
+                builder: (BuildContext context, GoRouterState state) =>
+                    const LoginPage(),
+              ),
+            ],
           ),
         ],
       ),

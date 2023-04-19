@@ -88,6 +88,23 @@ class Styles {
     color: textColor,
     fontWeight: FontWeight.w800,
   );
+  static TextStyle headingStyleWhite1 = TextStyle(
+    fontSize: 20,
+    color: secondaryColor,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.15,
+  );
+  static TextStyle headingStyleWhite2 = TextStyle(
+    fontSize: 18,
+    color: secondaryColor,
+    fontWeight: FontWeight.w800,
+  );
+  static TextStyle headingStyleWhite3 = TextStyle(
+    fontSize: 16,
+    color: secondaryColor,
+    fontWeight: FontWeight.w800,
+  );
+
   static TextStyle title = TextStyle(
     fontSize: 14,
     color: textColor,
@@ -101,22 +118,22 @@ class Styles {
   static TextStyle buttonTextBlue = TextStyle(
     fontSize: 14,
     color: accentColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w500,
   );
   static TextStyle buttonTextBlue2 = TextStyle(
     fontSize: 12,
     color: accentColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w500,
   );
   static TextStyle buttonTextWhite = TextStyle(
     fontSize: 14,
     color: secondaryColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w500,
   );
   static TextStyle buttonTextWhite2 = TextStyle(
     fontSize: 12,
     color: secondaryColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w500,
   );
 
   static TextStyle pageTitle = TextStyle(
