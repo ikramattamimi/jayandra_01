@@ -1,0 +1,45 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:jayandra_01/utils/app_styles.dart';
+
+class CustomTextFormField extends StatelessWidget {
+  const CustomTextFormField({
+    super.key,
+    required this.hintText,
+    required this.obscureText,
+    required this.keyboardType,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.validator,
+  });
+  final String hintText;
+  final bool obscureText;
+  final TextInputType keyboardType;
+  final IconData? prefixIcon;
+  final IconButton? suffixIcon;
+  final String? Function(String?)? validator;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        prefixIcon: Icon(prefixIcon),
+        suffixIcon: suffixIcon,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Styles.accentColor2,
+          ),
+        ),
+        hintText: hintText,
+        hintStyle: Styles.bodyTextBlack2,
+        errorMaxLines: 2,
+      ),
+      validator: validator,
+      // onSaved: (value) => _email = value,
+    );
+  }
+}

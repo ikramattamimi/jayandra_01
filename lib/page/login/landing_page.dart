@@ -16,6 +16,7 @@ class LandingPage extends StatelessWidget {
       backgroundColor: Styles.accentColor,
       body: SafeArea(
         child: CustomContainer(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Jayandra Powerstrip",
@@ -65,7 +66,9 @@ class LandingPage extends StatelessWidget {
                   borderColor: Styles.secondaryColor,
                   text: "Daftar",
                   textStyle: Styles.buttonTextWhite,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.goNamed("register_page");
+                  },
                 )
               ],
             ),

@@ -3,11 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
+import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:jayandra_01/utils/form_regex.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,40 +31,35 @@ class _LoginPageState extends State<LoginPage> {
       body: ListView(
         children: [
           CustomContainer(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(
+              CircleIconContainer(
+                width: 70,
+                height: 70,
+                color: Styles.secondaryColor,
+                icon: Icons.electric_bolt_rounded,
+                iconSize: 50,
+                iconColor: Styles.accentColor,
+              ),
+              const Gap(48),
+              Text(
+                "Selamat Datang",
+                style: Styles.headingStyleWhite1,
+              ),
+              const Gap(10),
+              Text(
+                "Silahkan masuk ke akun Anda",
+                style: Styles.bodyTextWhite2,
+              ),
+              const Gap(32),
+              WhiteContainer(
+                borderColor: Colors.transparent,
+                padding: 16,
+                margin: 0,
                 child: Column(
                   children: [
-                    CircleIconContainer(
-                      width: 70,
-                      height: 70,
-                      color: Styles.secondaryColor,
-                      icon: Icons.electric_bolt_rounded,
-                      iconSize: 50,
-                      iconColor: Styles.accentColor,
-                    ),
-                    const Gap(48),
-                    Text(
-                      "Selamat Datang",
-                      style: Styles.headingStyleWhite1,
-                    ),
-                    const Gap(10),
-                    Text(
-                      "Silahkan masuk ke akun Anda",
-                      style: Styles.bodyTextWhite2,
-                    ),
-                    const Gap(32),
-                    WhiteContainer(
-                      borderColor: Colors.transparent,
-                      padding: 16,
-                      margin: 0,
-                      child: Column(
-                        children: [
-                          const Gap(24),
-                          LoginForm(),
-                        ],
-                      ),
-                    )
+                    const Gap(8),
+                    LoginForm(),
                   ],
                 ),
               ),
@@ -89,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
   final _loginFormKey = GlobalKey<FormState>();
   late String? _email;
   late String? _password;
-  bool _showPassword = false;
+  bool _hidePassword = false;
 
   void _submitForm() {
     final form = _loginFormKey.currentState;
@@ -108,68 +106,20 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.mail,
-              ),
-              // prefixIconColor: Styles.textColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: Styles.accentColor2,
-                ),
-              ),
-              hintText: 'Email',
-              hintStyle: Styles.bodyTextBlack2,
-            ),
-            // The validator receives the text that the user has entered.
-            validator: (value) {
-              if (!value!.isValidEmail) return 'Alamat email tidak valid';
-            },
-            onSaved: (value) => _email = value,
-          ),
+          EmailTextForm(),
           const Gap(16),
-          TextFormField(
-            keyboardType: TextInputType.visiblePassword,
-            obscureText: !_showPassword,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.lock,
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
-                onPressed: () {
-                  setState(() {
-                    _showPassword = !_showPassword;
-                  });
-                },
-              ),
-              // prefixIconColor: Styles.textColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: Styles.accentColor2,
-                ),
-              ),
-              hintText: 'Password',
-              hintStyle: Styles.bodyTextBlack2,
-              errorMaxLines: 2,
-            ),
-            // The validator receives the text that the user has entered.
-            validator: (value) {
-              if (!value!.isValidPassword) return 'Password harus terdiri dari 8 karakter dan mengandung huruf besar, huruf kecil, dan angka.';
-            },
-            onSaved: (value) => _password = value,
+          PasswordTextForm(),
+          const Gap(8),
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Lupa Password?",
+                  style: Styles.buttonTextBlue,
+                )),
           ),
-          const Gap(24),
+          const Gap(20),
           CustomElevatedButton(
             backgroundColor: Styles.accentColor,
             borderColor: Styles.secondaryColor,
@@ -186,39 +136,81 @@ class _LoginFormState extends State<LoginForm> {
               // context.goNamed("login_page");
             },
           ),
+          const Gap(8),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                context.goNamed("register_page");
+              },
+              child: Text(
+                "Belum punya akun? Daftar",
+                style: Styles.buttonTextBlue,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-/// ****************************************************************************
-/// Code    : Regex for Form Validation
-/// Source  : https://blog.logrocket.com/flutter-form-validation-complete-guide/#input-validation-input-formatters
-/// ****************************************************************************
-extension ExtString on String {
-  bool get isValidEmail {
-    final emailRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    return emailRegExp.hasMatch(this);
+class PasswordTextForm extends StatefulWidget {
+  const PasswordTextForm({
+    super.key,
+    this.hintText = "Password",
+  });
+  final String hintText;
+
+  @override
+  State<PasswordTextForm> createState() => _PasswordTextFormState();
+}
+
+class _PasswordTextFormState extends State<PasswordTextForm> {
+  bool _hidePassword = true;
+  late String _hintText;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _hintText = widget.hintText;
   }
 
-  bool get isValidName {
-    final nameRegExp = RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
-    return nameRegExp.hasMatch(this);
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextFormField(
+      hintText: _hintText,
+      keyboardType: TextInputType.visiblePassword,
+      obscureText: _hidePassword,
+      prefixIcon: Icons.lock,
+      suffixIcon: IconButton(
+        icon: Icon(_hidePassword ? Icons.visibility : Icons.visibility_off),
+        onPressed: () {
+          setState(() {
+            _hidePassword = !_hidePassword;
+          });
+        },
+      ),
+      validator: (value) {
+        if (!value!.isValidPassword) return 'Password harus terdiri dari 8 karakter dan mengandung huruf besar, huruf kecil, dan angka.';
+      },
+    );
   }
+}
 
-  bool get isValidPassword {
-    final passwordRegExp = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$');
-    return passwordRegExp.hasMatch(this);
-  }
+class EmailTextForm extends StatelessWidget {
+  const EmailTextForm({super.key});
 
-  bool get isNotNull {
-    // ignore: unnecessary_null_comparison
-    return this != null;
-  }
-
-  bool get isValidPhone {
-    final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
-    return phoneRegExp.hasMatch(this);
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextFormField(
+      hintText: "Email",
+      keyboardType: TextInputType.emailAddress,
+      obscureText: false,
+      prefixIcon: Icons.mail_rounded,
+      validator: (value) {
+        if (!value!.isValidEmail) return 'Alamat email tidak valid';
+      },
+    );
   }
 }

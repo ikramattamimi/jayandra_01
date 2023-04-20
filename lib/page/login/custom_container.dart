@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:jayandra_01/utils/app_styles.dart';
 
 class CustomContainer extends StatelessWidget {
   const CustomContainer({
     super.key,
     required this.children,
+    required this.crossAxisAlignment,
   });
   final List<Widget> children;
+  final CrossAxisAlignment crossAxisAlignment;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
-        ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: crossAxisAlignment,
+        children: children,
+      ),
     );
   }
 }
