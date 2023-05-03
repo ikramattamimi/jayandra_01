@@ -101,11 +101,11 @@ class _RegisterFormState extends State<RegisterForm> {
         ),
       ),
       const Gap(16),
-      PasswordTextForm(),
+      // PasswordTextForm(),
       const Gap(16),
-      PasswordTextForm(
-        hintText: "Konfirmasi Password",
-      ),
+      // PasswordTextForm(
+      //   hintText: "Konfirmasi Password",
+      // ),
       const Gap(20),
       NextButton(
         onPressed: () {

@@ -62,7 +62,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   List<Widget> get _getRegisterFormWidget {
     return [
-      const EmailTextForm(),
+      // const EmailTextForm(),
       const Gap(20),
       NextButton(
         onPressed: () {

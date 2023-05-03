@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/my_response.dart';
+import 'package:jayandra_01/module/login/login_controller.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
@@ -11,6 +13,7 @@ import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -89,14 +92,23 @@ class _LoginFormState extends State<LoginForm> {
   late String? _password;
   bool _hidePassword = false;
 
-  void _submitForm() {
-    final form = _loginFormKey.currentState;
-    if (form != null) {
-      if (form.validate()) {
-        form.save();
-        // perform login with _email and _password
-      }
+  LoginController _controller = LoginController();
+
+  void _login() async {
+    // if (_loginFormKey.currentState!.validate()) {
+    // If the form is valid, display a snackbar. In the real world,
+    // you'd often call a server or save the information in a database.
+
+    MyResponse response = await _controller.login();
+    if (response.code == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Success')),
+      );
+      print("success");
+    } else {
+      print("failed");
     }
+    // }
   }
 
   @override
@@ -106,9 +118,17 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          EmailTextForm(),
+          EmailTextForm(
+            controller: _controller.emailController,
+            formKey: _loginFormKey,
+            onSaved: (value) => _email = value,
+          ),
           const Gap(16),
-          PasswordTextForm(),
+          PasswordTextForm(
+            controller: _controller.passwordController,
+            formKey: _loginFormKey,
+            onSaved: (value) => _password = value,
+          ),
           const Gap(8),
           Align(
             alignment: Alignment.topRight,
@@ -125,16 +145,17 @@ class _LoginFormState extends State<LoginForm> {
             borderColor: Styles.secondaryColor,
             text: "masuk",
             textStyle: Styles.buttonTextWhite,
-            onPressed: () {
-              if (_loginFormKey.currentState!.validate()) {
-                // If the form is valid, display a snackbar. In the real world,
-                // you'd often call a server or save the information in a database.
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Processing Data')),
-                );
-              }
-              // context.goNamed("login_page");
-            },
+            onPressed: _login,
+            // onPressed: () {
+            //   if (_loginFormKey.currentState!.validate()) {
+            //     // If the form is valid, display a snackbar. In the real world,
+            //     // you'd often call a server or save the information in a database.
+            //     ScaffoldMessenger.of(context).showSnackBar(
+            //       const SnackBar(content: Text('Processing Data')),
+            //     );
+            //     login(_email, _password);
+            //   }
+            // },
           ),
           const Gap(8),
           Center(
@@ -158,8 +179,14 @@ class PasswordTextForm extends StatefulWidget {
   const PasswordTextForm({
     super.key,
     this.hintText = "Password",
+    this.onSaved,
+    required this.formKey,
+    this.controller,
   });
   final String hintText;
+  final void Function(String?)? onSaved;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController? controller;
 
   @override
   State<PasswordTextForm> createState() => _PasswordTextFormState();
@@ -168,17 +195,20 @@ class PasswordTextForm extends StatefulWidget {
 class _PasswordTextFormState extends State<PasswordTextForm> {
   bool _hidePassword = true;
   late String _hintText;
+  late GlobalKey<FormState> _formKey;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _hintText = widget.hintText;
+    _formKey = widget.formKey;
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
+      controller: widget.controller,
       hintText: _hintText,
       keyboardType: TextInputType.visiblePassword,
       obscureText: _hidePassword,
@@ -192,25 +222,39 @@ class _PasswordTextFormState extends State<PasswordTextForm> {
         },
       ),
       validator: (value) {
-        if (!value!.isValidPassword) return 'Password harus terdiri dari 8 karakter dan mengandung huruf besar, huruf kecil, dan angka.';
+        if (!value!.isValidPassword) {
+          return 'Password harus terdiri dari 8 karakter dan mengandung huruf besar, huruf kecil, dan angka.';
+        } else {
+          widget.formKey.currentState?.save();
+        }
       },
+      onSaved: widget.onSaved,
     );
   }
 }
 
 class EmailTextForm extends StatelessWidget {
-  const EmailTextForm({super.key});
+  const EmailTextForm({super.key, this.onSaved, required this.formKey, this.controller});
+  final void Function(String?)? onSaved;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
+      controller: controller,
       hintText: "Email",
       keyboardType: TextInputType.emailAddress,
       obscureText: false,
       prefixIcon: Icons.mail_rounded,
       validator: (value) {
-        if (!value!.isValidEmail) return 'Alamat email tidak valid';
+        if (!value!.isValidEmail) {
+          return 'Alamat email tidak valid';
+        } else {
+          formKey.currentState?.save();
+        }
       },
+      onSaved: onSaved,
     );
   }
 }

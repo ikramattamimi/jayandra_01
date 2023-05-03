@@ -4,7 +4,7 @@ class CustomContainer extends StatelessWidget {
   const CustomContainer({
     super.key,
     required this.children,
-    required this.crossAxisAlignment,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
   });
   final List<Widget> children;
   final CrossAxisAlignment crossAxisAlignment;

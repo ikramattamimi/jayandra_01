@@ -3,25 +3,32 @@ import 'package:flutter/services.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({
+  CustomTextFormField({
     super.key,
     required this.hintText,
     required this.obscureText,
     required this.keyboardType,
+    this.controller,
     this.prefixIcon,
     this.suffixIcon,
     this.validator,
+    this.onSaved,
+    this.formKey,
   });
+  final TextEditingController? controller;
   final String hintText;
   final bool obscureText;
   final TextInputType keyboardType;
   final IconData? prefixIcon;
   final IconButton? suffixIcon;
   final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
+  GlobalKey<FormState>? formKey;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
       decoration: InputDecoration(
@@ -39,7 +46,7 @@ class CustomTextFormField extends StatelessWidget {
         errorMaxLines: 2,
       ),
       validator: validator,
-      // onSaved: (value) => _email = value,
+      onSaved: onSaved,
     );
   }
 }
