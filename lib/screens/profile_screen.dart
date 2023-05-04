@@ -6,6 +6,7 @@ import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/list_tile_view.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -101,17 +102,17 @@ class ProfileScreen extends StatelessWidget {
                               actions: <Widget>[
                                 Center(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
                                       ElevatedButton(
-                                        onPressed: () {
+                                        onPressed: () async {
+                                          final prefs = await SharedPreferences.getInstance();
+                                          prefs.remove('token');
                                           context.goNamed("landing_page");
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
                                           backgroundColor: Styles.accentColor,
                                           minimumSize: const Size(50, 50),
@@ -123,8 +124,7 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                       const Gap(8),
                                       TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context, 'Batalkan'),
+                                        onPressed: () => Navigator.pop(context, 'Batalkan'),
                                         style: TextButton.styleFrom(
                                           minimumSize: const Size(50, 50),
                                         ),
