@@ -6,9 +6,31 @@ import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class LandingPage extends StatelessWidget {
+class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
+
+  @override
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkAuth();
+  }
+
+  Future<void> checkAuth() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    if (token != null) {
+      context.goNamed('main_page');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

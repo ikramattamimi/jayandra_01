@@ -84,8 +84,8 @@ class AppRouter {
         ],
       ),
     ],
-    // initialLocation: '/landing_page',
-    initialLocation: '/',
+    initialLocation: '/landing_page',
+    // initialLocation: '/',
     debugLogDiagnostics: true,
     routerNeglect: true,
   );

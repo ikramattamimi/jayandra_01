@@ -95,20 +95,27 @@ class _LoginFormState extends State<LoginForm> {
   LoginController _controller = LoginController();
 
   void _login() async {
-    // if (_loginFormKey.currentState!.validate()) {
-    // If the form is valid, display a snackbar. In the real world,
-    // you'd often call a server or save the information in a database.
+    if (_loginFormKey.currentState!.validate()) {
+      // If the form is valid, display a snackbar. In the real world,
+      // you'd often call a server or save the information in a database.
 
-    MyResponse response = await _controller.login();
-    if (response.code == 200) {
+      setState(() {
+        _controller.isLoading = true;
+      });
+
+      MyResponse response = await _controller.login();
+
+      setState(() {
+        _controller.isLoading = false;
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Success')),
+        SnackBar(content: Text(response.message)),
       );
-      print("success");
-    } else {
-      print("failed");
+      if (response.code == 0) {
+        context.goNamed('main_page');
+      } else {}
     }
-    // }
   }
 
   @override
@@ -116,7 +123,7 @@ class _LoginFormState extends State<LoginForm> {
     return Form(
       key: _loginFormKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           EmailTextForm(
             controller: _controller.emailController,
@@ -140,23 +147,25 @@ class _LoginFormState extends State<LoginForm> {
                 )),
           ),
           const Gap(20),
-          CustomElevatedButton(
-            backgroundColor: Styles.accentColor,
-            borderColor: Styles.secondaryColor,
-            text: "masuk",
-            textStyle: Styles.buttonTextWhite,
-            onPressed: _login,
-            // onPressed: () {
-            //   if (_loginFormKey.currentState!.validate()) {
-            //     // If the form is valid, display a snackbar. In the real world,
-            //     // you'd often call a server or save the information in a database.
-            //     ScaffoldMessenger.of(context).showSnackBar(
-            //       const SnackBar(content: Text('Processing Data')),
-            //     );
-            //     login(_email, _password);
-            //   }
-            // },
-          ),
+          (!_controller.isLoading)
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: CustomElevatedButton(
+                    backgroundColor: Styles.accentColor,
+                    borderColor: Styles.secondaryColor,
+                    text: "masuk",
+                    textStyle: Styles.buttonTextWhite,
+                    onPressed: _login,
+                  ),
+                )
+              : SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: CircularProgressIndicator(
+                    color: Styles.accentColor,
+                    strokeWidth: 3,
+                  ),
+                ),
           const Gap(8),
           Center(
             child: TextButton(

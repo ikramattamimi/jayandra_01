@@ -1,15 +1,19 @@
 class User {
+  final int id;
   final String name;
-  final String username;
-  final String password;
+  final String email;
+  final String electricityclass;
+  final String token;
 
-  User({this.name = "", this.username = "", this.password = ""});
+  User({this.id = 0, this.name = "", this.email = "", this.electricityclass = "", this.token = ""});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      id: json['id'],
       name: json['name'],
-      username: json['uername'],
-      password: json['password'],
+      email: json['email'],
+      electricityclass: (json['electricityclass'] != "") ? json['electricityClass'] : "",
+      token: json['token'],
     );
   }
 }

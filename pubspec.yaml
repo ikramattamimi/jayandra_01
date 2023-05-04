@@ -46,6 +46,7 @@ dependencies:
   pin_code_fields: ^7.4.0
   http: ^0.13.5
   material_design_icons_flutter: ^6.0.7096
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:
