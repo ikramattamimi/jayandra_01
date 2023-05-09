@@ -21,7 +21,7 @@ class LoginController {
       Map<String, dynamic> myBody = jsonDecode(result.body);
       MyResponse<User> myResponse = MyResponse.fromJson(myBody, User.fromJson);
 
-      // print(myBody);
+      // print(myResponse.data.);
       // print("${myResponse.code}");
 
       if (myResponse.code == 0) {
@@ -29,6 +29,12 @@ class LoginController {
 
         // simpan token
         await prefs.setString('token', myResponse.data?.token ?? "");
+        await prefs.setString('user_name', myResponse.data?.name ?? "");
+        await prefs.setString('email', myResponse.data?.email ?? "");
+        await prefs.setString('electricityclass', myResponse.data?.electricityclass ?? "");
+
+        String? name = prefs.getString('user_name');
+        print(name);
       }
 
       return myResponse;

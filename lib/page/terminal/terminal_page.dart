@@ -95,10 +95,16 @@ class _TerminalPageState extends State<TerminalPage> {
             Column(
               children: [
                 const Gap(5),
-                Icon(
-                  Icons.schedule_rounded,
-                  color: Styles.accentColor,
-                  size: 32,
+                IconButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {
+                    context.goNamed('terminal_schedule');
+                  },
+                  icon: Icon(
+                    Icons.schedule_rounded,
+                    color: Styles.accentColor,
+                    size: 32,
+                  ),
                 ),
                 Text(
                   "Jadwal",
@@ -109,10 +115,14 @@ class _TerminalPageState extends State<TerminalPage> {
             Column(
               children: [
                 const Gap(5),
-                Icon(
-                  Icons.timer,
-                  color: Styles.accentColor,
-                  size: 32,
+                IconButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () => context.goNamed("terminal_timer"),
+                  icon: Icon(
+                    Icons.timer,
+                    color: Styles.accentColor,
+                    size: 32,
+                  ),
                 ),
                 Text(
                   "Timer",

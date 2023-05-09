@@ -1,7 +1,6 @@
-// ignore_for_file: body_might_complete_normally_nullable
+// ignore_for_file: body_might_complete_normally_nullable, unused_field, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
@@ -13,7 +12,6 @@ import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
-import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -90,9 +88,10 @@ class _LoginFormState extends State<LoginForm> {
   final _loginFormKey = GlobalKey<FormState>();
   late String? _email;
   late String? _password;
+  // ignore: prefer_final_fields
   bool _hidePassword = false;
 
-  LoginController _controller = LoginController();
+  final LoginController _controller = LoginController();
 
   void _login() async {
     if (_loginFormKey.currentState!.validate()) {
@@ -112,6 +111,9 @@ class _LoginFormState extends State<LoginForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(response.message)),
       );
+      
+      
+
       if (response.code == 0) {
         context.goNamed('main_page');
       } else {}

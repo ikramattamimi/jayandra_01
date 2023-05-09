@@ -3,11 +3,33 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/screens/report_view.dart';
 import 'package:jayandra_01/widget/terminal_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? userName;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserName();
+  }
+
+  void getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString('user_name');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Halo Lisa!",
+                      "Halo $userName!",
                       style: Styles.headingStyle1,
                     ),
                     Row(

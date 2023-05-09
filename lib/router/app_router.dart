@@ -4,10 +4,15 @@ import 'package:jayandra_01/page/golongan_listrik/electricity_class_page.dart';
 import 'package:jayandra_01/page/golongan_listrik/electricity_class_register_page.dart';
 import 'package:jayandra_01/page/login/landing_page.dart';
 import 'package:jayandra_01/page/login/login_page.dart';
+import 'package:jayandra_01/page/profile/edit_profile_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
 import 'package:jayandra_01/page/register/register_page_2.dart';
 import 'package:jayandra_01/page/register/register_page_3.dart';
+import 'package:jayandra_01/page/terminal/add_schedule_page.dart';
+import 'package:jayandra_01/page/terminal/add_timer_page.dart';
+import 'package:jayandra_01/page/terminal/schedule_page.dart';
 import 'package:jayandra_01/page/terminal/terminal_page.dart';
+import 'package:jayandra_01/page/terminal/timer_page.dart';
 import 'package:jayandra_01/screens/about_page.dart';
 import 'package:jayandra_01/screens/add_device_screen.dart';
 import 'package:jayandra_01/screens/main_screen.dart';
@@ -62,9 +67,40 @@ class AppRouter {
         routes: <GoRoute>[
           // Main Page Route
           GoRoute(
+            path: "edit_profile",
+            name: "edit_profile",
+            builder: (BuildContext context, GoRouterState state) => const EditProfilePage(),
+          ),
+          GoRoute(
             path: "terminal/1",
             name: "terminal_1",
             builder: (BuildContext context, GoRouterState state) => const TerminalPage(),
+            routes: <GoRoute>[
+              GoRoute(
+                path: "terminal/1/schedule",
+                name: "terminal_schedule",
+                builder: (BuildContext context, GoRouterState state) => const SchedulePage(),
+                routes: <GoRoute>[
+                  GoRoute(
+                    path: "terminal/1/schedule/add",
+                    name: "terminal_schedule_add",
+                    builder: (BuildContext context, GoRouterState state) => const AddSchedulePage(),
+                  )
+                ],
+              ),
+              GoRoute(
+                path: "terminal/1/timer",
+                name: "terminal_timer",
+                builder: (BuildContext context, GoRouterState state) => const TimerPage(),
+                routes: <GoRoute>[
+                  GoRoute(
+                    path: "terminal/1/timer/add",
+                    name: "terminal_timer_add",
+                    builder: (BuildContext context, GoRouterState state) => const AddTimerPage(),
+                  )
+                ],
+              ),
+            ],
           ),
           GoRoute(
             path: "page2",

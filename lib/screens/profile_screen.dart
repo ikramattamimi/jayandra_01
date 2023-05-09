@@ -8,8 +8,29 @@ import 'package:jayandra_01/widget/list_tile_view.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String? userName = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserName();
+  }
+
+  void getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString('user_name');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +66,7 @@ class ProfileScreen extends StatelessWidget {
                       color: Styles.accentColor,
                     ),
                     title: Text(
-                      "Lisa Lasagna",
+                      "$userName",
                       style: Styles.title,
                     ),
                     trailing: Text(
@@ -53,7 +74,7 @@ class ProfileScreen extends StatelessWidget {
                       style: Styles.buttonTextBlue,
                     ),
                     onTap: () {
-                      context.goNamed("add_device");
+                      context.goNamed("edit_profile");
                     },
                     // color
                   ),

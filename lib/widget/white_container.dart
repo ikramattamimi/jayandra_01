@@ -4,10 +4,10 @@ import 'package:jayandra_01/utils/app_styles.dart';
 class WhiteContainer extends StatelessWidget {
   const WhiteContainer({
     super.key,
-    required this.borderColor,
+    this.borderColor = Colors.transparent,
     required this.padding,
-    required this.child,
     required this.margin,
+    required this.child,
   });
   final Color borderColor;
   final double margin;
