@@ -88,6 +88,11 @@ class Styles {
     color: textColor,
     fontWeight: FontWeight.w800,
   );
+  static TextStyle headingStyle4 = TextStyle(
+    fontSize: 14,
+    color: textColor,
+    fontWeight: FontWeight.w800,
+  );
   static TextStyle headingStyleWhite1 = TextStyle(
     fontSize: 20,
     color: secondaryColor,

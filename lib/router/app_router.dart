@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/page/add_device/add_device_page.dart';
+import 'package:jayandra_01/page/add_device/adding_device.dart';
+import 'package:jayandra_01/page/add_device/confirm_pairing.dart';
+import 'package:jayandra_01/page/add_device/done_add_device.dart';
 import 'package:jayandra_01/page/golongan_listrik/electricity_class_page.dart';
 import 'package:jayandra_01/page/golongan_listrik/electricity_class_register_page.dart';
 import 'package:jayandra_01/page/login/landing_page.dart';
@@ -103,9 +107,20 @@ class AppRouter {
             ],
           ),
           GoRoute(
-            path: "page2",
+            path: "add_device",
             name: "add_device",
-            builder: (BuildContext context, GoRouterState state) => const AddDevice(),
+            builder: (BuildContext context, GoRouterState state) => const AddDevicePage(),
+            routes: <GoRoute>[
+              GoRoute(path: "confirm_pairing", name: "confirm_pairing", builder: (BuildContext context, GoRouterState state) => const ConfirmPairingPage(), routes: <GoRoute>[
+                GoRoute(path: "adding_device", name: "adding_device", builder: (BuildContext context, GoRouterState state) => const AddingDevicePage(), routes: <GoRoute>[
+                  GoRoute(
+                    path: "done_add_device",
+                    name: "done_add_device",
+                    builder: (BuildContext context, GoRouterState state) => const DoneAddDevice(),
+                  ),
+                ]),
+              ]),
+            ],
           ),
           GoRoute(
             path: "about",

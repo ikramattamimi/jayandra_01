@@ -62,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         IconButton(
+                          padding: EdgeInsets.zero,
                           onPressed: () => context.goNamed('add_device'),
                           icon: Icon(
                             CarbonIcons.add_filled,
