@@ -1,27 +1,33 @@
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/my_response.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/screens/report_view.dart';
+import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/terminal_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _DashboardPageState extends State<DashboardPage> {
   String? userName;
+  final _controller = TerminalController();
+  List? _terminals = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserName();
+    _getTerminal();
   }
 
   void getUserName() async {
@@ -29,6 +35,33 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       userName = prefs.getString('user_name');
     });
+  }
+
+  void _getTerminal() async {
+    MyArrayResponse response = await _controller.getTerminal();
+    _terminals = response.data;
+  }
+
+  List<Widget> _getTerminalWidget() {
+    List<Widget> _terminalWidgets = [];
+    for (var terminal in _terminals!) {
+      _terminalWidgets.add(
+        GestureDetector(
+          onTap: () {
+            print("Perangkat ditekan");
+            context.goNamed("terminal_1");
+          },
+          child: TerminalView(
+            terminalIcon: Icons.bed,
+            terminalName: terminal.name,
+            activeSocket: 3,
+            terminalStatus: true,
+          ),
+        ),
+      );
+    }
+
+    return _terminalWidgets;
   }
 
   @override
@@ -91,38 +124,42 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const Gap(24),
           SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    print("Perangkat ditekan");
-                    context.goNamed("terminal_1");
-                  },
-                  child: TerminalView(
-                    terminalIcon: Icons.bed,
-                    terminalName: "Kamar Adik",
-                    activeSocket: 3,
-                    terminalStatus: true,
-                  ),
-                ),
-                TerminalView(
-                  terminalIcon: Icons.soup_kitchen_rounded,
-                  terminalName: "Dapur",
-                  activeSocket: 3,
-                  terminalStatus: false,
-                ),
-                TerminalView(
-                  terminalIcon: Icons.family_restroom_rounded,
-                  terminalName: "Ruang Keluarga",
-                  activeSocket: 3,
-                  terminalStatus: true,
-                ),
-              ],
-            ),
-          )
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: _getTerminalWidget(),
+              )
+              // Row(
+              //   children: [
+              //     GestureDetector(
+              //       onTap: () {
+              //         print("Perangkat ditekan");
+              //         context.goNamed("terminal_1");
+              //       },
+              //       child: TerminalView(
+              //         terminalIcon: Icons.bed,
+              //         terminalName: "Kamar Adik",
+              //         activeSocket: 3,
+              //         terminalStatus: true,
+              //       ),
+              //     ),
+              //     TerminalView(
+              //       terminalIcon: Icons.soup_kitchen_rounded,
+              //       terminalName: "Dapur",
+              //       activeSocket: 3,
+              //       terminalStatus: false,
+              //     ),
+              //     TerminalView(
+              //       terminalIcon: Icons.family_restroom_rounded,
+              //       terminalName: "Ruang Keluarga",
+              //       activeSocket: 3,
+              //       terminalStatus: true,
+              //     ),
+              //   ],
+              // ),
+              )
         ],
       ),
     );
   }
 }
+

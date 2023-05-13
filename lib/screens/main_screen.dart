@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:flutter/services.dart';
-import 'package:jayandra_01/models/user_model.dart';
-import 'package:jayandra_01/screens/home_screen.dart';
+import 'package:jayandra_01/page/dashboard/dashboard_page.dart';
 import 'package:jayandra_01/screens/profile_screen.dart';
 import 'package:jayandra_01/screens/report_screen.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -54,7 +53,7 @@ class _BottomBarState extends State<BottomBar> {
   }
 
   static final List<Widget> _widgetoptions = <Widget>[
-    HomeScreen(),
+    DashboardPage(),
     ReportScreen(),
     ProfileScreen(),
   ];
