@@ -8,8 +8,9 @@ import 'package:jayandra_01/widget/circle_icon_container.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key, required this.subtitle, required this.form});
+  const RegisterPage({super.key, required this.subtitle, required this.form, this.description});
   final String subtitle;
+  final String? description;
   final Widget form;
 
   List<Widget> get _getRegisterWidget {
@@ -22,7 +23,7 @@ class RegisterPage extends StatelessWidget {
         iconSize: 50,
         iconColor: Styles.accentColor,
       ),
-      const Gap(48),
+      const Gap(24),
       Text(
         "Daftar",
         style: Styles.headingStyleWhite1,
@@ -39,7 +40,7 @@ class RegisterPage extends StatelessWidget {
         margin: 0,
         child: Column(
           children: [
-            const Gap(24),
+            const Gap(12),
             form,
           ],
         ),

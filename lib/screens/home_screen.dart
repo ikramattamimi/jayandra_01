@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Halo $userName!",
+                      (userName != null) ? "Halo $userName!" : "Halo",
                       style: Styles.headingStyle1,
                     ),
                     Row(

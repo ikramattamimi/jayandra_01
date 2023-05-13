@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/page/add_device/add_device_page.dart';
 import 'package:jayandra_01/page/add_device/adding_device.dart';
 import 'package:jayandra_01/page/add_device/confirm_pairing.dart';
@@ -49,9 +50,11 @@ class AppRouter {
               GoRoute(
                 path: "register_page_2",
                 name: "register_page_2",
-                builder: (BuildContext context, GoRouterState state) => const RegisterPage2(),
+                builder: (BuildContext context, GoRouterState state) => const RegisterPage2(
+                  email: "ikram@gmail.com",
+                ),
                 routes: <GoRoute>[
-                  GoRoute(path: "register_page_3", name: "register_page_3", builder: (BuildContext context, GoRouterState state) => const RegisterPage3(), routes: <GoRoute>[
+                  GoRoute(path: "register_page_3", name: "register_page_3", builder: (BuildContext context, GoRouterState state) => const RegisterPage3(email: '',), routes: <GoRoute>[
                     GoRoute(
                       path: "electricity_class_register_page",
                       name: "electricity_class_register_page",
@@ -67,6 +70,7 @@ class AppRouter {
       GoRoute(
         path: "/",
         name: "main_page",
+        // builder: (BuildContext context, GoRouterState state) => MainScreen(user: state.extra as User),
         builder: (BuildContext context, GoRouterState state) => const MainScreen(),
         routes: <GoRoute>[
           // Main Page Route

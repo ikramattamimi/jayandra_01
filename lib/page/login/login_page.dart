@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/login/login_controller.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -13,6 +14,7 @@ import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
 
+/// Widget ini menampilkan halaman Login
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -21,6 +23,53 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // Key untuk Form
+  final _loginFormKey = GlobalKey<FormState>();
+
+  /// Controller untuk form
+  final LoginController _controller = LoginController();
+
+  /// Apakah password disembunyikan dalam input [PasswordTextForm]
+  bool _isPasswordHidden = false;
+
+  /// Autentikasi akun user
+  ///
+  /// Menampilkan [SnackBar] dengan isi dari [response.message]
+  /// dari [LoginController]
+  void _login() async {
+    // Jika validasi form berhasil
+    if (_loginFormKey.currentState!.validate()) {
+      // Menampilkan animasi loading
+      setState(() {
+        _controller.isLoading = true;
+      });
+
+      // Memproses API Login
+      MyResponse response = await _controller.login();
+
+      // Menyembunyikan animasi loading
+      setState(() {
+        _controller.isLoading = false;
+      });
+
+      // Menampilkan pesan status autentikasi
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.message)),
+      );
+
+      // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
+      // membaca pesan status autentikasi
+      Future.delayed(Duration(seconds: 1), () {
+        // Jika status autentikasi sukses dengan kode 0
+        if (response.code == 0) {
+          User user = response.data;
+          // context.goNamed('main_page', extra: user);
+          context.goNamed('main_page');
+        } else {}
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,155 +78,97 @@ class _LoginPageState extends State<LoginPage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: ListView(
-        children: [
-          CustomContainer(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleIconContainer(
-                width: 70,
-                height: 70,
-                color: Styles.secondaryColor,
-                icon: Icons.electric_bolt_rounded,
-                iconSize: 50,
-                iconColor: Styles.accentColor,
-              ),
-              const Gap(48),
-              Text(
-                "Selamat Datang",
-                style: Styles.headingStyleWhite1,
-              ),
-              const Gap(10),
-              Text(
-                "Silahkan masuk ke akun Anda",
-                style: Styles.bodyTextWhite2,
-              ),
-              const Gap(32),
-              WhiteContainer(
-                borderColor: Colors.transparent,
-                padding: 16,
-                margin: 0,
-                child: Column(
-                  children: [
-                    const Gap(8),
-                    LoginForm(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
-
-  @override
-  State<LoginForm> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
-  final _loginFormKey = GlobalKey<FormState>();
-  late String? _email;
-  late String? _password;
-  // ignore: prefer_final_fields
-  bool _hidePassword = false;
-
-  final LoginController _controller = LoginController();
-
-  void _login() async {
-    if (_loginFormKey.currentState!.validate()) {
-      // If the form is valid, display a snackbar. In the real world,
-      // you'd often call a server or save the information in a database.
-
-      setState(() {
-        _controller.isLoading = true;
-      });
-
-      MyResponse response = await _controller.login();
-
-      setState(() {
-        _controller.isLoading = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.message)),
-      );
-      
-      
-
-      if (response.code == 0) {
-        context.goNamed('main_page');
-      } else {}
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _loginFormKey,
-      child: Column(
+      body: CustomContainer(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          EmailTextForm(
-            controller: _controller.emailController,
-            formKey: _loginFormKey,
-            onSaved: (value) => _email = value,
+          CircleIconContainer(
+            width: 70,
+            height: 70,
+            color: Styles.secondaryColor,
+            icon: Icons.electric_bolt_rounded,
+            iconSize: 50,
+            iconColor: Styles.accentColor,
           ),
-          const Gap(16),
-          PasswordTextForm(
-            controller: _controller.passwordController,
-            formKey: _loginFormKey,
-            onSaved: (value) => _password = value,
+          const Gap(48),
+          Text(
+            "Selamat Datang",
+            style: Styles.headingStyleWhite1,
           ),
-          const Gap(8),
-          Align(
-            alignment: Alignment.topRight,
-            child: TextButton(
-                onPressed: () {},
-                child: Text(
-                  "Lupa Password?",
-                  style: Styles.buttonTextBlue,
-                )),
+          const Gap(10),
+          Text(
+            "Silahkan masuk ke akun Anda",
+            style: Styles.bodyTextWhite2,
           ),
-          const Gap(20),
-          (!_controller.isLoading)
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: CustomElevatedButton(
-                    backgroundColor: Styles.accentColor,
-                    borderColor: Styles.secondaryColor,
-                    text: "masuk",
-                    textStyle: Styles.buttonTextWhite,
-                    onPressed: _login,
-                  ),
-                )
-              : SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: CircularProgressIndicator(
-                    color: Styles.accentColor,
-                    strokeWidth: 3,
+          const Gap(32),
+          WhiteContainer(
+            borderColor: Colors.transparent,
+            padding: 16,
+            margin: 0,
+            child: Column(
+              children: [
+                const Gap(8),
+                Form(
+                  key: _loginFormKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      EmailTextForm(
+                        controller: _controller.emailController,
+                        formKey: _loginFormKey,
+                      ),
+                      const Gap(16),
+                      PasswordTextForm(
+                        controller: _controller.passwordController,
+                        formKey: _loginFormKey,
+                      ),
+                      const Gap(8),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Lupa Password?",
+                              style: Styles.buttonTextBlue,
+                            )),
+                      ),
+                      const Gap(20),
+
+                      /// Apakah sistem sedang memproses data [_email] dan password
+                      (!_controller.isLoading)
+                          ? SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: CustomElevatedButton(
+                                backgroundColor: Styles.accentColor,
+                                borderColor: Styles.secondaryColor,
+                                text: "masuk",
+                                textStyle: Styles.buttonTextWhite,
+                                onPressed: _login,
+                              ),
+                            )
+                          : SizedBox(
+                              height: 32,
+                              width: 32,
+                              child: CircularProgressIndicator(
+                                color: Styles.accentColor,
+                                strokeWidth: 3,
+                              ),
+                            ),
+                      const Gap(8),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            context.goNamed("register_page");
+                          },
+                          child: Text(
+                            "Belum punya akun? Daftar",
+                            style: Styles.buttonTextBlue,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-          const Gap(8),
-          Center(
-            child: TextButton(
-              onPressed: () {
-                context.goNamed("register_page");
-              },
-              child: Text(
-                "Belum punya akun? Daftar",
-                style: Styles.buttonTextBlue,
-              ),
+              ],
             ),
           ),
         ],
@@ -186,16 +177,18 @@ class _LoginFormState extends State<LoginForm> {
   }
 }
 
+/// Widget ini menampilkan [TextFormField] untuk field password.
+///
+/// Dilengkapi dengan toggle untuk menampilkan dan menyembunyikan
+/// teks password.
 class PasswordTextForm extends StatefulWidget {
   const PasswordTextForm({
     super.key,
     this.hintText = "Password",
-    this.onSaved,
     required this.formKey,
     this.controller,
   });
   final String hintText;
-  final void Function(String?)? onSaved;
   final GlobalKey<FormState> formKey;
   final TextEditingController? controller;
 
@@ -204,7 +197,9 @@ class PasswordTextForm extends StatefulWidget {
 }
 
 class _PasswordTextFormState extends State<PasswordTextForm> {
-  bool _hidePassword = true;
+  /// Apakah teks password disembunyikan.
+  bool _isPasswordHidden = true;
+
   late String _hintText;
   late GlobalKey<FormState> _formKey;
 
@@ -222,13 +217,13 @@ class _PasswordTextFormState extends State<PasswordTextForm> {
       controller: widget.controller,
       hintText: _hintText,
       keyboardType: TextInputType.visiblePassword,
-      obscureText: _hidePassword,
+      obscureText: _isPasswordHidden,
       prefixIcon: Icons.lock,
       suffixIcon: IconButton(
-        icon: Icon(_hidePassword ? Icons.visibility : Icons.visibility_off),
+        icon: Icon(_isPasswordHidden ? Icons.visibility : Icons.visibility_off),
         onPressed: () {
           setState(() {
-            _hidePassword = !_hidePassword;
+            _isPasswordHidden = !_isPasswordHidden;
           });
         },
       ),
@@ -239,7 +234,6 @@ class _PasswordTextFormState extends State<PasswordTextForm> {
           widget.formKey.currentState?.save();
         }
       },
-      onSaved: widget.onSaved,
     );
   }
 }

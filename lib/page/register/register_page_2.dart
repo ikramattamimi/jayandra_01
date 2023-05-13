@@ -5,49 +5,35 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/page/register/register_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
+import 'package:jayandra_01/page/register/register_page_3.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class RegisterPage2 extends StatelessWidget {
-  const RegisterPage2({super.key});
+class RegisterPage2 extends StatefulWidget {
+  const RegisterPage2({super.key, required this.email});
+  final String email;
+
+  @override
+  State<RegisterPage2> createState() => _RegisterPage2State();
+}
+
+class _RegisterPage2State extends State<RegisterPage2> {
+  final _registerForm2Key = GlobalKey<FormState>();
+  late String _email;
 
   @override
   Widget build(BuildContext context) {
     return RegisterPage(
       subtitle: "Masukkan Kode OTP yang sudah dikirimkan ke email",
-      form: RegisterForm(),
-    );
-  }
-}
-
-class RegisterForm extends StatefulWidget {
-  const RegisterForm({super.key});
-
-  @override
-  State<RegisterForm> createState() => _RegisterFormState();
-}
-
-class _RegisterFormState extends State<RegisterForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
-  final _registerForm2Key = GlobalKey<FormState>();
-  late String? _email;
-  // late String? _password;
-  // bool _showPassword = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _registerForm2Key,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: _getRegisterFormWidget,
+      form: Form(
+        key: _registerForm2Key,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: _getRegisterFormWidget,
+        ),
       ),
     );
   }
@@ -77,6 +63,8 @@ class _RegisterFormState extends State<RegisterForm> {
     super.initState();
     errorController = StreamController<ErrorAnimationType>();
     startTimer();
+    _email = widget.email;
+    print(_email);
   }
 
   @override
@@ -187,8 +175,10 @@ class _RegisterFormState extends State<RegisterForm> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Mengecek Kode OTP')),
             );
-            Future.delayed(Duration(seconds: 0), () {
-              context.goNamed("register_page_3");
+            Future.delayed(Duration(seconds: 1), () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return RegisterPage3(email: _email);
+              }));
             });
           }
         },

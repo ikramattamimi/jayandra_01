@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/my_response.dart';
+import 'package:jayandra_01/module/register/cek_email_controller.dart';
 import 'package:jayandra_01/page/login/login_page.dart';
 import 'package:jayandra_01/page/register/register_page.dart';
+import 'package:jayandra_01/page/register/register_page_2.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
@@ -35,17 +38,80 @@ class _RegisterFormState extends State<RegisterForm> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final _registerFormKey = GlobalKey<FormState>();
-  late String? _email;
+  final _controller = CekEmailController();
+
+  // late String? _email;
   // late String? _password;
   // bool _showPassword = false;
+
+  void _cekEmail() async {
+    if (_registerFormKey.currentState!.validate()) {
+      // Menampilkan animasi loading
+      setState(() {
+        _controller.isLoading = true;
+      });
+
+      // Memproses API cek email
+      MyResponse response = await _controller.cekEmail();
+
+      // Menyembunyikan animasi loading
+      setState(() {
+        _controller.isLoading = false;
+      });
+
+      // Menampilkan pesan dari controller
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.message)),
+      );
+
+      Future.delayed(Duration(seconds: 2), () {
+        if (response.code == 1) {
+          // context.goNamed("register_page_2");
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return RegisterPage2(email: _controller.emailController.text);
+          }));
+        } else {}
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _registerFormKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: _getRegisterFormWidget,
+        children: [
+          EmailTextForm(
+            formKey: _registerFormKey,
+            controller: _controller.emailController,
+          ),
+          const Gap(20),
+          (!_controller.isLoading)
+              ? NextButton(
+                  onPressed: () => _cekEmail(),
+                )
+              : SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: CircularProgressIndicator(
+                    color: Styles.accentColor,
+                    strokeWidth: 3,
+                  ),
+                ),
+          const Gap(20),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                context.goNamed("login_page");
+              },
+              child: Text(
+                "Sudah punya akun? Masuk",
+                style: Styles.buttonTextBlue,
+              ),
+            ),
+          ),
+          const Gap(8),
+        ],
       ),
     );
   }
@@ -61,37 +127,7 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   List<Widget> get _getRegisterFormWidget {
-    return [
-      // const EmailTextForm(),
-      const Gap(20),
-      NextButton(
-        onPressed: () {
-          if (_registerFormKey.currentState!.validate()) {
-            // If the form is valid, display a snackbar. In the real world,
-            // you'd often call a server or save the information in a database.
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Mengirimkan Kode OTP ke email')),
-            );
-            Future.delayed(Duration(seconds: 0), () {
-              context.goNamed("register_page_2");
-            });
-          }
-        },
-      ),
-      const Gap(20),
-      Center(
-        child: TextButton(
-          onPressed: () {
-            context.goNamed("login_page");
-          },
-          child: Text(
-            "Sudah punya akun? Masuk",
-            style: Styles.buttonTextBlue,
-          ),
-        ),
-      ),
-      const Gap(8),
-    ];
+    return [];
   }
 }
 
@@ -101,12 +137,15 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomElevatedButton(
-      backgroundColor: Styles.accentColor,
-      borderColor: Styles.secondaryColor,
-      text: "lanjut",
-      textStyle: Styles.buttonTextWhite,
-      onPressed: onPressed,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: CustomElevatedButton(
+        backgroundColor: Styles.accentColor,
+        borderColor: Styles.secondaryColor,
+        text: "lanjut",
+        textStyle: Styles.buttonTextWhite,
+        onPressed: onPressed,
+      ),
     );
   }
 }

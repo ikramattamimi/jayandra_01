@@ -37,6 +37,8 @@ class LoginController {
         print(name);
       }
 
+      myResponse.message = "Login Berhasil";
+
       return myResponse;
     } else {
       return MyResponse(code: 1, message: "Username atau Password Salah");

@@ -7,6 +7,7 @@ class MyResponse<T> {
 
   factory MyResponse.fromJson(Map<String, dynamic> json, Function fromJsonModel) {
     return MyResponse(
+      // code: (json['code'] != null) ? json['code'] : 0,
       code: json['code'],
       message: json['message'],
       data: (json['data'] != null) ? fromJsonModel(json['data']) : null,
