@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/page/add_device/add_device_page.dart';
 import 'package:jayandra_01/page/add_device/adding_device.dart';
@@ -26,6 +27,7 @@ class AppRouter {
   GoRouter getRouter() {
     return _router;
   }
+    Terminal terminal = Terminal();
 
   final GoRouter _router = GoRouter(
     routes: <GoRoute>[
@@ -79,37 +81,37 @@ class AppRouter {
             name: "edit_profile",
             builder: (BuildContext context, GoRouterState state) => const EditProfilePage(),
           ),
-          GoRoute(
-            path: "terminal/1",
-            name: "terminal_1",
-            builder: (BuildContext context, GoRouterState state) => const TerminalPage(),
-            routes: <GoRoute>[
-              GoRoute(
-                path: "terminal/1/schedule",
-                name: "terminal_schedule",
-                builder: (BuildContext context, GoRouterState state) => const SchedulePage(),
-                routes: <GoRoute>[
-                  GoRoute(
-                    path: "terminal/1/schedule/add",
-                    name: "terminal_schedule_add",
-                    builder: (BuildContext context, GoRouterState state) => const AddSchedulePage(),
-                  )
-                ],
-              ),
-              GoRoute(
-                path: "terminal/1/timer",
-                name: "terminal_timer",
-                builder: (BuildContext context, GoRouterState state) => const TimerPage(),
-                routes: <GoRoute>[
-                  GoRoute(
-                    path: "terminal/1/timer/add",
-                    name: "terminal_timer_add",
-                    builder: (BuildContext context, GoRouterState state) => const AddTimerPage(),
-                  )
-                ],
-              ),
-            ],
-          ),
+          // GoRoute(
+          //   path: "terminal/1",
+          //   name: "terminal_1",
+          //   builder: (BuildContext context, GoRouterState state) => TerminalPage(terminal: terminal,),
+          //   routes: <GoRoute>[
+          //     GoRoute(
+          //       path: "terminal/1/schedule",
+          //       name: "terminal_schedule",
+          //       builder: (BuildContext context, GoRouterState state) => const SchedulePage(),
+          //       routes: <GoRoute>[
+          //         GoRoute(
+          //           path: "terminal/1/schedule/add",
+          //           name: "terminal_schedule_add",
+          //           builder: (BuildContext context, GoRouterState state) => const AddSchedulePage(),
+          //         )
+          //       ],
+          //     ),
+          //     GoRoute(
+          //       path: "terminal/1/timer",
+          //       name: "terminal_timer",
+          //       builder: (BuildContext context, GoRouterState state) => const TimerPage(),
+          //       routes: <GoRoute>[
+          //         GoRoute(
+          //           path: "terminal/1/timer/add",
+          //           name: "terminal_timer_add",
+          //           builder: (BuildContext context, GoRouterState state) => const AddTimerPage(),
+          //         )
+          //       ],
+          //     ),
+          //   ],
+          // ),
           GoRoute(
             path: "add_device",
             name: "add_device",

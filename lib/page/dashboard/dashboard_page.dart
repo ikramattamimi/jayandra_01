@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
+import 'package:jayandra_01/page/terminal/terminal_page.dart';
 import 'package:jayandra_01/screens/report_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/terminal_view.dart';
@@ -21,6 +24,7 @@ class _DashboardPageState extends State<DashboardPage> {
   String? userName;
   final _controller = TerminalController();
   List? _terminals = [];
+  List<Widget> _terminalWidgets = [];
 
   @override
   void initState() {
@@ -38,30 +42,70 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _getTerminal() async {
-    MyArrayResponse response = await _controller.getTerminal();
-    _terminals = response.data;
-  }
+    final prefs = await SharedPreferences.getInstance();
 
-  List<Widget> _getTerminalWidget() {
-    List<Widget> _terminalWidgets = [];
+    if (prefs.getString('terminal') != null) {
+      String? jsonString = prefs.getString('terminal');
+      Map<String, dynamic> myBody = jsonDecode(jsonString.toString());
+
+      MyArrayResponse<Terminal> response = MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);
+      _terminals = response.data;
+    } else {
+      try {
+        String? jsonString = await _controller.getTerminal();
+        Map<String, dynamic> myBody = jsonDecode(jsonString.toString());
+
+        MyArrayResponse<Terminal> response = MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);
+
+        _terminals = response.data;
+      } catch (e) {
+        print(e);
+      }
+    }
+
     for (var terminal in _terminals!) {
       _terminalWidgets.add(
         GestureDetector(
           onTap: () {
             print("Perangkat ditekan");
-            context.goNamed("terminal_1");
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return TerminalPage(
+                terminal: terminal,
+              );
+            }));
           },
           child: TerminalView(
             terminalIcon: Icons.bed,
             terminalName: terminal.name,
-            activeSocket: 3,
-            terminalStatus: true,
+            activeSocket: 0,
+            terminalStatus: false,
           ),
         ),
       );
     }
+  }
 
-    return _terminalWidgets;
+  void _getTerminalWidget() {
+    for (var terminal in _terminals!) {
+      _terminalWidgets.add(
+        GestureDetector(
+          onTap: () {
+            print("Perangkat ditekan");
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return TerminalPage(
+                terminal: terminal,
+              );
+            }));
+          },
+          child: TerminalView(
+            terminalIcon: Icons.bed,
+            terminalName: terminal.name,
+            activeSocket: 0,
+            terminalStatus: false,
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -126,7 +170,7 @@ class _DashboardPageState extends State<DashboardPage> {
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: _getTerminalWidget(),
+                children: _terminalWidgets,
               )
               // Row(
               //   children: [
@@ -162,4 +206,3 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 }
-

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
@@ -9,22 +10,29 @@ import 'package:jayandra_01/widget/white_container.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class TerminalPage extends StatefulWidget {
-  const TerminalPage({super.key});
+  const TerminalPage({super.key, required this.terminal});
+  final Terminal terminal;
 
   @override
   State<TerminalPage> createState() => _TerminalPageState();
 }
 
 class _TerminalPageState extends State<TerminalPage> {
-  String pageTitle = "Kamar Tidur";
+  String pageTitle = "";
   List<String> sockets = ['Socket 1', 'Socket 2', 'Socket 3', 'Socket 4'];
+
+  @override
+  void initState() {
+    super.initState();
+    pageTitle = widget.terminal.name;
+  }
 
   List<Widget> getSockets() {
     List<Widget> mySockets = <Socket>[];
     for (var element in sockets) {
       mySockets.add(Socket(
         id: 1,
-        status: true,
+        isSocketOn: false,
         name: element,
       ));
     }
@@ -45,7 +53,7 @@ class _TerminalPageState extends State<TerminalPage> {
         foregroundColor: Styles.textColor,
         leading: IconButton(
           onPressed: () {
-            context.pop();
+            Navigator.pop(context);
             SystemChrome.setSystemUIOverlayStyle(
               SystemUiOverlayStyle(
                 statusBarColor: Styles.primaryColor,
@@ -80,15 +88,35 @@ class _TerminalPageState extends State<TerminalPage> {
                   Gap(16),
                   // Socket(id: 1, status: status, name: name),
                   // getSockets(),
-                  for (var i = 0; i < sockets.length; i++) ...[
-                    Expanded(
-                      child: Socket(
-                        id: 1,
-                        status: true,
-                        name: sockets[i],
-                      ),
-                    )
-                  ],
+
+                  Expanded(
+                    child: Socket(
+                      id: 1,
+                      isSocketOn: true,
+                      name: sockets[0],
+                    ),
+                  ),
+                  Expanded(
+                    child: Socket(
+                      id: 1,
+                      isSocketOn: true,
+                      name: sockets[1],
+                    ),
+                  ),
+                  Expanded(
+                    child: Socket(
+                      id: 1,
+                      isSocketOn: true,
+                      name: sockets[2],
+                    ),
+                  ),
+                  Expanded(
+                    child: Socket(
+                      id: 1,
+                      isSocketOn: true,
+                      name: sockets[3],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -141,11 +169,11 @@ class Socket extends StatefulWidget {
   const Socket({
     super.key,
     required this.id,
-    required this.status,
+    required this.isSocketOn,
     required this.name,
   });
   final int id;
-  final bool status;
+  final bool isSocketOn;
   final String name;
 
   @override
@@ -153,6 +181,15 @@ class Socket extends StatefulWidget {
 }
 
 class _SocketState extends State<Socket> {
+  bool _isSocketOn = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _isSocketOn = widget.isSocketOn;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -165,9 +202,19 @@ class _SocketState extends State<Socket> {
             icon: Icon(
               MdiIcons.powerSocketDe,
               size: 85,
-              color: Styles.accentColor,
+              color: (_isSocketOn != false) ? Styles.accentColor : Styles.accentColor2,
             ),
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                _isSocketOn = !_isSocketOn;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Message'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            },
           ),
         ),
         const Gap(16),
