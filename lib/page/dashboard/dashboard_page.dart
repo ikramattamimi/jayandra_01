@@ -13,6 +13,7 @@ import 'package:jayandra_01/widget/terminal_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
+/// Widget ini menampilkan halaman Dashboard
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -41,48 +42,37 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
+  /// Mengambil data terminal
+  /// 
+  /// Jika data terminal berhasil didapat ketika login data akan 
+  /// diambil dari [SharedPreferences].
+  /// 
+  /// Sebaliknya, data terminal akan diambil dengan melakukan pemanggilan 
+  /// API getTerminal pada [LoginController]
   void _getTerminal() async {
+    // Shared preferences
     final prefs = await SharedPreferences.getInstance();
+    
+    // jsonString response get terminal yang dilakukan ketika login
+    String? jsonString = prefs.getString('terminal');
 
-    if (prefs.getString('terminal') != null) {
-      String? jsonString = prefs.getString('terminal');
-      Map<String, dynamic> myBody = jsonDecode(jsonString.toString());
-
+    // Jika data terminal berhasil didapat ketika login
+    if (jsonString != null) {
+      Map<String, dynamic> myBody = jsonDecode(jsonString);
       MyArrayResponse<Terminal> response = MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);
       _terminals = response.data;
     } else {
       try {
         String? jsonString = await _controller.getTerminal();
         Map<String, dynamic> myBody = jsonDecode(jsonString.toString());
-
         MyArrayResponse<Terminal> response = MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);
-
         _terminals = response.data;
       } catch (e) {
         print(e);
       }
     }
 
-    for (var terminal in _terminals!) {
-      _terminalWidgets.add(
-        GestureDetector(
-          onTap: () {
-            print("Perangkat ditekan");
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return TerminalPage(
-                terminal: terminal,
-              );
-            }));
-          },
-          child: TerminalView(
-            terminalIcon: Icons.bed,
-            terminalName: terminal.name,
-            activeSocket: 0,
-            terminalStatus: false,
-          ),
-        ),
-      );
-    }
+    _getTerminalWidget();
   }
 
   void _getTerminalWidget() {

@@ -21,9 +21,6 @@ class LoginController {
       Map<String, dynamic> myBody = jsonDecode(result.body);
       MyResponse<User> myResponse = MyResponse.fromJson(myBody, User.fromJson);
 
-      // print(myResponse.data.);
-      // print("${myResponse.code}");
-
       if (myResponse.code == 0) {
         final prefs = await SharedPreferences.getInstance();
 

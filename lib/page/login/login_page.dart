@@ -1,11 +1,15 @@
 // ignore_for_file: body_might_complete_normally_nullable, unused_field, use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/login/login_controller.dart';
+import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
@@ -13,6 +17,7 @@ import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Widget ini menampilkan halaman Login
 class LoginPage extends StatefulWidget {
@@ -26,47 +31,68 @@ class _LoginPageState extends State<LoginPage> {
   // Key untuk Form
   final _loginFormKey = GlobalKey<FormState>();
 
-  /// Controller untuk form
-  final LoginController _controller = LoginController();
+  /// Controller untuk form login
+  final LoginController _loginController = LoginController();
+
+  /// Controller untuk mendapatkan data terminal ketika login berhasil
+  final _terminalController = TerminalController();
 
   /// Apakah password disembunyikan dalam input [PasswordTextForm]
   bool _isPasswordHidden = false;
 
   /// Autentikasi akun user
   ///
-  /// Menampilkan [SnackBar] dengan isi dari [response.message]
+  /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
   /// dari [LoginController]
   void _login() async {
     // Jika validasi form berhasil
     if (_loginFormKey.currentState!.validate()) {
       // Menampilkan animasi loading
       setState(() {
-        _controller.isLoading = true;
+        _loginController.isLoading = true;
       });
 
-      // Memproses API Login
-      MyResponse response = await _controller.login();
+      // Memproses API
+      MyResponse loginResponse = await _loginController.login();
 
       // Menyembunyikan animasi loading
       setState(() {
-        _controller.isLoading = false;
+        _loginController.isLoading = false;
       });
 
       // Menampilkan pesan status autentikasi
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.message)),
+        SnackBar(content: Text(loginResponse.message)),
       );
 
       // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
       // membaca pesan status autentikasi
       Future.delayed(Duration(seconds: 1), () {
         // Jika status autentikasi sukses dengan kode 0
-        if (response.code == 0) {
-          User user = response.data;
+        if (loginResponse.code == 0) {
+          User user = loginResponse.data;
           // context.goNamed('main_page', extra: user);
           context.goNamed('main_page');
         } else {}
       });
+    }
+  }
+
+  /// Get data terminal yang terhubung dengan akun user
+  /// 
+  /// PS:
+  /// Sementara ketika login data terminal yang pernah terhubung dengan akun
+  /// user akan otomatis tampil di dashboard.
+  /// Next data terminal baru akan muncul ketika terminal sudah bisa ditambahkan
+  /// melalui aplikasi.
+  void _getTerminal() async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      String? jsonString = await _terminalController.getTerminal();
+      Map<String, dynamic> myBody = jsonDecode(jsonString.toString());
+      MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);      
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -113,12 +139,12 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       EmailTextForm(
-                        controller: _controller.emailController,
+                        controller: _loginController.emailController,
                         formKey: _loginFormKey,
                       ),
                       const Gap(16),
                       PasswordTextForm(
-                        controller: _controller.passwordController,
+                        controller: _loginController.passwordController,
                         formKey: _loginFormKey,
                       ),
                       const Gap(8),
@@ -134,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                       const Gap(20),
 
                       /// Apakah sistem sedang memproses data [_email] dan password
-                      (!_controller.isLoading)
+                      (!_loginController.isLoading)
                           ? SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: CustomElevatedButton(
@@ -142,7 +168,16 @@ class _LoginPageState extends State<LoginPage> {
                                 borderColor: Styles.secondaryColor,
                                 text: "masuk",
                                 textStyle: Styles.buttonTextWhite,
-                                onPressed: _login,
+                                onPressed: () async {
+                                  try {
+                                    final prefs = await SharedPreferences.getInstance();
+
+                                    _login();
+                                    _getTerminal();
+                                    print('terminal ketika login:');
+                                    print(prefs.getString('terminal'));
+                                  } catch (e) {}
+                                },
                               ),
                             )
                           : SizedBox(

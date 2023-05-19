@@ -27,7 +27,6 @@ class AppRouter {
   GoRouter getRouter() {
     return _router;
   }
-    Terminal terminal = Terminal();
 
   final GoRouter _router = GoRouter(
     routes: <GoRoute>[

@@ -28,25 +28,10 @@ class TerminalController {
       if (terminalData == null) {
         await prefs.setString('terminal', result.body);
         terminalData = prefs.getString('terminal').toString();
-
-        // Map<String, dynamic> myBody = jsonDecode(prefs.getString('terminal').toString());
-
-        // myResponse = MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);
-
-        // print(myResponse.data.);
-        // print("${myResponse.code}");
+        print('terminal di controller');
+        print(terminalData);
 
         if (myResponse.code == 0) {
-          // final prefs = await SharedPreferences.getInstance();
-
-          // simpan token
-          // await prefs.setString('token', myResponse.data?.token ?? "");
-          // await prefs.setString('user_name', myResponse.data?.name ?? "");
-          // await prefs.setString('email', myResponse.data?.email ?? "");
-          // await prefs.setString('electricityclass', myResponse.data?.electricityclass ?? "");
-
-          // print(myBody);
-
           myResponse.message = "Data terminal berhasil dimuat";
         }
       }

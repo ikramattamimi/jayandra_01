@@ -128,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ElevatedButton(
                                         onPressed: () async {
                                           final prefs = await SharedPreferences.getInstance();
-                                          prefs.remove('token');
+                                          prefs.clear();
                                           context.goNamed("landing_page");
                                         },
                                         style: ElevatedButton.styleFrom(
