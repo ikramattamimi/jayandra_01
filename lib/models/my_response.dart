@@ -1,3 +1,6 @@
+import 'package:jayandra_01/models/socket_model.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
+
 class MyResponse<T> {
   int code;
   String message;
@@ -15,26 +18,31 @@ class MyResponse<T> {
   }
 }
 
-class MyArrayResponse<T> {
+class TerminalResponse {
   int code;
   String message;
-  List<T>? data;
+  List<Terminal>? data;
 
-  MyArrayResponse({this.code = 0, this.message = "", this.data});
+  TerminalResponse({this.code = 0, this.message = "", this.data});
 
-  factory MyArrayResponse.fromJsonArray(Map<String, dynamic> json, Function fromJsonModel) {
-    List<T> myList = [];
-    final arrayData = json['data'];
-    if (arrayData != null) {
-      for (var element in arrayData) {
-        myList.add(fromJsonModel(element));
+  factory TerminalResponse.fromJsonArray(Map<String, dynamic> json, Function fromJsonModel) {
+    List<Terminal> terminals = [];
+
+    // List terminal dari response API
+    final terminalList = json['data'];
+
+    // Jika list terminal tidak kosong
+    if (terminalList != null) {
+      // Pembuatan objek terminal
+      for (var terminal in terminalList) {
+        terminals.add(fromJsonModel(terminal));
       }
     }
-    return MyArrayResponse(
+    return TerminalResponse(
       // code: (json['code'] != null) ? json['code'] : 0,
       code: json['code'],
       message: json['message'],
-      data: (json['data'] != null) ? myList : null,
+      data: (json['data'] != null) ? terminals : null,
     );
   }
 }

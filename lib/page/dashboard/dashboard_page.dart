@@ -24,8 +24,11 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   String? userName;
   final _controller = TerminalController();
-  List? _terminals = [];
-  List<Widget> _terminalWidgets = [];
+  List<Terminal>? _terminals = [];
+  List<Widget>? _terminalWidgets;
+
+  /// Response pemanggilan API yang sudah dalam bentuk objek [TerminalResponse]
+  late TerminalResponse? _terminalObjectResponse;
 
   @override
   void initState() {
@@ -43,58 +46,46 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   /// Mengambil data terminal
-  /// 
-  /// Jika data terminal berhasil didapat ketika login data akan 
+  ///
+  /// Jika data terminal berhasil didapat ketika login data akan
   /// diambil dari [SharedPreferences].
-  /// 
-  /// Sebaliknya, data terminal akan diambil dengan melakukan pemanggilan 
+  ///
+  /// Sebaliknya, data terminal akan diambil dengan melakukan pemanggilan
   /// API getTerminal pada [LoginController]
   void _getTerminal() async {
-    // Shared preferences
-    final prefs = await SharedPreferences.getInstance();
-    
-    // jsonString response get terminal yang dilakukan ketika login
-    String? jsonString = prefs.getString('terminal');
-
-    // Jika data terminal berhasil didapat ketika login
-    if (jsonString != null) {
-      Map<String, dynamic> myBody = jsonDecode(jsonString);
-      MyArrayResponse<Terminal> response = MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);
-      _terminals = response.data;
-    } else {
-      try {
-        String? jsonString = await _controller.getTerminal();
-        Map<String, dynamic> myBody = jsonDecode(jsonString.toString());
-        MyArrayResponse<Terminal> response = MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);
-        _terminals = response.data;
-      } catch (e) {
-        print(e);
-      }
+    try {
+      _terminalObjectResponse = await _controller.getTerminal(2);
+      _terminals = _terminalObjectResponse?.data;
+    } catch (e) {
+      print(e);
     }
 
     _getTerminalWidget();
   }
 
   void _getTerminalWidget() {
-    for (var terminal in _terminals!) {
-      _terminalWidgets.add(
-        GestureDetector(
-          onTap: () {
-            print("Perangkat ditekan");
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return TerminalPage(
-                terminal: terminal,
-              );
-            }));
-          },
-          child: TerminalView(
-            terminalIcon: Icons.bed,
-            terminalName: terminal.name,
-            activeSocket: 0,
-            terminalStatus: false,
+    if (_terminals != null) {
+      for (var terminal in _terminals!) {
+        _terminalWidgets = [];
+        _terminalWidgets!.add(
+          GestureDetector(
+            onTap: () {
+              print("Perangkat ditekan");
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return TerminalPage(
+                  terminal: terminal,
+                );
+              }));
+            },
+            child: TerminalView(
+              terminalIcon: Icons.bed,
+              terminalName: terminal.name,
+              activeSocket: 0,
+              terminalStatus: false,
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -158,39 +149,23 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           const Gap(24),
           SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: _terminalWidgets,
-              )
-              // Row(
-              //   children: [
-              //     GestureDetector(
-              //       onTap: () {
-              //         print("Perangkat ditekan");
-              //         context.goNamed("terminal_1");
-              //       },
-              //       child: TerminalView(
-              //         terminalIcon: Icons.bed,
-              //         terminalName: "Kamar Adik",
-              //         activeSocket: 3,
-              //         terminalStatus: true,
-              //       ),
-              //     ),
-              //     TerminalView(
-              //       terminalIcon: Icons.soup_kitchen_rounded,
-              //       terminalName: "Dapur",
-              //       activeSocket: 3,
-              //       terminalStatus: false,
-              //     ),
-              //     TerminalView(
-              //       terminalIcon: Icons.family_restroom_rounded,
-              //       terminalName: "Ruang Keluarga",
-              //       activeSocket: 3,
-              //       terminalStatus: true,
-              //     ),
-              //   ],
-              // ),
-              )
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _terminalWidgets ??
+                  [
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Text(
+                          "Belum ada perangkat",
+                          style: Styles.bodyTextBlack,
+                        ),
+                      ),
+                    ),
+                  ],
+            ),
+          )
         ],
       ),
     );

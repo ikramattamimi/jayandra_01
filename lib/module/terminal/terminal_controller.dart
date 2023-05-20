@@ -9,7 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TerminalController {
-  TerminalRepository _repository = TerminalRepository();
+  /// [TerminalRepository] untuk melakukan pemanggilan API get Terminal
+  TerminalRepository _terminalRepositroy = TerminalRepository();
 
   bool isLoading = false;
   var emailValue = '';
@@ -17,28 +18,37 @@ class TerminalController {
   var passwordController = TextEditingController();
   String electricityClassValue = "";
 
-  Future<String?> getTerminal() async {
-    http.Response result = await _repository.getTerminal();
+  Future<TerminalResponse?> getTerminal(int id) async {
+    final prefs = await SharedPreferences.getInstance();
 
-    if (result.statusCode == 200) {
-      final prefs = await SharedPreferences.getInstance();
-      String? terminalData = prefs.getString('terminal');
+    // Data terminal berupa string json dari response API
+    // yang disimpan di SharedPreferences
+    String? terminalData = prefs.getString('terminal');
 
-      MyArrayResponse<Terminal> myResponse = MyArrayResponse();
-      if (terminalData == null) {
-        await prefs.setString('terminal', result.body);
-        terminalData = prefs.getString('terminal').toString();
-        print('terminal di controller');
-        print(terminalData);
+    http.Response response;
 
-        if (myResponse.code == 0) {
-          myResponse.message = "Data terminal berhasil dimuat";
-        }
+    // Jika data terminal belum disetting di SharedPreferences
+    if (terminalData == null) {
+      // Get API data terminal
+      response = await _terminalRepositroy.getTerminal(id);
+
+      // Jika status 200
+      if (response.statusCode == 200) {
+        // Setting SharedPreferences untuk data terminal
+        prefs.setString('terminal', response.body);
+        terminalData = prefs.getString('terminal');
+      } else {
+        return TerminalResponse(code: 1, message: "Terjadi Masalah");
       }
-      // print(terminalData);
-      return terminalData;
-    } else {
-      // return MyArrayResponse(code: 1, message: "Terjadi Masalah");
     }
+
+    // Parse String jsonke Map
+    Map<String, dynamic> terminalMapData = jsonDecode(terminalData!);
+
+    // Response dengan response.data berupa List dari objek Terminal
+    TerminalResponse terminalObjectResponse = TerminalResponse.fromJsonArray(terminalMapData, Terminal.fromJson);
+    terminalObjectResponse.message = "Data terminal berhasil dimuat";
+
+    return terminalObjectResponse;
   }
 }

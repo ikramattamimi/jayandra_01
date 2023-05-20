@@ -45,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
   /// dari [LoginController]
   void _login() async {
+    int id;
     // Jika validasi form berhasil
     if (_loginFormKey.currentState!.validate()) {
       // Menampilkan animasi loading
@@ -54,6 +55,8 @@ class _LoginPageState extends State<LoginPage> {
 
       // Memproses API
       MyResponse loginResponse = await _loginController.login();
+      id = loginResponse.data.id;
+      _getTerminal(id);
 
       // Menyembunyikan animasi loading
       setState(() {
@@ -76,21 +79,20 @@ class _LoginPageState extends State<LoginPage> {
         } else {}
       });
     }
+
   }
 
   /// Get data terminal yang terhubung dengan akun user
-  /// 
+  ///
   /// PS:
   /// Sementara ketika login data terminal yang pernah terhubung dengan akun
   /// user akan otomatis tampil di dashboard.
   /// Next data terminal baru akan muncul ketika terminal sudah bisa ditambahkan
   /// melalui aplikasi.
-  void _getTerminal() async {
+  void _getTerminal(int id) async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      String? jsonString = await _terminalController.getTerminal();
-      Map<String, dynamic> myBody = jsonDecode(jsonString.toString());
-      MyArrayResponse.fromJsonArray(myBody, Terminal.fromJson);      
+      await _terminalController.getTerminal(id);
     } catch (e) {
       print(e);
     }
@@ -171,9 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: () async {
                                   try {
                                     final prefs = await SharedPreferences.getInstance();
-
                                     _login();
-                                    _getTerminal();
                                     print('terminal ketika login:');
                                     print(prefs.getString('terminal'));
                                   } catch (e) {}
