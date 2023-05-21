@@ -30,6 +30,11 @@ class AppRouter {
 
   final GoRouter _router = GoRouter(
     routes: <GoRoute>[
+      GoRoute(
+        path: "/splash",
+        name: "splash_screen",
+        builder: (BuildContext context, GoRouterState state) => const SplashScreen(),
+      ),
       // Landing Page Route
       GoRoute(
         path: "/landing_page",
@@ -55,13 +60,19 @@ class AppRouter {
                   email: "ikram@gmail.com",
                 ),
                 routes: <GoRoute>[
-                  GoRoute(path: "register_page_3", name: "register_page_3", builder: (BuildContext context, GoRouterState state) => const RegisterPage3(email: '',), routes: <GoRoute>[
-                    GoRoute(
-                      path: "electricity_class_register_page",
-                      name: "electricity_class_register_page",
-                      builder: (BuildContext context, GoRouterState state) => const ElectricityClassRegisterPage(),
-                    ),
-                  ])
+                  GoRoute(
+                      path: "register_page_3",
+                      name: "register_page_3",
+                      builder: (BuildContext context, GoRouterState state) => const RegisterPage3(
+                            email: '',
+                          ),
+                      routes: <GoRoute>[
+                        GoRoute(
+                          path: "electricity_class_register_page",
+                          name: "electricity_class_register_page",
+                          builder: (BuildContext context, GoRouterState state) => const ElectricityClassRegisterPage(),
+                        ),
+                      ])
                 ],
               ),
             ],
@@ -72,7 +83,7 @@ class AppRouter {
         path: "/",
         name: "main_page",
         // builder: (BuildContext context, GoRouterState state) => MainScreen(user: state.extra as User),
-        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
+        builder: (BuildContext context, GoRouterState state) => MainScreen(),
         routes: <GoRoute>[
           // Main Page Route
           GoRoute(
@@ -80,37 +91,39 @@ class AppRouter {
             name: "edit_profile",
             builder: (BuildContext context, GoRouterState state) => const EditProfilePage(),
           ),
-          // GoRoute(
-          //   path: "terminal/1",
-          //   name: "terminal_1",
-          //   builder: (BuildContext context, GoRouterState state) => TerminalPage(terminal: terminal,),
-          //   routes: <GoRoute>[
-          //     GoRoute(
-          //       path: "terminal/1/schedule",
-          //       name: "terminal_schedule",
-          //       builder: (BuildContext context, GoRouterState state) => const SchedulePage(),
-          //       routes: <GoRoute>[
-          //         GoRoute(
-          //           path: "terminal/1/schedule/add",
-          //           name: "terminal_schedule_add",
-          //           builder: (BuildContext context, GoRouterState state) => const AddSchedulePage(),
-          //         )
-          //       ],
-          //     ),
-          //     GoRoute(
-          //       path: "terminal/1/timer",
-          //       name: "terminal_timer",
-          //       builder: (BuildContext context, GoRouterState state) => const TimerPage(),
-          //       routes: <GoRoute>[
-          //         GoRoute(
-          //           path: "terminal/1/timer/add",
-          //           name: "terminal_timer_add",
-          //           builder: (BuildContext context, GoRouterState state) => const AddTimerPage(),
-          //         )
-          //       ],
-          //     ),
-          //   ],
-          // ),
+          GoRoute(
+            path: "terminal",
+            name: "terminal",
+            builder: (BuildContext context, GoRouterState state) => TerminalPage(
+              terminal: state.extra as Terminal,
+            ),
+            routes: <GoRoute>[
+              GoRoute(
+                path: "terminal/1/schedule",
+                name: "terminal_schedule",
+                builder: (BuildContext context, GoRouterState state) => const SchedulePage(),
+                routes: <GoRoute>[
+                  GoRoute(
+                    path: "terminal/1/schedule/add",
+                    name: "terminal_schedule_add",
+                    builder: (BuildContext context, GoRouterState state) => const AddSchedulePage(),
+                  )
+                ],
+              ),
+              GoRoute(
+                path: "terminal/1/timer",
+                name: "terminal_timer",
+                builder: (BuildContext context, GoRouterState state) => const TimerPage(),
+                routes: <GoRoute>[
+                  GoRoute(
+                    path: "terminal/1/timer/add",
+                    name: "terminal_timer_add",
+                    builder: (BuildContext context, GoRouterState state) => const AddTimerPage(),
+                  )
+                ],
+              ),
+            ],
+          ),
           GoRoute(
             path: "add_device",
             name: "add_device",
@@ -140,7 +153,7 @@ class AppRouter {
         ],
       ),
     ],
-    initialLocation: '/landing_page',
+    initialLocation: '/splash',
     // initialLocation: '/',
     debugLogDiagnostics: true,
     routerNeglect: true,

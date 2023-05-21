@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/terminal/terminal_page.dart';
 import 'package:jayandra_01/screens/report_view.dart';
@@ -15,6 +16,8 @@ import 'package:flutter/material.dart';
 
 /// Widget ini menampilkan halaman Dashboard
 class DashboardPage extends StatefulWidget {
+  // final User user;
+  // const DashboardPage({super.key, required this.user});
   const DashboardPage({super.key});
 
   @override
@@ -36,6 +39,7 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     getUserName();
     _getTerminal();
+    // print(widget.user);
   }
 
   void getUserName() async {
@@ -71,11 +75,7 @@ class _DashboardPageState extends State<DashboardPage> {
           GestureDetector(
             onTap: () {
               print("Perangkat ditekan");
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return TerminalPage(
-                  terminal: terminal,
-                );
-              }));
+              context.goNamed('terminal', extra: terminal);
             },
             child: TerminalView(
               terminalIcon: Icons.bed,

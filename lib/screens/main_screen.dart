@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:flutter/services.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/page/dashboard/dashboard_page.dart';
 import 'package:jayandra_01/screens/profile_screen.dart';
 import 'package:jayandra_01/screens/report_screen.dart';
@@ -9,7 +10,10 @@ import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  // final User user;
+  // MainScreen({super.key, required this.user});
+  MainScreen({super.key});
+  User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +33,16 @@ class MainScreen extends StatelessWidget {
         primarySwatch: Colors.red,
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
-      home: const BottomBar(),
+      home: BottomBar(
+        // user: user1,
+      ),
     );
   }
 }
 
 class BottomBar extends StatefulWidget {
+  // final User user;
+  // const BottomBar({super.key, required this.user});
   const BottomBar({super.key});
 
   @override
@@ -44,19 +52,29 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
   late String userName;
+  late User user;
+  List<Widget> _widgetoptions = <Widget>[
+      // DashboardPage(user: user1),
+      DashboardPage(),
+      ReportScreen(),
+      ProfileScreen(),
+    ];
 
   void getUserName() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       userName = prefs.getString('user_name').toString();
     });
-  }
+    // user = widget.user;
+    User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
 
-  static final List<Widget> _widgetoptions = <Widget>[
-    DashboardPage(),
-    ReportScreen(),
-    ProfileScreen(),
-  ];
+    _widgetoptions = <Widget>[
+      // DashboardPage(user: user1),
+      DashboardPage(),
+      ReportScreen(),
+      ProfileScreen(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {

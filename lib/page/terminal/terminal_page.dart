@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -21,20 +22,33 @@ class _TerminalPageState extends State<TerminalPage> {
   String pageTitle = "";
   List<String> sockets = ['Socket 1', 'Socket 2', 'Socket 3', 'Socket 4'];
 
+  List<Socket>? socketss;
+  Terminal? terminal;
+
   @override
   void initState() {
     super.initState();
+    setTerminal();
     pageTitle = widget.terminal.name;
   }
 
+  void setTerminal() {
+    terminal = widget.terminal;
+    socketss = terminal?.sockets;
+  }
+
   List<Widget> getSockets() {
-    List<Widget> mySockets = <Socket>[];
-    for (var element in sockets) {
-      mySockets.add(Socket(
-        id: 1,
-        isSocketOn: false,
-        name: element,
-      ));
+    List<Widget> mySockets = [];
+    for (var element in socketss!) {
+      mySockets.add(
+        Expanded(
+          child: SocketView(
+            id: element.id_socket!,
+            isSocketOn: element.status!,
+            name: element.name!,
+          ),
+        ),
+      );
     }
     return mySockets;
   }
@@ -86,35 +100,10 @@ class _TerminalPageState extends State<TerminalPage> {
                     size: 32,
                   ),
                   Gap(16),
-                  // Socket(id: 1, status: status, name: name),
-                  // getSockets(),
-
                   Expanded(
-                    child: Socket(
-                      id: 1,
-                      isSocketOn: true,
-                      name: sockets[0],
-                    ),
-                  ),
-                  Expanded(
-                    child: Socket(
-                      id: 1,
-                      isSocketOn: true,
-                      name: sockets[1],
-                    ),
-                  ),
-                  Expanded(
-                    child: Socket(
-                      id: 1,
-                      isSocketOn: true,
-                      name: sockets[2],
-                    ),
-                  ),
-                  Expanded(
-                    child: Socket(
-                      id: 1,
-                      isSocketOn: true,
-                      name: sockets[3],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: getSockets(),
                     ),
                   ),
                 ],
@@ -165,8 +154,8 @@ class _TerminalPageState extends State<TerminalPage> {
   }
 }
 
-class Socket extends StatefulWidget {
-  const Socket({
+class SocketView extends StatefulWidget {
+  const SocketView({
     super.key,
     required this.id,
     required this.isSocketOn,
@@ -177,10 +166,10 @@ class Socket extends StatefulWidget {
   final String name;
 
   @override
-  State<Socket> createState() => _SocketState();
+  State<SocketView> createState() => _SocketState();
 }
 
-class _SocketState extends State<Socket> {
+class _SocketState extends State<SocketView> {
   bool _isSocketOn = false;
 
   @override
@@ -194,6 +183,7 @@ class _SocketState extends State<Socket> {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(
           height: 85,
@@ -217,10 +207,17 @@ class _SocketState extends State<Socket> {
             },
           ),
         ),
-        const Gap(16),
-        Text(
-          "Socket 1",
-          style: Styles.bodyTextBlack3,
+        const Gap(10),
+        SizedBox(
+          width: 67,
+          child: Wrap(
+            children: [
+              Text(
+                widget.name,
+                style: Styles.bodyTextBlack3,
+              ),
+            ],
+          ),
         ),
         IconButton(
           onPressed: () {},

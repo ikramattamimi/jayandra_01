@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -8,14 +10,14 @@ import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LandingPage extends StatefulWidget {
-  const LandingPage({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<LandingPage> createState() => _LandingPageState();
+  State<SplashScreen> createState() => _LandingPageState();
 }
 
-class _LandingPageState extends State<LandingPage> {
+class _LandingPageState extends State<SplashScreen> {
   @override
   void initState() {
     // TODO: implement initState
@@ -27,10 +29,23 @@ class _LandingPageState extends State<LandingPage> {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
-    if (token != null) {
-      context.goNamed('main_page');
-    }
+    Timer(Duration(seconds: 2), (() {
+      token != null ? context.goNamed('main_page') : context.goNamed('landing_page');
+    }));
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class LandingPage extends StatelessWidget {
+  const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {

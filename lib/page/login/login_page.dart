@@ -74,12 +74,12 @@ class _LoginPageState extends State<LoginPage> {
         // Jika status autentikasi sukses dengan kode 0
         if (loginResponse.code == 0) {
           User user = loginResponse.data;
+          User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
           // context.goNamed('main_page', extra: user);
           context.goNamed('main_page');
         } else {}
       });
     }
-
   }
 
   /// Get data terminal yang terhubung dengan akun user
