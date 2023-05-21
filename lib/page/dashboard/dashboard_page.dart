@@ -58,7 +58,7 @@ class _DashboardPageState extends State<DashboardPage> {
   /// API getTerminal pada [LoginController]
   void _getTerminal() async {
     try {
-      _terminalObjectResponse = await _controller.getTerminal(2);
+      _terminalObjectResponse = await _controller.getTerminal();
       _terminals = _terminalObjectResponse?.data;
     } catch (e) {
       print(e);
@@ -80,8 +80,8 @@ class _DashboardPageState extends State<DashboardPage> {
             child: TerminalView(
               terminalIcon: Icons.bed,
               terminalName: terminal.name,
-              activeSocket: 0,
-              terminalStatus: false,
+              activeSocket: terminal.totalActiveSocket,
+              isTerminalActive: terminal.isTerminalActive,
             ),
           ),
         );

@@ -29,13 +29,19 @@ class _TerminalPageState extends State<TerminalPage> {
   @override
   void initState() {
     super.initState();
-    setTerminal();
+    getTerminalState();
     pageTitle = widget.terminal.name;
   }
 
-  void setTerminal() {
+  void getTerminalState() {
     terminal = widget.terminal;
     socketss = terminal?.sockets;
+  }
+
+  void setTerminal() {
+    setState(() {
+      terminal!.isTerminalActive = !terminal!.isTerminalActive;
+    });
   }
 
   List<Widget> getSockets() {
@@ -66,7 +72,7 @@ class _TerminalPageState extends State<TerminalPage> {
         foregroundColor: Styles.textColor,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            context.pushNamed('main_page');
             SystemChrome.setSystemUIOverlayStyle(
               SystemUiOverlayStyle(
                 statusBarColor: Styles.primaryColor,
@@ -93,10 +99,13 @@ class _TerminalPageState extends State<TerminalPage> {
               margin: 0,
               child: Column(
                 children: [
-                  Icon(
-                    Icons.power_settings_new_rounded,
-                    color: Styles.accentColor,
-                    size: 32,
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.power_settings_new_rounded,
+                      color: terminal!.isTerminalActive ? Styles.accentColor : Styles.accentColor2,
+                      size: 32,
+                    ),
                   ),
                   Gap(16),
                   Expanded(

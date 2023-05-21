@@ -19,8 +19,8 @@ class TerminalController {
   var passwordController = TextEditingController();
   String electricityClassValue = "";
 
-  Future<TerminalResponse?> getTerminal(int id) async {
-    print('get terminal dipanggil');
+  Future<TerminalResponse?> getTerminal() async {
+    // print('get terminal dipanggil');
     final prefs = await SharedPreferences.getInstance();
 
     // Data terminal berupa string json dari response API
@@ -32,7 +32,7 @@ class TerminalController {
     // Jika data terminal belum disetting di SharedPreferences
     if (terminalData == null) {
       // Get API data terminal
-      response = await _terminalRepositroy.getTerminal(id);
+      response = await _terminalRepositroy.getTerminal();
 
       // Jika status 200
       if (response.statusCode == 200) {
@@ -70,7 +70,7 @@ class TerminalController {
     final prefs = await SharedPreferences.getInstance();
     int? userId = prefs.getInt('user_id');
     prefs.remove('terminal');
-    getTerminal(userId!);
+    getTerminal();
 
     return updateSocketResponse;
   }

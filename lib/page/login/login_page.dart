@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
   void _getTerminal(int id) async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      await _terminalController.getTerminal(id);
+      await _terminalController.getTerminal();
     } catch (e) {
       print(e);
     }

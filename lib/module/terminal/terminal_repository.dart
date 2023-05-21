@@ -5,11 +5,11 @@ import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TerminalRepository {
-  Future<http.Response> getTerminal(int id) async {
+  Future<http.Response> getTerminal() async {
     final prefs = await SharedPreferences.getInstance();
-    var userId = prefs.getInt('id_uesr');
+    var userId = prefs.getInt('user_id');
     return http.get(
-      Uri.parse('http://localhost:3000/getpowerstrip/$id'),
+      Uri.parse('http://localhost:3000/getpowerstrip/$userId'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
@@ -17,8 +17,6 @@ class TerminalRepository {
   }
 
   Future<http.Response> updateSocket(Socket socket) async {
-    final prefs = await SharedPreferences.getInstance();
-    var userId = prefs.getInt('id_uesr');
     return http.post(
       Uri.parse('http://localhost:3000/updateSocketStatus/'),
       headers: <String, String>{

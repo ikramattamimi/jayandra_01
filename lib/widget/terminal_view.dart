@@ -8,11 +8,11 @@ class TerminalView extends StatefulWidget {
       required this.terminalIcon,
       required this.terminalName,
       required this.activeSocket,
-      required this.terminalStatus});
+      required this.isTerminalActive});
   final IconData terminalIcon;
   final String terminalName;
   final int activeSocket;
-  final bool terminalStatus;
+  final bool isTerminalActive;
 
   @override
   State<TerminalView> createState() => _TerminalViewState();
@@ -28,7 +28,7 @@ class _TerminalViewState extends State<TerminalView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _toggleStatus = widget.terminalStatus;
+    _toggleStatus = widget.isTerminalActive;
     getTogglesStatus();
   }
 
