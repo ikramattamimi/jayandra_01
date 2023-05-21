@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
@@ -43,9 +44,7 @@ class _TerminalPageState extends State<TerminalPage> {
       mySockets.add(
         Expanded(
           child: SocketView(
-            id: element.id_socket!,
-            isSocketOn: element.status!,
-            name: element.name!,
+            socket: element,
           ),
         ),
       );
@@ -157,26 +156,24 @@ class _TerminalPageState extends State<TerminalPage> {
 class SocketView extends StatefulWidget {
   const SocketView({
     super.key,
-    required this.id,
-    required this.isSocketOn,
-    required this.name,
+    required this.socket,
   });
-  final int id;
-  final bool isSocketOn;
-  final String name;
+  final Socket socket;
 
   @override
   State<SocketView> createState() => _SocketState();
 }
 
 class _SocketState extends State<SocketView> {
+  late Socket socket;
   bool _isSocketOn = false;
+  TerminalController _terminalController = TerminalController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _isSocketOn = widget.isSocketOn;
+    socket = widget.socket;
   }
 
   @override
@@ -192,12 +189,13 @@ class _SocketState extends State<SocketView> {
             icon: Icon(
               MdiIcons.powerSocketDe,
               size: 85,
-              color: (_isSocketOn != false) ? Styles.accentColor : Styles.accentColor2,
+              color: (socket.status != false) ? Styles.accentColor : Styles.accentColor2,
             ),
             onPressed: () {
               setState(() {
-                _isSocketOn = !_isSocketOn;
+                socket.status = socket.status != null ? !socket.status! : true;
               });
+              _terminalController.updateSocket(socket);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Message'),
@@ -213,7 +211,7 @@ class _SocketState extends State<SocketView> {
           child: Wrap(
             children: [
               Text(
-                widget.name,
+                socket.name!,
                 style: Styles.bodyTextBlack3,
               ),
             ],

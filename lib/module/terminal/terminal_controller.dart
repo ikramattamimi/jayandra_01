@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:jayandra_01/models/my_response.dart';
+import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_repository.dart';
@@ -19,6 +20,7 @@ class TerminalController {
   String electricityClassValue = "";
 
   Future<TerminalResponse?> getTerminal(int id) async {
+    print('get terminal dipanggil');
     final prefs = await SharedPreferences.getInstance();
 
     // Data terminal berupa string json dari response API
@@ -37,6 +39,7 @@ class TerminalController {
         // Setting SharedPreferences untuk data terminal
         prefs.setString('terminal', response.body);
         terminalData = prefs.getString('terminal');
+        print(terminalData);
       } else {
         return TerminalResponse(code: 1, message: "Terjadi Masalah");
       }
@@ -50,5 +53,25 @@ class TerminalController {
     terminalObjectResponse.message = "Data terminal berhasil dimuat";
 
     return terminalObjectResponse;
+  }
+
+  Future<MyResponse?> updateSocket(Socket socket) async {
+    http.Response responseSocket;
+    responseSocket = await _terminalRepositroy.updateSocket(socket);
+
+    // Parse String jsonke Map
+    Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
+
+    MyResponse updateSocketResponse = MyResponse.fromJson(socketMapData, Socket.fromJson);
+    // print(updateSocketResponse.data.status);
+    Socket updatedSocket = updateSocketResponse.data;
+    /////
+
+    final prefs = await SharedPreferences.getInstance();
+    int? userId = prefs.getInt('user_id');
+    prefs.remove('terminal');
+    getTerminal(userId!);
+
+    return updateSocketResponse;
   }
 }
