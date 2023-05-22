@@ -39,6 +39,21 @@ class _TerminalPageState extends State<TerminalPage> {
     socketss = terminal?.sockets;
   }
 
+  void setTerminalByOneSocket() {
+    for (var socket in terminal!.sockets) {
+      if (socket.status == true) {
+        setState(() {
+          terminal!.isTerminalActive = true;
+        });
+        break;
+      } else {
+        setState(() {
+          terminal!.isTerminalActive = false;
+        });
+      }
+    }
+  }
+
   void setTerminal() async {
     setState(() {
       terminal!.isTerminalActive = !terminal!.isTerminalActive;
@@ -56,6 +71,7 @@ class _TerminalPageState extends State<TerminalPage> {
         Expanded(
           child: SocketView(
             socket: element,
+            changeParentState: setTerminalByOneSocket,
           ),
         ),
       );
@@ -172,8 +188,10 @@ class SocketView extends StatefulWidget {
   const SocketView({
     super.key,
     required this.socket,
+    required this.changeParentState,
   });
   final Socket socket;
+  final Function() changeParentState;
 
   @override
   State<SocketView> createState() => _SocketState();
@@ -209,6 +227,7 @@ class _SocketState extends State<SocketView> {
             onPressed: () {
               setState(() {
                 socket.status = socket.status != null ? !socket.status! : true;
+                widget.changeParentState();
               });
               _terminalController.updateSocket(socket);
               ScaffoldMessenger.of(context).showSnackBar(
