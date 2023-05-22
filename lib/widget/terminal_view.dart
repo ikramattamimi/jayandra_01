@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
@@ -20,8 +21,9 @@ class _TerminalViewState extends State<TerminalView> {
   late Color _toggleColor;
   late String _activeSocket;
   late int _totalActiveSocket;
+  late Terminal terminal;
 
-  final _controller = TerminalController();
+  final _terminalController = TerminalController();
   late TerminalResponse? _terminalObjectResponse;
 
   @override
@@ -47,8 +49,8 @@ class _TerminalViewState extends State<TerminalView> {
 
   void setToggle() async {
     _toggleStatus = !_toggleStatus;
-    _totalActiveSocket = 4;
-    _terminalObjectResponse = await _controller.changeAllSocketStatus(widget.terminal.id, _toggleStatus);
+    // _totalActiveSocket = 4;
+    _terminalObjectResponse = await _terminalController.changeAllSocketStatus(widget.terminal.id, _toggleStatus);
     setState(() {
       getTogglesStatus();
     });
@@ -57,63 +59,69 @@ class _TerminalViewState extends State<TerminalView> {
   @override
   Widget build(BuildContext context) {
     // final size = AppLayout.getSize(context);
-    return SizedBox(
-      width: 170,
-      height: 140,
-      child: Container(
-        margin: const EdgeInsets.only(
-          left: 16,
-          bottom: 16,
-        ),
-        decoration: BoxDecoration(
-          color: Styles.secondaryColor,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(5),
+    return GestureDetector(
+      onTap: () {
+        print("Perangkat ditekan");
+        context.goNamed('terminal', extra: widget.terminal);
+      },
+      child: SizedBox(
+        width: 170,
+        height: 140,
+        child: Container(
+          margin: const EdgeInsets.only(
+            left: 16,
+            bottom: 16,
           ),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ===================================
-            // Icon dan Toggle
-            // ===================================
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  widget.terminalIcon,
-                  size: 30,
-                ),
-                IconButton(
-                  onPressed: setToggle,
-                  icon: Icon(
-                    _toggleIcon,
-                    color: _toggleColor,
-                    size: 40,
-                  ),
-                )
-              ],
+          decoration: BoxDecoration(
+            color: Styles.secondaryColor,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(5),
             ),
-            // ===================================
-            // Nama terminal dan status socket
-            // ===================================
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.terminal.name,
-                  style: Styles.title,
-                ),
-                Text(
-                  '${_activeSocket}',
-                  style: Styles.bodyTextGrey3,
-                ),
-              ],
-            )
-          ],
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ===================================
+              // Icon dan Toggle
+              // ===================================
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    widget.terminalIcon,
+                    size: 30,
+                  ),
+                  IconButton(
+                    onPressed: setToggle,
+                    icon: Icon(
+                      _toggleIcon,
+                      color: _toggleColor,
+                      size: 40,
+                    ),
+                  )
+                ],
+              ),
+              // ===================================
+              // Nama terminal dan status socket
+              // ===================================
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.terminal.name,
+                    style: Styles.title,
+                  ),
+                  Text(
+                    '${_activeSocket}',
+                    style: Styles.bodyTextGrey3,
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

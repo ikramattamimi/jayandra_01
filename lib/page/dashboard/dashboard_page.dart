@@ -118,19 +118,13 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _getTerminalWidget() {
     if (_terminals != null) {
-      print('terminal : $_terminals');
+      _terminalWidgets = [];
       for (var terminal in _terminals!) {
-        _terminalWidgets = [];
+        print(terminal.totalActiveSocket);
         _terminalWidgets!.add(
-          GestureDetector(
-            onTap: () {
-              print("Perangkat ditekan");
-              context.goNamed('terminal', extra: terminal);
-            },
-            child: TerminalView(
-              terminalIcon: Icons.bed,
-              terminal: terminal,
-            ),
+          TerminalView(
+            terminalIcon: Icons.bed,
+            terminal: terminal,
           ),
         );
       }

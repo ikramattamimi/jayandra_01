@@ -78,12 +78,15 @@ class TerminalController {
   Future<TerminalResponse?> changeAllSocketStatus(int id_terminal, bool status) async {
     // print('get terminal dipanggil');
     final prefs = await SharedPreferences.getInstance();
+    TerminalResponse? _terminalObjectResponse;
 
     print('update all socket');
 
     // Get API data terminal
-    await _terminalRepositroy.changeAllSocketStatus(id_terminal, status);
-    prefs.remove('terminal');
-    getTerminal();
+    await _terminalRepositroy.changeAllSocketStatus(id_terminal, status).then((value) async {
+      prefs.remove('terminal');
+      _terminalObjectResponse = await getTerminal();
+    });
+    return _terminalObjectResponse;
   }
 }

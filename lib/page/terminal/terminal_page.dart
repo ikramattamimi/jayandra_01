@@ -22,6 +22,7 @@ class TerminalPage extends StatefulWidget {
 class _TerminalPageState extends State<TerminalPage> {
   String pageTitle = "";
   List<String> sockets = ['Socket 1', 'Socket 2', 'Socket 3', 'Socket 4'];
+  final _terminalController = TerminalController();
 
   List<Socket>? socketss;
   Terminal? terminal;
@@ -38,10 +39,14 @@ class _TerminalPageState extends State<TerminalPage> {
     socketss = terminal?.sockets;
   }
 
-  void setTerminal() {
+  void setTerminal() async {
     setState(() {
       terminal!.isTerminalActive = !terminal!.isTerminalActive;
+      for (var socket in socketss!) {
+        socket.status = !socket.status!;
+      }
     });
+    await _terminalController.changeAllSocketStatus(widget.terminal.id, terminal!.isTerminalActive);
   }
 
   List<Widget> getSockets() {
@@ -100,7 +105,8 @@ class _TerminalPageState extends State<TerminalPage> {
               child: Column(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    padding: EdgeInsets.zero,
+                    onPressed: () => setTerminal(),
                     icon: Icon(
                       Icons.power_settings_new_rounded,
                       color: terminal!.isTerminalActive ? Styles.accentColor : Styles.accentColor2,
