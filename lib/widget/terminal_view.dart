@@ -94,14 +94,15 @@ class _TerminalViewState extends State<TerminalView> {
                     widget.terminalIcon,
                     size: 30,
                   ),
-                  IconButton(
-                    onPressed: setToggle,
-                    icon: Icon(
-                      _toggleIcon,
-                      color: _toggleColor,
-                      size: 40,
-                    ),
-                  )
+                  // IconButton(
+                  //   onPressed: setToggle,
+                  //   icon:
+                  Icon(
+                    _toggleIcon,
+                    color: _toggleColor,
+                    size: 40,
+                  ),
+                  // )
                 ],
               ),
               // ===================================

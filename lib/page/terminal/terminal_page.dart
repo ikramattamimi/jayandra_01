@@ -43,7 +43,7 @@ class _TerminalPageState extends State<TerminalPage> {
     setState(() {
       terminal!.isTerminalActive = !terminal!.isTerminalActive;
       for (var socket in socketss!) {
-        socket.status = !socket.status!;
+        socket.status = terminal!.isTerminalActive;
       }
     });
     await _terminalController.changeAllSocketStatus(widget.terminal.id, terminal!.isTerminalActive);
