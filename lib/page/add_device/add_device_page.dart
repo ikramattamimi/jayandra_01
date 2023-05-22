@@ -97,7 +97,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                               const Gap(24),
                               ElevatedButton(
                                 onPressed: () {
-                                  context.goNamed("confirm_pairing");
+                                  context.pushNamed("confirm_pairing");
                                 },
                                 child: Text(
                                   "Selanjutnya",

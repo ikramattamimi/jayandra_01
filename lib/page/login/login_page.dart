@@ -75,8 +75,8 @@ class _LoginPageState extends State<LoginPage> {
         if (loginResponse.code == 0) {
           User user = loginResponse.data;
           User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
-          // context.goNamed('main_page', extra: user);
-          context.goNamed('main_page');
+          // context.pushNamed('main_page', extra: user);
+          context.pushNamed('main_page');
         } else {}
       });
     }
@@ -192,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                       Center(
                         child: TextButton(
                           onPressed: () {
-                            context.goNamed("register_page");
+                            context.pushNamed("register_page");
                           },
                           child: Text(
                             "Belum punya akun? Daftar",

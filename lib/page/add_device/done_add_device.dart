@@ -61,7 +61,7 @@ class _DoneAddDeviceState extends State<DoneAddDevice> {
                   ),
                   const Gap(32),
                   GestureDetector(
-                    onTap: () => context.goNamed("name"),
+                    onTap: () => context.pushNamed("name"),
                     child: SizedBox(
                       height: 380,
                       width: MediaQuery.of(context).size.width,
@@ -88,7 +88,7 @@ class _DoneAddDeviceState extends State<DoneAddDevice> {
                             const Gap(20),
                             ElevatedButton(
                               onPressed: () {
-                                context.goNamed("main_page");
+                                context.pushNamed("main_page");
                               },
                               style: ElevatedButton.styleFrom(
                                 minimumSize: Size(60, 42),

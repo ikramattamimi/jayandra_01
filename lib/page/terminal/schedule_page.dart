@@ -27,7 +27,7 @@ class _SchedulePageState extends State<SchedulePage> {
         foregroundColor: Styles.textColor,
         leading: IconButton(
           onPressed: () {
-            context.pop();
+            Navigator.of(context).pop();
             SystemChrome.setSystemUIOverlayStyle(
               SystemUiOverlayStyle(
                 statusBarColor: Styles.primaryColor,
@@ -44,7 +44,7 @@ class _SchedulePageState extends State<SchedulePage> {
         actions: [
           IconButton(
             onPressed: () {
-              context.goNamed("terminal_schedule_add");
+              context.pushNamed("terminal_schedule_add");
             },
             icon: Icon(Icons.add_rounded),
           )
@@ -53,11 +53,7 @@ class _SchedulePageState extends State<SchedulePage> {
       backgroundColor: Styles.primaryColor,
       body: ListView(
         children: [
-          SizedBox(
-            height: 156,
-            width: MediaQuery.of(context).size.width,
-            child: ScheduleView()
-            ),
+          SizedBox(height: 156, width: MediaQuery.of(context).size.width, child: ScheduleView()),
         ],
       ),
     );
@@ -75,52 +71,52 @@ class _ScheduleViewState extends State<ScheduleView> {
   @override
   Widget build(BuildContext context) {
     return WhiteContainer(
-              padding: 16,
-              margin: 16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      padding: 16,
+      margin: 16,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "22:00",
-                            style: Styles.headingStyle1,
-                          ),
-                          Text(
-                            " - ",
-                            style: Styles.headingStyle1,
-                          ),
-                          Text(
-                            "02:00",
-                            style: Styles.headingStyle1,
-                          ),
-                        ],
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.toggle_on,
-                          size: 36,
-                          color: Styles.accentColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Gap(4),
                   Text(
-                    "Setiap hari",
-                    style: Styles.bodyTextGrey2,
+                    "22:00",
+                    style: Styles.headingStyle1,
                   ),
                   Text(
-                    "Socket 2",
-                    style: Styles.bodyTextGrey2,
+                    " - ",
+                    style: Styles.headingStyle1,
+                  ),
+                  Text(
+                    "02:00",
+                    style: Styles.headingStyle1,
                   ),
                 ],
               ),
-            );
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.toggle_on,
+                  size: 36,
+                  color: Styles.accentColor,
+                ),
+              ),
+            ],
+          ),
+          const Gap(4),
+          Text(
+            "Setiap hari",
+            style: Styles.bodyTextGrey2,
+          ),
+          Text(
+            "Socket 2",
+            style: Styles.bodyTextGrey2,
+          ),
+        ],
+      ),
+    );
   }
 }

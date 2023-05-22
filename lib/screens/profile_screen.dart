@@ -74,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: Styles.buttonTextBlue,
                     ),
                     onTap: () {
-                      context.goNamed("edit_profile");
+                      context.pushNamed("edit_profile");
                     },
                     // color
                   ),
@@ -102,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.money,
                         title: "Golongan Listrik",
                         onTap: () {
-                          context.goNamed("electricity_class_page");
+                          context.pushNamed("electricity_class_page");
                         },
                       ),
                       CustomListTile(
@@ -129,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         onPressed: () async {
                                           final prefs = await SharedPreferences.getInstance();
                                           prefs.clear();
-                                          context.goNamed("landing_page");
+                                          context.pushNamed("landing_page");
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
@@ -188,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.info_outline_rounded,
                         title: "Tentang Aplikasi",
                         onTap: () {
-                          context.goNamed("about_page");
+                          context.pushNamed("about_page");
                         },
                       ),
                     ],

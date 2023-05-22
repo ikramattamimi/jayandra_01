@@ -61,7 +61,7 @@ class _AddingDevicePageState extends State<AddingDevicePage> {
                   ),
                   const Gap(32),
                   GestureDetector(
-                    onTap: () => context.goNamed("done_add_device"),
+                    onTap: () => context.pushNamed("done_add_device"),
                     child: SizedBox(
                       height: 380,
                       width: MediaQuery.of(context).size.width,

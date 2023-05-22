@@ -163,7 +163,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: () => context.goNamed('add_device'),
+                          onPressed: () => context.pushNamed('add_device'),
                           icon: Icon(
                             CarbonIcons.add_filled,
                             size: 30,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/list_tile_view.dart';
 import 'package:jayandra_01/widget/white_container.dart';
@@ -58,7 +59,9 @@ class _AddTimerPageState extends State<AddTimerPage> {
               padding: 16,
               margin: 16,
               child: Column(
-                children: [],
+                children: [
+                  TimerPickerExample(),
+                ],
               ),
             ),
           ),

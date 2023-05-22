@@ -113,7 +113,7 @@ class _ConfirmPairingPageState extends State<ConfirmPairingPage> {
                           const Gap(16),
                           ElevatedButton(
                             onPressed: () {
-                              context.goNamed("adding_device");
+                              context.pushNamed("adding_device");
                             },
                             child: Text(
                               "Selanjutnya",

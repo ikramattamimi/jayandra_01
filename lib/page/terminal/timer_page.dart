@@ -44,7 +44,7 @@ class _TimerPageState extends State<TimerPage> {
         actions: [
           IconButton(
             onPressed: () {
-              context.goNamed("terminal_timer_add");
+              context.pushNamed("terminal_timer_add");
             },
             icon: Icon(Icons.add_rounded),
           )

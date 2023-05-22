@@ -145,7 +145,7 @@ class _TerminalPageState extends State<TerminalPage> {
                 IconButton(
                   padding: EdgeInsets.all(0),
                   onPressed: () {
-                    context.goNamed('terminal_schedule');
+                    context.pushNamed('terminal_schedule');
                   },
                   icon: Icon(
                     Icons.schedule_rounded,
@@ -164,7 +164,7 @@ class _TerminalPageState extends State<TerminalPage> {
                 const Gap(5),
                 IconButton(
                   padding: EdgeInsets.all(0),
-                  onPressed: () => context.goNamed("terminal_timer"),
+                  onPressed: () => context.pushNamed("terminal_timer"),
                   icon: Icon(
                     Icons.timer,
                     color: Styles.accentColor,

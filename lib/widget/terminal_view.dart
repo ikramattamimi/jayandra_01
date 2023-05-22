@@ -62,7 +62,7 @@ class _TerminalViewState extends State<TerminalView> {
     return GestureDetector(
       onTap: () {
         print("Perangkat ditekan");
-        context.goNamed('terminal', extra: widget.terminal);
+        context.pushNamed('terminal', extra: widget.terminal);
       },
       child: SizedBox(
         width: 170,

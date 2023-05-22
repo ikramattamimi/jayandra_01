@@ -88,7 +88,7 @@ class _RegisterPage4State extends State<RegisterPage4> {
 
       Future.delayed(Duration(seconds: 2), () {
         if (response.code == 0) {
-          // context.goNamed("register_page_2");
+          // context.pushNamed("register_page_2");
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return LoginPage();
           }));

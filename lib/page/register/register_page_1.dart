@@ -66,7 +66,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
       Future.delayed(Duration(seconds: 2), () {
         if (response.code == 1) {
-          // context.goNamed("register_page_2");
+          // context.pushNamed("register_page_2");
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return RegisterPage2(email: _controller.emailController.text);
           }));
@@ -102,7 +102,7 @@ class _RegisterFormState extends State<RegisterForm> {
           Center(
             child: TextButton(
               onPressed: () {
-                context.goNamed("login_page");
+                context.pushNamed("login_page");
               },
               child: Text(
                 "Sudah punya akun? Masuk",

@@ -29,11 +29,11 @@ class _LandingPageState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
-    // Biar terminal auto refresh 
+    // Biar terminal auto refresh
     prefs.remove('terminal');
 
     Timer(Duration(seconds: 2), (() {
-      token != null ? context.goNamed('main_page') : context.goNamed('landing_page');
+      token != null ? context.pushNamed('main_page') : context.pushNamed('landing_page');
     }));
   }
 
@@ -97,7 +97,7 @@ class LandingPage extends StatelessWidget {
                   text: "masuk",
                   textStyle: Styles.buttonTextBlue,
                   onPressed: () {
-                    context.goNamed("login_page");
+                    context.pushNamed("login_page");
                   },
                 ),
                 const Gap(10),
@@ -107,7 +107,7 @@ class LandingPage extends StatelessWidget {
                   text: "Daftar",
                   textStyle: Styles.buttonTextWhite,
                   onPressed: () {
-                    context.goNamed("register_page");
+                    context.pushNamed("register_page");
                   },
                 )
               ],
