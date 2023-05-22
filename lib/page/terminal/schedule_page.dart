@@ -56,7 +56,25 @@ class _SchedulePageState extends State<SchedulePage> {
           SizedBox(
             height: 156,
             width: MediaQuery.of(context).size.width,
-            child: WhiteContainer(
+            child: ScheduleView()
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class ScheduleView extends StatefulWidget {
+  const ScheduleView({super.key});
+
+  @override
+  State<ScheduleView> createState() => _ScheduleViewState();
+}
+
+class _ScheduleViewState extends State<ScheduleView> {
+  @override
+  Widget build(BuildContext context) {
+    return WhiteContainer(
               padding: 16,
               margin: 16,
               child: Column(
@@ -103,10 +121,6 @@ class _SchedulePageState extends State<SchedulePage> {
                   ),
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
-    );
+            );
   }
 }

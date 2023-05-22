@@ -29,6 +29,9 @@ class _LandingPageState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 
+    // Biar terminal auto refresh 
+    prefs.remove('terminal');
+
     Timer(Duration(seconds: 2), (() {
       token != null ? context.goNamed('main_page') : context.goNamed('landing_page');
     }));

@@ -39,7 +39,7 @@ class TerminalController {
         // Setting SharedPreferences untuk data terminal
         prefs.setString('terminal', response.body);
         terminalData = prefs.getString('terminal');
-        print(terminalData);
+        // print(terminalData);
       } else {
         return TerminalResponse(code: 1, message: "Terjadi Masalah");
       }
@@ -73,5 +73,17 @@ class TerminalController {
     getTerminal();
 
     return updateSocketResponse;
+  }
+
+  Future<TerminalResponse?> changeAllSocketStatus(int id_terminal, bool status) async {
+    // print('get terminal dipanggil');
+    final prefs = await SharedPreferences.getInstance();
+
+    print('update all socket');
+
+    // Get API data terminal
+    await _terminalRepositroy.changeAllSocketStatus(id_terminal, status);
+    prefs.remove('terminal');
+    getTerminal();
   }
 }

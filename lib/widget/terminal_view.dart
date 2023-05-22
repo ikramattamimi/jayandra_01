@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:jayandra_01/models/my_response.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
 class TerminalView extends StatefulWidget {
-  const TerminalView(
-      {super.key,
-      required this.terminalIcon,
-      required this.terminalName,
-      required this.activeSocket,
-      required this.isTerminalActive});
+  const TerminalView({super.key, required this.terminal, required this.terminalIcon});
+  final Terminal terminal;
   final IconData terminalIcon;
-  final String terminalName;
-  final int activeSocket;
-  final bool isTerminalActive;
 
   @override
   State<TerminalView> createState() => _TerminalViewState();
@@ -23,30 +19,36 @@ class _TerminalViewState extends State<TerminalView> {
   late IconData _toggleIcon;
   late Color _toggleColor;
   late String _activeSocket;
+  late int _totalActiveSocket;
+
+  final _controller = TerminalController();
+  late TerminalResponse? _terminalObjectResponse;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _toggleStatus = widget.isTerminalActive;
+    _toggleStatus = widget.terminal.isTerminalActive;
+    _totalActiveSocket = widget.terminal.totalActiveSocket;
     getTogglesStatus();
   }
 
   void getTogglesStatus() {
     if (_toggleStatus == true) {
-      _activeSocket = "${widget.activeSocket} Socket Aktif";
-      _toggleStatus = false;
+      _activeSocket = "$_totalActiveSocket Socket Aktif";
       _toggleIcon = Icons.toggle_on;
       _toggleColor = Styles.accentColor;
     } else {
       _activeSocket = "Nonaktif";
-      _toggleStatus = true;
       _toggleIcon = Icons.toggle_off;
       _toggleColor = Styles.textColor3;
     }
   }
 
-  void setToggle() {
+  void setToggle() async {
+    _toggleStatus = !_toggleStatus;
+    _totalActiveSocket = 4;
+    _terminalObjectResponse = await _controller.changeAllSocketStatus(widget.terminal.id, _toggleStatus);
     setState(() {
       getTogglesStatus();
     });
@@ -102,7 +104,7 @@ class _TerminalViewState extends State<TerminalView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.terminalName,
+                  widget.terminal.name,
                   style: Styles.title,
                 ),
                 Text(

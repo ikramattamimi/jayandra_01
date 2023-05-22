@@ -22,11 +22,17 @@ class TerminalRepository {
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
-      body: jsonEncode({
-        'id_socket': socket.id_socket.toString(),
-        'id_terminal': socket.id_terminal.toString(),
-        'status' : socket.status
-      }),
+      body: jsonEncode({'id_socket': socket.id_socket.toString(), 'id_terminal': socket.id_terminal.toString(), 'status': socket.status}),
+    );
+  }
+
+  Future<http.Response> changeAllSocketStatus(int id_terminal, bool status) async {
+    int updateStatus = status == true ? 1 : 0;
+    return http.post(
+      Uri.parse('http://localhost:3000/changeAllSocketStatus/$id_terminal/$updateStatus'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
     );
   }
 }

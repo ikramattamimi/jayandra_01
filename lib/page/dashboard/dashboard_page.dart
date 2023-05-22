@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:carbon_icons/carbon_icons.dart';
@@ -5,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/terminal/terminal_page.dart';
@@ -28,7 +30,7 @@ class _DashboardPageState extends State<DashboardPage> {
   String? userName;
   final _controller = TerminalController();
   List<Terminal>? _terminals = [];
-  List<Widget>? _terminalWidgets;
+  List<Widget>? _terminalWidgets = [];
 
   /// Response pemanggilan API yang sudah dalam bentuk objek [TerminalResponse]
   late TerminalResponse? _terminalObjectResponse;
@@ -38,6 +40,7 @@ class _DashboardPageState extends State<DashboardPage> {
     // TODO: implement initState
     super.initState();
     getUserName();
+    _isTerminalNull();
     _getTerminal();
     // print(widget.user);
   }
@@ -49,6 +52,34 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
+  void _isTerminalNull() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getString('terminal') == null) {
+      _terminalWidgets = [
+        SizedBox(
+          height: 140,
+          width: 170,
+          child: Container(
+            margin: const EdgeInsets.only(
+              left: 16,
+              bottom: 16,
+            ),
+            decoration: BoxDecoration(
+              color: Styles.secondaryColor,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
+            child: Center(
+              child: CircularProgressIndicator(color: Styles.accentColor),
+            ),
+          ),
+        ),
+      ];
+    }
+  }
+
   /// Mengambil data terminal
   ///
   /// Jika data terminal berhasil didapat ketika login data akan
@@ -58,17 +89,36 @@ class _DashboardPageState extends State<DashboardPage> {
   /// API getTerminal pada [LoginController]
   void _getTerminal() async {
     try {
-      _terminalObjectResponse = await _controller.getTerminal();
-      _terminals = _terminalObjectResponse?.data;
+      _terminalObjectResponse = await _controller.getTerminal().then((value) {
+        setState(() {
+          if (value!.data != null) {
+            _terminals = value.data;
+          } else {
+            _terminals = null;
+            _terminalWidgets = [
+              SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: Text(
+                    "Belum ada perangkat",
+                    style: Styles.bodyTextBlack,
+                  ),
+                ),
+              ),
+            ];
+          }
+          _getTerminalWidget();
+        });
+      });
     } catch (e) {
       print(e);
     }
-
-    _getTerminalWidget();
   }
 
   void _getTerminalWidget() {
     if (_terminals != null) {
+      print('terminal : $_terminals');
       for (var terminal in _terminals!) {
         _terminalWidgets = [];
         _terminalWidgets!.add(
@@ -79,9 +129,7 @@ class _DashboardPageState extends State<DashboardPage> {
             },
             child: TerminalView(
               terminalIcon: Icons.bed,
-              terminalName: terminal.name,
-              activeSocket: terminal.totalActiveSocket,
-              isTerminalActive: terminal.isTerminalActive,
+              terminal: terminal,
             ),
           ),
         );
@@ -150,21 +198,7 @@ class _DashboardPageState extends State<DashboardPage> {
           const Gap(24),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: _terminalWidgets ??
-                  [
-                    SizedBox(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: Center(
-                        child: Text(
-                          "Belum ada perangkat",
-                          style: Styles.bodyTextBlack,
-                        ),
-                      ),
-                    ),
-                  ],
-            ),
+            child: Row(children: _terminalWidgets!),
           )
         ],
       ),
