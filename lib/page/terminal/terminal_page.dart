@@ -164,7 +164,7 @@ class _TerminalPageState extends State<TerminalPage> {
                 const Gap(5),
                 IconButton(
                   padding: EdgeInsets.all(0),
-                  onPressed: () => context.pushNamed("terminal_timer"),
+                  onPressed: () => context.pushNamed("terminal_timer", extra: terminal),
                   icon: Icon(
                     Icons.timer,
                     color: Styles.accentColor,

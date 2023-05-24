@@ -2,17 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 
 class TimerPage extends StatefulWidget {
-  const TimerPage({super.key});
+  const TimerPage({super.key, required this.terminal});
+
+  final Terminal terminal;
 
   @override
   State<TimerPage> createState() => _TimerPageState();
 }
 
 class _TimerPageState extends State<TimerPage> {
+  Terminal? terminal;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    terminal = widget.terminal;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +56,7 @@ class _TimerPageState extends State<TimerPage> {
         actions: [
           IconButton(
             onPressed: () {
-              context.pushNamed("terminal_timer_add");
+              context.pushNamed("terminal_timer_add", extra: terminal);
             },
             icon: Icon(Icons.add_rounded),
           )

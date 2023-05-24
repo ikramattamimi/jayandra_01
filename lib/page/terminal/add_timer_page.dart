@@ -1,19 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/list_tile_view.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 
 class AddTimerPage extends StatefulWidget {
-  const AddTimerPage({super.key});
+  const AddTimerPage({super.key, required this.terminal});
+  final Terminal terminal;
 
   @override
   State<AddTimerPage> createState() => _AddTimerPageState();
 }
 
 class _AddTimerPageState extends State<AddTimerPage> {
+  var timerMinute = 0;
+  var timerHour = 0;
+  String selectedOption = "";
+  String selectedValue = "";
+  final _dropdownFormKey = GlobalKey<FormState>();
+  bool isSwitched = true;
+  var socketStatus = "Aktif";
+  Terminal? terminal;
+
+  @override
+  void initState() {
+    super.initState();
+    terminal = widget.terminal;
+    selectedValue = widget.terminal.sockets[0].id_socket.toString();
+    print(terminal!.name);
+  }
+
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [];
+    for (var socket in terminal!.sockets) {
+      menuItems.add(
+        DropdownMenuItem(
+          value: socket.id_socket.toString(),
+          child: Text(
+            socket.name!,
+            style: Styles.bodyTextBlack2,
+          ),
+        ),
+      );
+    }
+    return menuItems;
+  }
+
+  setTime(int hour, int minute) {
+    setState(() {
+      timerHour = hour;
+      timerMinute = minute;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,67 +95,55 @@ class _AddTimerPageState extends State<AddTimerPage> {
       backgroundColor: Styles.primaryColor,
       body: ListView(
         children: [
-          SizedBox(
-            height: 256,
-            width: MediaQuery.of(context).size.width,
-            child: WhiteContainer(
-              padding: 16,
-              margin: 16,
-              child: Column(
-                children: [
-                  TimerPickerExample(),
-                ],
-              ),
-            ),
-          ),
           WhiteContainer(
             margin: 16,
-            padding: 0,
+            padding: 16,
             child: Column(
               children: [
-                ListTile(
-                  title: Text(
-                    "Ulangi",
-                    style: Styles.bodyTextBlack2,
-                  ),
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right_rounded,
-                    color: Styles.textColor3,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      socketStatus,
+                      style: Styles.bodyTextBlack2,
+                    ),
+                    SizedBox(
+                      width: 50,
+                      height: 30,
+                      child: Switch(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        value: isSwitched,
+                        onChanged: (value) {
+                          setState(() {
+                            isSwitched = value;
+                            socketStatus = isSwitched ? "Aktif" : "Nonaktif";
+                            print(isSwitched);
+                          });
+                        },
+                        // activeTrackColor: Styles.accentColor,
+                        activeColor: Styles.accentColor,
+                      ),
+                    ),
+                  ],
                 ),
-                ListTile(
-                  title: Text(
-                    "Catatan",
-                    style: Styles.bodyTextBlack2,
+                const Gap(16),
+                DropdownButtonFormField(
+                  focusColor: Styles.accentColor,
+                  decoration: InputDecoration.collapsed(
+                    hintText: '',
                   ),
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right_rounded,
-                    color: Styles.textColor3,
-                  ),
+                  validator: (value) => value == null ? "Select a country" : "null",
+                  // dropdownColor: Colors.blueAccent,
+                  value: selectedValue,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedValue = newValue!;
+                    });
+                  },
+                  items: dropdownItems,
                 ),
-                ListTile(
-                  title: Text(
-                    "Socket",
-                    style: Styles.bodyTextBlack2,
-                  ),
-                  trailing: Icon(
-                    Icons.keyboard_arrow_right_rounded,
-                    color: Styles.textColor3,
-                  ),
-                  subtitle: Text(
-                    "Socket 1",
-                    style: Styles.bodyTextGrey3,
-                  ),
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Text(
-                //       "Socket",
-                //       style: Styles.bodyTextBlack2,
-                //     ),
-                //   ],
-                // )
+                const Gap(16),
+                TextTimePicker(notifyParent: setTime),
               ],
             ),
           )

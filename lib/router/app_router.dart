@@ -118,12 +118,12 @@ class AppRouter {
           GoRoute(
             path: "timer",
             name: "terminal_timer",
-            builder: (BuildContext context, GoRouterState state) => const TimerPage(),
+            builder: (BuildContext context, GoRouterState state) => TimerPage(terminal: state.extra as Terminal,),
           ),
           GoRoute(
             path: "add_timer",
             name: "terminal_timer_add",
-            builder: (BuildContext context, GoRouterState state) => const AddTimerPage(),
+            builder: (BuildContext context, GoRouterState state) => AddTimerPage(terminal: state.extra as Terminal),
           ),
 
           // ADD DEVICE PAGE ROUTE

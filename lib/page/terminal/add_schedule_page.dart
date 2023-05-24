@@ -14,6 +14,8 @@ class AddSchedulePage extends StatefulWidget {
 }
 
 class _AddSchedulePageState extends State<AddSchedulePage> {
+  TimeOfDay startTime = TimeOfDay.now();
+  TimeOfDay endTime = TimeOfDay.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,14 +55,26 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
       body: ListView(
         children: [
           SizedBox(
-            height: 256,
+            // height: 256,
             width: MediaQuery.of(context).size.width,
             child: WhiteContainer(
               padding: 16,
               margin: 16,
               child: Column(
                 children: [
-                  // MyTimePicker(),
+                  _buildTimePick("Start", true, startTime, (x) {
+                    setState(() {
+                      startTime = x;
+                      print("The picked time is: $x");
+                    });
+                  }),
+                  const SizedBox(height: 10),
+                  _buildTimePick("End", true, endTime, (x) {
+                    setState(() {
+                      endTime = x;
+                      print("The picked time is: $x");
+                    });
+                  }),
                 ],
               ),
             ),
@@ -118,6 +132,44 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
           )
         ],
       ),
+    );
+  }
+
+  Future selectedTime(BuildContext context, bool ifPickedTime, TimeOfDay initialTime, Function(TimeOfDay) onTimePicked) async {
+    var _pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+    if (_pickedTime != null) {
+      onTimePicked(_pickedTime);
+    }
+  }
+
+  Widget _buildTimePick(String title, bool ifPickedTime, TimeOfDay currentTime, Function(TimeOfDay) onTimePicked) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 80,
+          child: Text(
+            title,
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          decoration: BoxDecoration(
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: GestureDetector(
+            child: Text(
+              currentTime.format(context),
+            ),
+            onTap: () {
+              selectedTime(context, ifPickedTime, currentTime, onTimePicked);
+            },
+          ),
+        ),
+      ],
     );
   }
 }

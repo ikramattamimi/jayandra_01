@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:jayandra_01/utils/app_styles.dart';
 
 class MyTimePicker extends StatefulWidget {
   @override
@@ -116,116 +118,6 @@ class _MySecondTimePickerState extends State<MySecondTimePicker> {
   }
 }
 
-class IntegerInput extends StatefulWidget {
-  @override
-  _IntegerInputState createState() => _IntegerInputState();
-}
-
-class _IntegerInputState extends State<IntegerInput> {
-  int _value = 0;
-  TextEditingController _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-    _controller.text = _value.toString();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _incrementValue() {
-    setState(() {
-      if (_value < 60) {
-        _value++;
-        _controller.text = _value.toString();
-      }
-    });
-  }
-
-  void _decrementValue() {
-    setState(() {
-      if (_value > 0) {
-        _value--;
-        _controller.text = _value.toString();
-      }
-    });
-  }
-
-  void _updateValue(String newValue) {
-    setState(() {
-      if ((int.tryParse(newValue) ?? 60) > 60) {
-        _value = 60;
-      } else {
-        _value = int.tryParse(newValue) ?? 0;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.remove),
-          onPressed: _decrementValue,
-        ),
-        Expanded(
-          child: TextField(
-            controller: _controller,
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-            onChanged: _updateValue,
-          ),
-        ),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: _incrementValue,
-        ),
-      ],
-    );
-  }
-}
-
-class NumberPicker extends StatefulWidget {
-  @override
-  _NumberPickerState createState() => _NumberPickerState();
-}
-
-class _NumberPickerState extends State<NumberPicker> {
-  int _selectedNumber = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedNumber = 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 61, // Numbers from 0 to 60 (inclusive)
-      itemBuilder: (context, index) {
-        final number = index;
-
-        return ListTile(
-          title: Text(number.toString()),
-          onTap: () {
-            setState(() {
-              _selectedNumber = number;
-            });
-          },
-          tileColor: number == _selectedNumber ? Colors.blue : null,
-        );
-      },
-    );
-  }
-}
-
 class TimerPickerExample extends StatefulWidget {
   const TimerPickerExample({super.key});
 
@@ -269,7 +161,7 @@ class _TimerPickerExampleState extends State<TimerPickerExample> {
         _TimerPickerItem(
           children: <Widget>[
             const Text('Timer'),
-            CupertinoButton(
+            ElevatedButton(
               // Display a CupertinoTimerPicker with hour/minute mode.
               onPressed: () => _showDialog(
                 CupertinoTimerPicker(
@@ -328,5 +220,78 @@ class _TimerPickerItem extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class TextTimePicker extends StatefulWidget {
+  final Function notifyParent;
+
+  const TextTimePicker({super.key, required this.notifyParent});
+
+  @override
+  _TextTimePickerState createState() => _TextTimePickerState();
+}
+
+class _TextTimePickerState extends State<TextTimePicker> {
+  TimeOfDay selectedTime = TimeOfDay.now();
+
+  TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController(text: formatTime(selectedTime));
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        _showTimePickerDialog(context);
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+          controller: _textEditingController,
+          decoration: InputDecoration(
+            labelText: 'Waktu',
+            labelStyle: Styles.bodyTextBlack,
+            suffixIcon: Icon(Icons.access_time),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showTimePickerDialog(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedTime != null && pickedTime != selectedTime) {
+      setState(() {
+        selectedTime = pickedTime;
+        // print(selectedTime.hour);
+        widget.notifyParent(selectedTime.hour, selectedTime.minute);
+        _textEditingController.text = formatTime(selectedTime);
+      });
+    }
+  }
+
+  String formatTime(TimeOfDay time) {
+    final formattedTime = DateFormat('HH:mm').format(DateTime(0, 0, 0, time.hour, time.minute));
+    return formattedTime;
   }
 }
