@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/timer_model.dart';
+import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/list_tile_view.dart';
@@ -25,6 +28,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
   bool isSwitched = true;
   var socketStatus = "Aktif";
   Terminal? terminal;
+  TerminalController _terminalController = TerminalController();
 
   @override
   void initState() {
@@ -32,6 +36,16 @@ class _AddTimerPageState extends State<AddTimerPage> {
     terminal = widget.terminal;
     selectedValue = widget.terminal.sockets[0].id_socket.toString();
     print(terminal!.name);
+  }
+
+  addTimer() async {
+    TimerModel timer = TimerModel(
+      id_socket: int.parse(selectedValue),
+      time: TimeOfDay(hour: timerHour, minute: timerMinute),
+      status: isSwitched,
+    );
+    MyResponse? addTimerResponse = await _terminalController.addTimer(timer);
+    print(addTimerResponse);
   }
 
   List<DropdownMenuItem<String>> get dropdownItems {
@@ -87,7 +101,9 @@ class _AddTimerPageState extends State<AddTimerPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              addTimer();
+            },
             icon: Icon(Icons.check_rounded),
           ),
         ],
@@ -108,7 +124,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
                       style: Styles.bodyTextBlack2,
                     ),
                     SizedBox(
-                      width: 50,
+                      width: 45,
                       height: 30,
                       child: Switch(
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

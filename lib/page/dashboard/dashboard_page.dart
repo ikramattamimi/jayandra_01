@@ -10,7 +10,7 @@ import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/terminal/terminal_page.dart';
-import 'package:jayandra_01/screens/report_view.dart';
+import 'package:jayandra_01/page/report/report_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/terminal_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';

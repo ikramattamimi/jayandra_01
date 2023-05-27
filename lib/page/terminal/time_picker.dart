@@ -280,7 +280,7 @@ class _TextTimePickerState extends State<TextTimePicker> {
       },
     );
 
-    if (pickedTime != null && pickedTime != selectedTime) {
+    if (pickedTime != null) {
       setState(() {
         selectedTime = pickedTime;
         // print(selectedTime.hour);

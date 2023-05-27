@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:jayandra_01/utils/network_api.dart';
 
 class CekEmailRepository {
   Future<http.Response> cekEmail(String? email) async {
     return http.post(
-      Uri.parse('http://localhost:3000/cekEmail'),
-      // Uri.parse('http://192.168.198.8:3000/login'),
+      Uri.parse('${NetworkAPI.ip}/cekEmail'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },

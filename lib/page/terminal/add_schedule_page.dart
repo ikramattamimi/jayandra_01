@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -62,14 +63,14 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
               margin: 16,
               child: Column(
                 children: [
-                  _buildTimePick("Start", true, startTime, (x) {
+                  _buildTimePick("Jadwal Aktif", true, startTime, (x) {
                     setState(() {
                       startTime = x;
                       print("The picked time is: $x");
                     });
                   }),
-                  const SizedBox(height: 10),
-                  _buildTimePick("End", true, endTime, (x) {
+                  Gap(10),
+                  _buildTimePick("Jadwal Nonaktif", true, endTime, (x) {
                     setState(() {
                       endTime = x;
                       print("The picked time is: $x");
@@ -149,7 +150,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
     return Row(
       children: [
         SizedBox(
-          width: 80,
+          width: 170,
           child: Text(
             title,
           ),

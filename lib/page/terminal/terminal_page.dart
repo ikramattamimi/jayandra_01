@@ -114,68 +114,77 @@ class _TerminalPageState extends State<TerminalPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            WhiteContainer(
-              borderColor: Colors.transparent,
-              padding: 6,
-              margin: 0,
+            Flexible(
+              flex: 5,
+              child: WhiteContainer(
+                borderColor: Colors.transparent,
+                padding: 6,
+                margin: 0,
+                child: Column(
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => setTerminal(),
+                      icon: Icon(
+                        Icons.power_settings_new_rounded,
+                        color: terminal!.isTerminalActive ? Styles.accentColor : Styles.accentColor2,
+                        size: 32,
+                      ),
+                    ),
+                    Gap(16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: getSockets(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
               child: Column(
                 children: [
+                  const Gap(5),
                   IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () => setTerminal(),
+                    padding: EdgeInsets.all(0),
+                    onPressed: () {
+                      context.pushNamed('terminal_schedule');
+                    },
                     icon: Icon(
-                      Icons.power_settings_new_rounded,
-                      color: terminal!.isTerminalActive ? Styles.accentColor : Styles.accentColor2,
+                      Icons.schedule_rounded,
+                      color: Styles.accentColor,
                       size: 32,
                     ),
                   ),
-                  Gap(16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: getSockets(),
-                    ),
+                  Text(
+                    "Jadwal",
+                    style: Styles.bodyTextBlack3,
                   ),
                 ],
               ),
             ),
-            Column(
-              children: [
-                const Gap(5),
-                IconButton(
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {
-                    context.pushNamed('terminal_schedule');
-                  },
-                  icon: Icon(
-                    Icons.schedule_rounded,
-                    color: Styles.accentColor,
-                    size: 32,
+            Flexible(
+              flex: 1,
+              child: Column(
+                children: [
+                  const Gap(5),
+                  IconButton(
+                    padding: EdgeInsets.all(0),
+                    onPressed: () => context.pushNamed("terminal_timer", extra: terminal),
+                    icon: Icon(
+                      Icons.timer,
+                      color: Styles.accentColor,
+                      size: 32,
+                    ),
                   ),
-                ),
-                Text(
-                  "Jadwal",
-                  style: Styles.bodyTextBlack3,
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                const Gap(5),
-                IconButton(
-                  padding: EdgeInsets.all(0),
-                  onPressed: () => context.pushNamed("terminal_timer", extra: terminal),
-                  icon: Icon(
-                    Icons.timer,
-                    color: Styles.accentColor,
-                    size: 32,
+                  Text(
+                    "Timer",
+                    style: Styles.bodyTextBlack3,
                   ),
-                ),
-                Text(
-                  "Timer",
-                  style: Styles.bodyTextBlack3,
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_repository.dart';
 import 'package:flutter/material.dart';
@@ -88,5 +89,31 @@ class TerminalController {
       _terminalObjectResponse = await getTerminal();
     });
     return _terminalObjectResponse;
+  }
+
+  Future<MyResponse?> addTimer(TimerModel timer) async {
+    // print('get terminal dipanggil');
+    // final prefs = await SharedPreferences.getInstance();
+    MyResponse timerObjectResponse = MyResponse();
+
+    print('add timer');
+
+    // Get API data terminal
+    await _terminalRepositroy.addTimer(timer).then((value) {
+      print(value.statusCode);
+      if (value.statusCode == 200) {
+        // Parse String jsonke Map
+        Map<String, dynamic> timerMapData = jsonDecode(value.body);
+
+        // Response dengan response.data berupa List dari objek Terminal
+        timerObjectResponse = MyResponse.fromJson(timerMapData, TimerModel.fromJson);
+        print(timerObjectResponse);
+        timerObjectResponse.message = "Data terminal berhasil dimuat";
+        return timerObjectResponse;
+      } else {
+        return MyResponse(code: 1, message: "Terjadi Masalah");
+      }
+    });
+    return timerObjectResponse;
   }
 }
