@@ -18,6 +18,36 @@ class MyResponse<T> {
   }
 }
 
+class MyArrayResponse {
+  int code;
+  String message;
+  List? data;
+
+  MyArrayResponse({this.code = 0, this.message = "", this.data});
+
+  factory MyArrayResponse.fromJson(Map<String, dynamic> json, Function fromJsonModel) {
+    List objectList = [];
+
+    // List terminal dari response API
+    final responseObjectList = json['data'];
+
+    // Jika list terminal tidak kosong
+    if (responseObjectList != null) {
+      // Pembuatan objek terminal
+      for (var responseObject in responseObjectList) {
+        objectList.add(fromJsonModel(responseObject));
+      }
+    }
+
+    return MyArrayResponse(
+      // code: (json['code'] != null) ? json['code'] : 0,
+      code: json['code'],
+      message: json['message'],
+      data: (json['data'] != null) ? objectList : null,
+    );
+  }
+}
+
 class TerminalResponse {
   int code;
   String message;

@@ -6,6 +6,7 @@ import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
+import 'package:jayandra_01/module/terminal/timer_controller.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/list_tile_view.dart';
@@ -28,7 +29,8 @@ class _AddTimerPageState extends State<AddTimerPage> {
   bool isSwitched = true;
   var socketStatus = "Aktif";
   Terminal? terminal;
-  TerminalController _terminalController = TerminalController();
+  final _terminalController = TerminalController();
+  final _timerController = TimerController();
 
   @override
   void initState() {
@@ -44,7 +46,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
       time: TimeOfDay(hour: timerHour, minute: timerMinute),
       status: isSwitched,
     );
-    MyResponse? addTimerResponse = await _terminalController.addTimer(timer);
+    MyResponse? addTimerResponse = await _timerController.addTimer(timer);
     print(addTimerResponse);
   }
 

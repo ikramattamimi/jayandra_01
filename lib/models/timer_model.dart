@@ -13,6 +13,7 @@ class TimerModel {
     final hour = int.parse(parts[0]);
     final minute = int.parse(parts[1]);
     final time = TimeOfDay(hour: hour, minute: minute);
+    
     return TimerModel(
       id_timer: json['id_timer'],
       id_socket: json['id_socket'],

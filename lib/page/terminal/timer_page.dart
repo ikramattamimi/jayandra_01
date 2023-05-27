@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/timer_model.dart';
+import 'package:jayandra_01/module/terminal/timer_controller.dart';
+import 'package:jayandra_01/page/terminal/timer_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/widget/white_container.dart';
 
 class TimerPage extends StatefulWidget {
   const TimerPage({super.key, required this.terminal});
@@ -17,12 +18,30 @@ class TimerPage extends StatefulWidget {
 
 class _TimerPageState extends State<TimerPage> {
   Terminal? terminal;
+  List? timers;
+
+  // Controller untuk model Timer
+  final _timerController = TimerController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getTimer();
     terminal = widget.terminal;
+  }
+
+  getTimer() async {
+    await _timerController.getTimer(1).then((value) {
+      setState(() {
+        timers = value!.data!;
+      });
+    });
+  }
+
+  Widget getTimerWidget(TimerModel timer) {
+    // print('get timer widget');
+    return TimerView(timer: timer);
   }
 
   @override
@@ -64,47 +83,7 @@ class _TimerPageState extends State<TimerPage> {
       ),
       backgroundColor: Styles.primaryColor,
       body: ListView(
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: WhiteContainer(
-              padding: 16,
-              margin: 16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "00:20",
-                            style: Styles.headingStyle1,
-                          ),
-                        ],
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.toggle_on,
-                          size: 36,
-                          color: Styles.accentColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                  // const Gap(4),
-                  Text(
-                    "Socket 2",
-                    style: Styles.bodyTextGrey2,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+        children: timers == null ? [] : timers!.map((timer) => getTimerWidget(timer)).toList(),
       ),
     );
   }
