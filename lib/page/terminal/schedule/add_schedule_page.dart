@@ -212,7 +212,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   bool socketOn = true;
   bool socketOff = false;
   List<String> repeatDay = [];
-  List<DayModel> daysIndo = daysIndonesia.getDay();
+  List<DayModel> daysIndo = DaysIndonesia.getDay();
   int jumlahrepeatDay = 0;
   String days = '';
 

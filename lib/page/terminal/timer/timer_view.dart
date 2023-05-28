@@ -30,16 +30,14 @@ class _TimerViewState extends State<TimerView> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.pushNamed('terminal_timer_edit', extra: terminalTimer);
-      },
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Card(
-          elevation: 0,
-          margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-          color: Styles.secondaryColor,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
+        color: Styles.secondaryColor,
+        child: InkWell(
+          onTap: () => context.pushNamed('terminal_timer_edit', extra: terminalTimer),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(

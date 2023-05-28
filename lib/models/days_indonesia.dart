@@ -1,6 +1,6 @@
 import 'package:jayandra_01/models/day_model.dart';
 
-class daysIndonesia {
+class DaysIndonesia {
   static List<DayModel> getDay() {
     List<DayModel> days = [];
 
@@ -13,7 +13,7 @@ class daysIndonesia {
       DayModel(id: 5, name: "Sabtu", isSelected: false),
       DayModel(id: 6, name: "Minggu", isSelected: false),
     ]);
-    
+
     return days;
   }
 }

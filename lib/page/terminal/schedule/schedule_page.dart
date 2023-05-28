@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/module/terminal/schedule_controller.dart';
 import 'package:jayandra_01/page/terminal/schedule/schedule_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
@@ -54,9 +57,8 @@ class _SchedulePageState extends State<SchedulePage> {
       ),
       backgroundColor: Styles.primaryColor,
       body: ListView(
-        children: const [
-          ScheduleView(),
-        ],
+        children: _schedules == null ? [] : _schedules!.map((schedule) => getScheduleWidget(schedule)).toList()
+          ..add(const Gap(16)),
       ),
     );
   }
@@ -66,6 +68,8 @@ class _SchedulePageState extends State<SchedulePage> {
   /// ==========================================================================
 
   late TerminalModel terminal;
+  final _scheduleController = ScheduleController();
+  List? _schedules;
 
   /// ==========================================================================
   /// Local Function
@@ -77,5 +81,25 @@ class _SchedulePageState extends State<SchedulePage> {
     // TODO: implement initState
     super.initState();
     terminal = widget.terminal;
+    getSchedule();
+  }
+
+  /// get Schedule
+  getSchedule() async {
+    await _scheduleController.getSchedule(terminal.id).then((value) {
+      setState(() {
+        _schedules = value!.data!;
+        print(_schedules);
+      });
+    });
+  }
+
+  /// Get Schedule Widget
+  Widget getScheduleWidget(ScheduleModel schedule) {
+    // print('get timer widget');
+    var terminalSchedule = TerminalSchedule(terminal: terminal, schedule: schedule);
+    return ScheduleView(
+      terminalSchedule: terminalSchedule,
+    );
   }
 }

@@ -17,7 +17,7 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-  TerminalModel? terminal;
+  late TerminalModel terminal;
   List? timers;
 
   // Controller untuk model Timer
@@ -27,12 +27,12 @@ class _TimerPageState extends State<TimerPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getTimer();
     terminal = widget.terminal;
+    getTimer();
   }
 
   getTimer() async {
-    await _timerController.getTimer(1).then((value) {
+    await _timerController.getTimer(terminal.id).then((value) {
       setState(() {
         timers = value!.data!;
       });

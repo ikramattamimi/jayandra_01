@@ -7,26 +7,26 @@ import 'package:jayandra_01/module/terminal/schedule_repository.dart';
 class ScheduleController {
   final _scheduleRepository = ScheduleRepository();
 
-  // Future<MyArrayResponse?> getSchedule(int terminalId) async {
-  //   var scheduleObjectResponse = MyArrayResponse();
+  Future<MyArrayResponse?> getSchedule(int terminalId) async {
+    var scheduleObjectResponse = MyArrayResponse();
 
-  //   // Get API data schedule
-  //   await _scheduleRepository.getSchedule(terminalId).then((value) {
-  //     print(value.statusCode);
-  //     if (value.statusCode == 200) {
-  //       // Parse String json ke Map
-  //       Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
+    // Get API data schedule
+    await _scheduleRepository.getSchedule(terminalId).then((value) {
+      print(value.statusCode);
+      if (value.statusCode == 200) {
+        // Parse String json ke Map
+        Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
 
-  //       // Response dengan response.data berupa List dari objek Terminal
-  //       scheduleObjectResponse = MyArrayResponse.fromJson(scheduleMapData, ScheduleModel.fromJson);
-  //       scheduleObjectResponse.message = "Data terminal berhasil dimuat";
-  //       return scheduleObjectResponse;
-  //     } else {
-  //       return MyArrayResponse(code: 1, message: "Terjadi Masalah");
-  //     }
-  //   });
-  //   return scheduleObjectResponse;
-  // }
+        // Response dengan response.data berupa List dari objek Terminal
+        scheduleObjectResponse = MyArrayResponse.fromJson(scheduleMapData, ScheduleModel.fromJson);
+        scheduleObjectResponse.message = "Data terminal berhasil dimuat";
+        return scheduleObjectResponse;
+      } else {
+        return MyArrayResponse(code: 1, message: "Terjadi Masalah");
+      }
+    });
+    return scheduleObjectResponse;
+  }
 
   Future<MyResponse?> addSchedule(ScheduleModel schedule) async {
     // print('get terminal dipanggil');
@@ -37,7 +37,7 @@ class ScheduleController {
 
     // Get API data terminal
     await _scheduleRepository.addSchedule(schedule).then((value) {
-      print(value.statusCode);
+      // print(value.statusCode);
 
       if (value.statusCode == 200) {
         // Parse String json ke Map
