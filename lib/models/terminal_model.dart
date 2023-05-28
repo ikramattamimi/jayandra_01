@@ -1,13 +1,13 @@
 import 'package:jayandra_01/models/socket_model.dart';
 
-class Terminal {
+class TerminalModel {
   final int id;
   final String name;
   final List<Socket> sockets;
   bool isTerminalActive;
   int totalActiveSocket;
 
-  Terminal({
+  TerminalModel({
     this.id = 0,                             
     this.name = "",
     required this.sockets,
@@ -15,7 +15,7 @@ class Terminal {
     this.totalActiveSocket = 0,
   });
 
-  factory Terminal.fromJson(Map<String, dynamic> json) {
+  factory TerminalModel.fromJson(Map<String, dynamic> json) {
     var isTerminalActive = false;
     var totalActiveSoccket = 0;
     List<Socket> sockets = [];
@@ -26,7 +26,7 @@ class Terminal {
         isTerminalActive = true;
       }
     }
-    return Terminal(
+    return TerminalModel(
       id: json['id'],
       name: json['name'],
       sockets: sockets,

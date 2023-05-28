@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CekEmailController {
-  CekEmailRepository _repository = CekEmailRepository();
+  final CekEmailRepository _repository = CekEmailRepository();
 
   bool isLoading = false;
   var emailController = TextEditingController();

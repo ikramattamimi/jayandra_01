@@ -11,7 +11,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 class TerminalPage extends StatefulWidget {
   const TerminalPage({super.key, required this.terminal});
-  final Terminal terminal;
+  final TerminalModel terminal;
 
   @override
   State<TerminalPage> createState() => _TerminalPageState();
@@ -23,7 +23,7 @@ class _TerminalPageState extends State<TerminalPage> {
   final _terminalController = TerminalController();
 
   List<Socket>? socketss;
-  Terminal? terminal;
+  TerminalModel? terminal;
 
   @override
   void initState() {
@@ -108,7 +108,7 @@ class _TerminalPageState extends State<TerminalPage> {
       ),
       backgroundColor: Styles.primaryColor,
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -129,7 +129,7 @@ class _TerminalPageState extends State<TerminalPage> {
                         size: 32,
                       ),
                     ),
-                    Gap(16),
+                    const Gap(16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +146,7 @@ class _TerminalPageState extends State<TerminalPage> {
                 children: [
                   const Gap(5),
                   IconButton(
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     onPressed: () {
                       context.pushNamed('terminal_schedule');
                     },
@@ -169,7 +169,7 @@ class _TerminalPageState extends State<TerminalPage> {
                 children: [
                   const Gap(5),
                   IconButton(
-                    padding: EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     onPressed: () => context.pushNamed("terminal_timer", extra: terminal),
                     icon: Icon(
                       Icons.timer,
@@ -206,8 +206,8 @@ class SocketView extends StatefulWidget {
 
 class _SocketState extends State<SocketView> {
   late Socket socket;
-  bool _isSocketOn = false;
-  TerminalController _terminalController = TerminalController();
+  final bool _isSocketOn = false;
+  final TerminalController _terminalController = TerminalController();
 
   @override
   void initState() {
@@ -238,7 +238,7 @@ class _SocketState extends State<SocketView> {
               });
               _terminalController.updateSocket(socket);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Message'),
                   duration: Duration(seconds: 1),
                 ),
@@ -260,7 +260,7 @@ class _SocketState extends State<SocketView> {
         ),
         IconButton(
           onPressed: () {},
-          icon: Icon(
+          icon: const Icon(
             Icons.edit,
             size: 16,
           ),

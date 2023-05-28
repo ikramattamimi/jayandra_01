@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class LoginController {
-  LoginRepository _repository = LoginRepository();
+  final LoginRepository _repository = LoginRepository();
 
   bool isLoading = false;
   var emailController = TextEditingController();

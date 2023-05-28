@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterController {
-  RegisterRepository _repository = RegisterRepository();
+  final RegisterRepository _repository = RegisterRepository();
 
   bool isLoading = false;
   var emailValue = '';

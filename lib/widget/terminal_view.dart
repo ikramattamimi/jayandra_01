@@ -3,12 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
-import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
 class TerminalView extends StatefulWidget {
   const TerminalView({super.key, required this.terminal, required this.terminalIcon});
-  final Terminal terminal;
+  final TerminalModel terminal;
   final IconData terminalIcon;
 
   @override
@@ -21,7 +20,7 @@ class _TerminalViewState extends State<TerminalView> {
   late Color _toggleColor;
   late String _activeSocket;
   late int _totalActiveSocket;
-  late Terminal terminal;
+  late TerminalModel terminal;
 
   final _terminalController = TerminalController();
   late TerminalResponse? _terminalObjectResponse;
@@ -116,7 +115,7 @@ class _TerminalViewState extends State<TerminalView> {
                     style: Styles.title,
                   ),
                   Text(
-                    '${_activeSocket}',
+                    _activeSocket,
                     style: Styles.bodyTextGrey3,
                   ),
                 ],

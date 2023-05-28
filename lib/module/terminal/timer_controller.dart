@@ -53,4 +53,30 @@ class TimerController {
     });
     return timerObjectResponse;
   }
+
+  Future<MyResponse?> deleteTimer(int timerId) async {
+    // print('get terminal dipanggil');
+    // final prefs = await SharedPreferences.getInstance();
+    MyResponse timerObjectResponse = MyResponse();
+
+    // print('add timer');
+
+    // Get API data terminal
+    await _timerRepository.deleteTimer(timerId).then((value) {
+      // print(value.statusCode);
+
+      if (value.statusCode == 200) {
+        // Parse String json ke Map
+        Map<String, dynamic> timerMapData = jsonDecode(value.body);
+
+        // Response dengan response.data berupa List dari objek Terminal
+        timerObjectResponse = MyResponse.fromJson(timerMapData, TimerModel.fromJson);
+        timerObjectResponse.message = "Timer berhasil dihapus";
+        return timerObjectResponse;
+      } else {
+        return MyResponse(code: 1, message: "Terjadi Masalah");
+      }
+    });
+    return timerObjectResponse;
+  }
 }

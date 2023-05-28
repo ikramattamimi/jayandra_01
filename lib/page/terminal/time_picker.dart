@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/utils/timeofday_converter.dart';
 
 class TextTimePicker extends StatefulWidget {
   final Function notifyParent;
@@ -40,7 +41,7 @@ class _TextTimePickerState extends State<TextTimePicker> {
           decoration: InputDecoration(
             labelText: 'Waktu',
             labelStyle: Styles.bodyTextBlack,
-            suffixIcon: Icon(Icons.access_time),
+            suffixIcon: const Icon(Icons.access_time),
           ),
         ),
       ),
@@ -72,5 +73,44 @@ class _TextTimePickerState extends State<TextTimePicker> {
   String formatTime(TimeOfDay time) {
     final formattedTime = DateFormat('HH:mm').format(DateTime(0, 0, 0, time.hour, time.minute));
     return formattedTime;
+  }
+}
+
+class MyTimePicker extends StatefulWidget {
+  const MyTimePicker({super.key, required this.title, required this.ifPickedTime, required this.currentTime, required this.onTimePicked});
+
+  final String title;
+  final bool ifPickedTime;
+  final TimeOfDay currentTime;
+  final Function(TimeOfDay) onTimePicked;
+
+  @override
+  State<MyTimePicker> createState() => _MyTimePickerState();
+}
+
+class _MyTimePickerState extends State<MyTimePicker> {
+  Future selectedTime(BuildContext context, bool ifPickedTime, TimeOfDay initialTime, Function(TimeOfDay) onTimePicked) async {
+    var pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+    if (pickedTime != null) {
+      onTimePicked(pickedTime);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        selectedTime(context, widget.ifPickedTime, widget.currentTime, widget.onTimePicked);
+      },
+      title: Text(
+        widget.title,
+        style: Styles.bodyTextBlack2,
+      ),
+      trailing: Text(widget.currentTime.to24hours()),
+      contentPadding: EdgeInsets.zero,
+    );
   }
 }

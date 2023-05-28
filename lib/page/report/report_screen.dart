@@ -1,10 +1,7 @@
-import 'package:carbon_icons/carbon_icons.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/page/report/bar_chart_view.dart';
-import 'package:jayandra_01/page/report/report_view.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
@@ -17,7 +14,7 @@ class ReportScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
             Text(

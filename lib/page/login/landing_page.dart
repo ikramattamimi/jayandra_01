@@ -7,7 +7,6 @@ import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
-import 'package:jayandra_01/widget/white_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -32,14 +31,14 @@ class _LandingPageState extends State<SplashScreen> {
     // Biar terminal auto refresh
     prefs.remove('terminal');
 
-    Timer(Duration(seconds: 2), (() {
+    Timer(const Duration(seconds: 2), (() {
       token != null ? context.pushNamed('main_page') : context.pushNamed('landing_page');
     }));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
       ),

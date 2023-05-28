@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
-import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/module/terminal/timer_controller.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/widget/list_tile_view.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 
 class AddTimerPage extends StatefulWidget {
   const AddTimerPage({super.key, required this.terminal});
-  final Terminal terminal;
+  final TerminalModel terminal;
 
   @override
   State<AddTimerPage> createState() => _AddTimerPageState();
@@ -25,12 +22,11 @@ class _AddTimerPageState extends State<AddTimerPage> {
   var timerHour = 0;
   String selectedOption = "";
   String selectedValue = "";
-  final _dropdownFormKey = GlobalKey<FormState>();
   bool isSwitched = true;
   var socketStatus = "Aktif";
-  Terminal? terminal;
-  final _terminalController = TerminalController();
+  TerminalModel? terminal;
   final _timerController = TimerController();
+  TimeOfDay endTime = TimeOfDay.now();
 
   @override
   void initState() {
@@ -106,7 +102,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
             onPressed: () {
               addTimer();
             },
-            icon: Icon(Icons.check_rounded),
+            icon: const Icon(Icons.check_rounded),
           ),
         ],
       ),
@@ -118,38 +114,44 @@ class _AddTimerPageState extends State<AddTimerPage> {
             padding: 16,
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      socketStatus,
-                      style: Styles.bodyTextBlack2,
-                    ),
-                    SizedBox(
-                      width: 45,
-                      height: 30,
-                      child: Switch(
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        value: isSwitched,
-                        onChanged: (value) {
-                          setState(() {
-                            isSwitched = value;
-                            socketStatus = isSwitched ? "Aktif" : "Nonaktif";
-                            print(isSwitched);
-                          });
-                        },
-                        // activeTrackColor: Styles.accentColor,
-                        activeColor: Styles.accentColor,
+                SizedBox(
+                  height: 48,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        socketStatus,
+                        style: Styles.bodyTextBlack2,
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: 45,
+                        height: 30,
+                        child: Switch(
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          value: isSwitched,
+                          onChanged: (value) {
+                            setState(() {
+                              isSwitched = value;
+                              socketStatus = isSwitched ? "Aktif" : "Nonaktif";
+                              print(isSwitched);
+                            });
+                          },
+                          // activeTrackColor: Styles.accentColor,
+                          activeColor: Styles.accentColor,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const Gap(16),
+                // const Gap(16),
                 DropdownButtonFormField(
                   focusColor: Styles.accentColor,
-                  decoration: InputDecoration.collapsed(
+                  decoration: const InputDecoration.collapsed(
                     hintText: '',
                   ),
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   validator: (value) => value == null ? "Select a country" : "null",
                   // dropdownColor: Colors.blueAccent,
                   value: selectedValue,
@@ -160,8 +162,17 @@ class _AddTimerPageState extends State<AddTimerPage> {
                   },
                   items: dropdownItems,
                 ),
-                const Gap(16),
-                TextTimePicker(notifyParent: setTime),
+                MyTimePicker(
+                  title: "Lama timer",
+                  ifPickedTime: true,
+                  currentTime: endTime,
+                  onTimePicked: (x) {
+                    setState(() {
+                      endTime = x;
+                      print("The picked time is: $x");
+                    });
+                  },
+                ),
               ],
             ),
           )

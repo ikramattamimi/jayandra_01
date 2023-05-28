@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
-import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/page/add_device/add_device_page.dart';
 import 'package:jayandra_01/page/add_device/adding_device.dart';
 import 'package:jayandra_01/page/add_device/confirm_pairing.dart';
@@ -16,11 +16,11 @@ import 'package:jayandra_01/page/register/register_page_2.dart';
 import 'package:jayandra_01/page/register/register_page_3.dart';
 import 'package:jayandra_01/page/terminal/add_schedule_page.dart';
 import 'package:jayandra_01/page/terminal/add_timer_page.dart';
+import 'package:jayandra_01/page/terminal/edit_timer_page.dart';
 import 'package:jayandra_01/page/terminal/schedule_page.dart';
 import 'package:jayandra_01/page/terminal/terminal_page.dart';
 import 'package:jayandra_01/page/terminal/timer_page.dart';
 import 'package:jayandra_01/screens/about_page.dart';
-import 'package:jayandra_01/screens/add_device_screen.dart';
 import 'package:jayandra_01/screens/main_screen.dart';
 
 class AppRouter {
@@ -102,7 +102,7 @@ class AppRouter {
             path: "terminal",
             name: "terminal",
             builder: (BuildContext context, GoRouterState state) => TerminalPage(
-              terminal: state.extra as Terminal,
+              terminal: state.extra as TerminalModel,
             ),
           ),
           GoRoute(
@@ -118,12 +118,21 @@ class AppRouter {
           GoRoute(
             path: "timer",
             name: "terminal_timer",
-            builder: (BuildContext context, GoRouterState state) => TimerPage(terminal: state.extra as Terminal,),
+            builder: (BuildContext context, GoRouterState state) => TimerPage(
+              terminal: state.extra as TerminalModel,
+            ),
           ),
           GoRoute(
             path: "add_timer",
             name: "terminal_timer_add",
-            builder: (BuildContext context, GoRouterState state) => AddTimerPage(terminal: state.extra as Terminal),
+            builder: (BuildContext context, GoRouterState state) => AddTimerPage(terminal: state.extra as TerminalModel),
+          ),
+          GoRoute(
+            path: "edit_timer",
+            name: "terminal_timer_edit",
+            builder: (BuildContext context, GoRouterState state) => EditTimerPage(
+              terminalTimer: state.extra as TerminalTimer,
+            ),
           ),
 
           // ADD DEVICE PAGE ROUTE

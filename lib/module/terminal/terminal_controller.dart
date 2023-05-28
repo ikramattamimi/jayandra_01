@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class TerminalController {
   /// [TerminalRepository] untuk melakukan pemanggilan API get Terminal
-  TerminalRepository _terminalRepositroy = TerminalRepository();
+  final TerminalRepository _terminalRepositroy = TerminalRepository();
 
   bool isLoading = false;
   var emailValue = '';
@@ -48,7 +48,7 @@ class TerminalController {
     Map<String, dynamic> terminalMapData = jsonDecode(terminalData!);
 
     // Response dengan response.data berupa List dari objek Terminal
-    TerminalResponse terminalObjectResponse = TerminalResponse.fromJsonArray(terminalMapData, Terminal.fromJson);
+    TerminalResponse terminalObjectResponse = TerminalResponse.fromJsonArray(terminalMapData, TerminalModel.fromJson);
     terminalObjectResponse.message = "Data terminal berhasil dimuat";
 
     return terminalObjectResponse;
@@ -74,18 +74,18 @@ class TerminalController {
     return updateSocketResponse;
   }
 
-  Future<TerminalResponse?> changeAllSocketStatus(int id_terminal, bool status) async {
+  Future<TerminalResponse?> changeAllSocketStatus(int idTerminal, bool status) async {
     // print('get terminal dipanggil');
     final prefs = await SharedPreferences.getInstance();
-    TerminalResponse? _terminalObjectResponse;
+    TerminalResponse? terminalObjectResponse;
 
     print('update all socket');
 
     // Get API data terminal
-    await _terminalRepositroy.changeAllSocketStatus(id_terminal, status).then((value) async {
+    await _terminalRepositroy.changeAllSocketStatus(idTerminal, status).then((value) async {
       prefs.remove('terminal');
-      _terminalObjectResponse = await getTerminal();
+      terminalObjectResponse = await getTerminal();
     });
-    return _terminalObjectResponse;
+    return terminalObjectResponse;
   }
 }

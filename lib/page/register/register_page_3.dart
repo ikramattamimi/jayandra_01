@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/page/login/login_page.dart';
 import 'package:jayandra_01/page/register/register_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
 import 'package:jayandra_01/page/register/register_page_4.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/widget/custom_elevated_button.dart';
-import 'package:jayandra_01/utils/form_regex.dart';
-import 'package:jayandra_01/widget/custom_text_form_field.dart';
-import 'package:jayandra_01/widget/list_tile_view.dart';
-import 'package:jayandra_01/widget/white_container.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 class RegisterPage3 extends StatefulWidget {
   const RegisterPage3({super.key, required this.email});
@@ -123,7 +115,7 @@ class _RegisterPage3State extends State<RegisterPage3> {
             // ScaffoldMessenger.of(context).showSnackBar(
             //   const SnackBar(content: Text('Mengecek Kode OTP')),
             // );
-            Future.delayed(Duration(seconds: 1), () {
+            Future.delayed(const Duration(seconds: 1), () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return RegisterPage4(
                   email: _email,

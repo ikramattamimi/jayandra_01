@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/widget/list_tile_view.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 
 class AddSchedulePage extends StatefulWidget {
@@ -48,7 +47,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.check_rounded),
+            icon: const Icon(Icons.check_rounded),
           ),
         ],
       ),
@@ -63,19 +62,29 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
               margin: 16,
               child: Column(
                 children: [
-                  _buildTimePick("Jadwal Aktif", true, startTime, (x) {
-                    setState(() {
-                      startTime = x;
-                      print("The picked time is: $x");
-                    });
-                  }),
-                  Gap(10),
-                  _buildTimePick("Jadwal Nonaktif", true, endTime, (x) {
-                    setState(() {
-                      endTime = x;
-                      print("The picked time is: $x");
-                    });
-                  }),
+                  MyTimePicker(
+                    title: "Jadwal Aktif",
+                    ifPickedTime: true,
+                    currentTime: startTime,
+                    onTimePicked: (x) {
+                      setState(() {
+                        startTime = x;
+                        print("The picked time is: $x");
+                      });
+                    },
+                  ),
+                  const Gap(10),
+                  MyTimePicker(
+                    title: "Jadwal Nonaktif",
+                    ifPickedTime: true,
+                    currentTime: endTime,
+                    onTimePicked: (x) {
+                      setState(() {
+                        endTime = x;
+                        print("The picked time is: $x");
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
@@ -137,12 +146,12 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   }
 
   Future selectedTime(BuildContext context, bool ifPickedTime, TimeOfDay initialTime, Function(TimeOfDay) onTimePicked) async {
-    var _pickedTime = await showTimePicker(
+    var pickedTime = await showTimePicker(
       context: context,
       initialTime: initialTime,
     );
-    if (_pickedTime != null) {
-      onTimePicked(_pickedTime);
+    if (pickedTime != null) {
+      onTimePicked(pickedTime);
     }
   }
 

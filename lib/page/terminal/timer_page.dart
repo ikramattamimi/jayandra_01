@@ -10,14 +10,14 @@ import 'package:jayandra_01/utils/app_styles.dart';
 class TimerPage extends StatefulWidget {
   const TimerPage({super.key, required this.terminal});
 
-  final Terminal terminal;
+  final TerminalModel terminal;
 
   @override
   State<TimerPage> createState() => _TimerPageState();
 }
 
 class _TimerPageState extends State<TimerPage> {
-  Terminal? terminal;
+  TerminalModel? terminal;
   List? timers;
 
   // Controller untuk model Timer
@@ -41,7 +41,10 @@ class _TimerPageState extends State<TimerPage> {
 
   Widget getTimerWidget(TimerModel timer) {
     // print('get timer widget');
-    return TimerView(timer: timer);
+    var terminalTimer = TerminalTimer(terminal: terminal!, timer: timer);
+    return TimerView(
+      terminalTimer: terminalTimer,
+    );
   }
 
   @override
@@ -77,7 +80,7 @@ class _TimerPageState extends State<TimerPage> {
             onPressed: () {
               context.pushNamed("terminal_timer_add", extra: terminal);
             },
-            icon: Icon(Icons.add_rounded),
+            icon: const Icon(Icons.add_rounded),
           )
         ],
       ),

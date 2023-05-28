@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/page/login/login_page.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:jayandra_01/widget/white_container.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class AddDevicePage extends StatefulWidget {
   const AddDevicePage({super.key});
@@ -50,7 +48,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         ),
         backgroundColor: Styles.primaryColor,
         body: Container(
-          margin: EdgeInsets.all(16),
+          margin: const EdgeInsets.all(16),
           // padding: EdgeInsets.all(16),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -76,9 +74,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
                     margin: 0,
                     child: Column(
                       children: [
-                        Gap(20),
+                        const Gap(20),
                         Image.asset("assets/images/router.png"),
-                        Gap(32),
+                        const Gap(32),
                         Form(
                           child: Column(
                             children: [
@@ -88,7 +86,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                                 keyboardType: TextInputType.name,
                                 prefixIcon: Icons.wifi_rounded,
                                 suffixIcon: IconButton(
-                                  icon: Icon(Icons.compare_arrows_rounded),
+                                  icon: const Icon(Icons.compare_arrows_rounded),
                                   onPressed: () {},
                                 ),
                               ),
@@ -99,12 +97,12 @@ class _AddDevicePageState extends State<AddDevicePage> {
                                 onPressed: () {
                                   context.pushNamed("confirm_pairing");
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(30, 42),
+                                ),
                                 child: Text(
                                   "Selanjutnya",
                                   style: Styles.bodyTextWhite3,
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(30, 42),
                                 ),
                               ),
                               const Gap(20),

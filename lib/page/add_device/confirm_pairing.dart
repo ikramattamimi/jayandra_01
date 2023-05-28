@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -52,7 +51,7 @@ class _ConfirmPairingPageState extends State<ConfirmPairingPage> {
         backgroundColor: Styles.primaryColor,
         body: SafeArea(
           child: Container(
-            margin: EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
             // padding: EdgeInsets.all(16),
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
@@ -115,12 +114,12 @@ class _ConfirmPairingPageState extends State<ConfirmPairingPage> {
                             onPressed: () {
                               context.pushNamed("adding_device");
                             },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(30, 42),
+                            ),
                             child: Text(
                               "Selanjutnya",
                               style: Styles.bodyTextWhite3,
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(30, 42),
                             ),
                           ),
                           const Gap(20),

@@ -23,7 +23,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         backgroundColor: Styles.secondaryColor,
         foregroundColor: Styles.textColor,
       ),
-      body: SafeArea(
+      body: const SafeArea(
           child: WhiteContainer(
         padding: 16,
         margin: 16,
@@ -49,7 +49,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return const Form(
       child: Column()
     
     );

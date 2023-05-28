@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 
 class ScheduleModel {
+  ScheduleModel({
+    this.id_schedule = 0,
+    this.id_socket = 0,
+    this.time,
+    this.status = false,
+    required this.note,
+    required this.days,
+  });
+
   final int? id_schedule;
   final int? id_socket;
   final TimeOfDay? time;
   final bool status;
-
-  ScheduleModel({this.id_schedule = 0, this.id_socket = 0, this.time, this.status = false});
+  final String note;
+  final List<String> days;
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');
@@ -18,6 +27,8 @@ class ScheduleModel {
       id_socket: json['id_socket'],
       time: time,
       status: json['status'],
+      days: json['days'],
+      note: '',
     );
   }
 }

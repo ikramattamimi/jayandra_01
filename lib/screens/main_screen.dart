@@ -33,7 +33,7 @@ class MainScreen extends StatelessWidget {
         primarySwatch: Colors.red,
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
-      home: BottomBar(
+      home: const BottomBar(
         // user: user1,
       ),
     );
@@ -55,9 +55,9 @@ class _BottomBarState extends State<BottomBar> {
   late User user;
   List<Widget> _widgetoptions = <Widget>[
       // DashboardPage(user: user1),
-      DashboardPage(),
-      ReportScreen(),
-      ProfileScreen(),
+      const DashboardPage(),
+      const ReportScreen(),
+      const ProfileScreen(),
     ];
 
   void getUserName() async {
@@ -70,9 +70,9 @@ class _BottomBarState extends State<BottomBar> {
 
     _widgetoptions = <Widget>[
       // DashboardPage(user: user1),
-      DashboardPage(),
-      ReportScreen(),
-      ProfileScreen(),
+      const DashboardPage(),
+      const ReportScreen(),
+      const ProfileScreen(),
     ];
   }
 

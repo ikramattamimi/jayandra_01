@@ -51,6 +51,8 @@ class BarChartView extends StatelessWidget {
     ),
   ];
 
+  BarChartView({super.key});
+
   SideTitles getTopBottomTitles() {
     return SideTitles(
       showTitles: true,
@@ -102,7 +104,7 @@ class BarChartView extends StatelessWidget {
                     toY: data.y.toDouble(),
                     width: barWidth,
                     color: data.color,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(6),
                       topRight: Radius.circular(6),
                     ),

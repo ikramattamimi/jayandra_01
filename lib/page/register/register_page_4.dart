@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/module/register/register_controller.dart';
 import 'package:jayandra_01/page/login/login_page.dart';
 import 'package:jayandra_01/page/register/register_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
-import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
-import 'package:jayandra_01/widget/list_tile_view.dart';
-import 'package:jayandra_01/widget/white_container.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 class RegisterPage4 extends StatefulWidget {
   const RegisterPage4({super.key, required this.email, required this.electricityClass});
@@ -86,11 +80,11 @@ class _RegisterPage4State extends State<RegisterPage4> {
         SnackBar(content: Text(response.message)),
       );
 
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         if (response.code == 0) {
           // context.pushNamed("register_page_2");
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return LoginPage();
+            return const LoginPage();
           }));
         } else {}
       });
@@ -107,6 +101,7 @@ class _RegisterPage4State extends State<RegisterPage4> {
         prefixIcon: Icons.person_rounded,
         validator: (value) {
           if (!value!.isValidName) return 'Nama tidak valid';
+          return null;
         },
       ),
       const Gap(16),

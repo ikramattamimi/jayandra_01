@@ -1,4 +1,3 @@
-import 'package:carbon_icons/carbon_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';

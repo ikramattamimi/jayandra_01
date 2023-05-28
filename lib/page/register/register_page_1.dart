@@ -8,16 +8,13 @@ import 'package:jayandra_01/page/register/register_page.dart';
 import 'package:jayandra_01/page/register/register_page_2.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
-import 'package:jayandra_01/utils/form_regex.dart';
-import 'package:jayandra_01/widget/custom_text_form_field.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 class RegisterPage1 extends StatelessWidget {
   const RegisterPage1({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return RegisterPage(
+    return const RegisterPage(
       subtitle: "Masukkan email Anda untuk melanjutkan",
       form: RegisterForm(),
     );
@@ -64,7 +61,7 @@ class _RegisterFormState extends State<RegisterForm> {
         SnackBar(content: Text(response.message)),
       );
 
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         if (response.code == 1) {
           // context.pushNamed("register_page_2");
           Navigator.push(context, MaterialPageRoute(builder: (context) {

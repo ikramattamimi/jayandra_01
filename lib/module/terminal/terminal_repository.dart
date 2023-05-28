@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jayandra_01/models/socket_model.dart';
-import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,10 +32,10 @@ class TerminalRepository {
     );
   }
 
-  Future<http.Response> changeAllSocketStatus(int id_terminal, bool status) async {
+  Future<http.Response> changeAllSocketStatus(int idTerminal, bool status) async {
     int updateStatus = status == true ? 1 : 0;
     return http.post(
-      Uri.parse('${NetworkAPI.ip}/changeAllSocketStatus/$id_terminal/$updateStatus'),
+      Uri.parse('${NetworkAPI.ip}/changeAllSocketStatus/$idTerminal/$updateStatus'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },

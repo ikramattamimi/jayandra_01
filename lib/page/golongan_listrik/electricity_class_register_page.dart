@@ -1,14 +1,9 @@
-import 'package:carbon_icons/carbon_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
-import 'package:jayandra_01/widget/custom_dropdown.dart';
-import 'package:jayandra_01/widget/custom_radio.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 
 class ElectricityClassRegisterPage extends StatefulWidget {
@@ -68,7 +63,7 @@ class _ElectricityClassRegisterPageState extends State<ElectricityClassRegisterP
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(
+        title: const Text(
           "Golongan Listrik",
           style: TextStyle(
             fontSize: 18,
@@ -79,7 +74,7 @@ class _ElectricityClassRegisterPageState extends State<ElectricityClassRegisterP
         foregroundColor: Styles.secondaryColor,
         actions: [
           IconButton(
-            icon: Icon(Icons.check_rounded),
+            icon: const Icon(Icons.check_rounded),
             onPressed: () {},
           ),
         ],

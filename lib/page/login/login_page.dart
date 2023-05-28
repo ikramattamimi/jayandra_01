@@ -1,12 +1,10 @@
 // ignore_for_file: body_might_complete_normally_nullable, unused_field, use_build_context_synchronously
 
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
-import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/login/login_controller.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
@@ -38,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   final _terminalController = TerminalController();
 
   /// Apakah password disembunyikan dalam input [PasswordTextForm]
-  bool _isPasswordHidden = false;
+  final bool _isPasswordHidden = false;
 
   /// Autentikasi akun user
   ///
@@ -70,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
 
       // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
       // membaca pesan status autentikasi
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         // Jika status autentikasi sukses dengan kode 0
         if (loginResponse.code == 0) {
           User user = loginResponse.data;

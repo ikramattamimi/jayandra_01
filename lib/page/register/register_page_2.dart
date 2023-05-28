@@ -2,14 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/page/register/register_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
 import 'package:jayandra_01/page/register/register_page_3.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/widget/custom_elevated_button.dart';
-import 'package:jayandra_01/utils/form_regex.dart';
-import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class RegisterPage2 extends StatefulWidget {
@@ -131,7 +127,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
           borderRadius: BorderRadius.circular(10),
           fieldHeight: 50,
           fieldWidth: 50,
-          errorBorderColor: Color(0xFFb03c3c),
+          errorBorderColor: const Color(0xFFb03c3c),
           selectedColor: Styles.accentColor,
           selectedFillColor: Styles.secondaryColor,
           activeFillColor: Styles.secondaryColor,
@@ -156,10 +152,10 @@ class _RegisterPage2State extends State<RegisterPage2> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text("Tidak menerima kode?"),
+          const Text("Tidak menerima kode?"),
           TextButton(
             style: TextButton.styleFrom(
-              padding: EdgeInsets.all(0),
+              padding: const EdgeInsets.all(0),
             ),
             onPressed: resendOTP,
             child: Text("Kirim ulang $_resendTimer"),
@@ -175,7 +171,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Mengecek Kode OTP')),
             );
-            Future.delayed(Duration(seconds: 1), () {
+            Future.delayed(const Duration(seconds: 1), () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return RegisterPage3(email: _email);
               }));

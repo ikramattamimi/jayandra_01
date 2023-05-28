@@ -1,4 +1,3 @@
-import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 
 class MyResponse<T> {
@@ -51,12 +50,12 @@ class MyArrayResponse {
 class TerminalResponse {
   int code;
   String message;
-  List<Terminal>? data;
+  List<TerminalModel>? data;
 
   TerminalResponse({this.code = 0, this.message = "", this.data});
 
   factory TerminalResponse.fromJsonArray(Map<String, dynamic> json, Function fromJsonModel) {
-    List<Terminal> terminals = [];
+    List<TerminalModel> terminals = [];
 
     // List terminal dari response API
     final terminalList = json['data'];
