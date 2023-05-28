@@ -14,12 +14,12 @@ import 'package:jayandra_01/page/profile/edit_profile_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
 import 'package:jayandra_01/page/register/register_page_2.dart';
 import 'package:jayandra_01/page/register/register_page_3.dart';
-import 'package:jayandra_01/page/terminal/add_schedule_page.dart';
-import 'package:jayandra_01/page/terminal/add_timer_page.dart';
-import 'package:jayandra_01/page/terminal/edit_timer_page.dart';
-import 'package:jayandra_01/page/terminal/schedule_page.dart';
+import 'package:jayandra_01/page/terminal/schedule/add_schedule_page.dart';
+import 'package:jayandra_01/page/terminal/timer/add_timer_page.dart';
+import 'package:jayandra_01/page/terminal/timer/edit_timer_page.dart';
+import 'package:jayandra_01/page/terminal/schedule/schedule_page.dart';
 import 'package:jayandra_01/page/terminal/terminal_page.dart';
-import 'package:jayandra_01/page/terminal/timer_page.dart';
+import 'package:jayandra_01/page/terminal/timer/timer_page.dart';
 import 'package:jayandra_01/screens/about_page.dart';
 import 'package:jayandra_01/screens/main_screen.dart';
 
@@ -108,12 +108,12 @@ class AppRouter {
           GoRoute(
             path: "schedule",
             name: "terminal_schedule",
-            builder: (BuildContext context, GoRouterState state) => const SchedulePage(),
+            builder: (BuildContext context, GoRouterState state) => SchedulePage(terminal: state.extra as TerminalModel,),
           ),
           GoRoute(
             path: "add_schedule",
             name: "terminal_schedule_add",
-            builder: (BuildContext context, GoRouterState state) => const AddSchedulePage(),
+            builder: (BuildContext context, GoRouterState state) => AddSchedulePage(terminal: state.extra as TerminalModel,),
           ),
           GoRoute(
             path: "timer",

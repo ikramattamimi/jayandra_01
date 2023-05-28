@@ -37,6 +37,7 @@ class _TimerViewState extends State<TimerView> {
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Card(
+          elevation: 0,
           margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
           color: Styles.secondaryColor,
           child: Padding(

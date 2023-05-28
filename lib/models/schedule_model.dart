@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jayandra_01/models/day_model.dart';
 
 class ScheduleModel {
   ScheduleModel({
@@ -15,7 +16,7 @@ class ScheduleModel {
   final TimeOfDay? time;
   final bool status;
   final String note;
-  final List<String> days;
+  final List<DayModel> days;
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');

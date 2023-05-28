@@ -26,76 +26,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Key untuk Form
-  final _loginFormKey = GlobalKey<FormState>();
 
-  /// Controller untuk form login
-  final LoginController _loginController = LoginController();
-
-  /// Controller untuk mendapatkan data terminal ketika login berhasil
-  final _terminalController = TerminalController();
-
-  /// Apakah password disembunyikan dalam input [PasswordTextForm]
-  final bool _isPasswordHidden = false;
-
-  /// Autentikasi akun user
-  ///
-  /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
-  /// dari [LoginController]
-  void _login() async {
-    int id;
-    // Jika validasi form berhasil
-    if (_loginFormKey.currentState!.validate()) {
-      // Menampilkan animasi loading
-      setState(() {
-        _loginController.isLoading = true;
-      });
-
-      // Memproses API
-      MyResponse loginResponse = await _loginController.login();
-      id = loginResponse.data.id;
-      _getTerminal(id);
-
-      // Menyembunyikan animasi loading
-      setState(() {
-        _loginController.isLoading = false;
-      });
-
-      // Menampilkan pesan status autentikasi
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(loginResponse.message)),
-      );
-
-      // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
-      // membaca pesan status autentikasi
-      Future.delayed(const Duration(seconds: 1), () {
-        // Jika status autentikasi sukses dengan kode 0
-        if (loginResponse.code == 0) {
-          User user = loginResponse.data;
-          User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
-          // context.pushNamed('main_page', extra: user);
-          context.pushNamed('main_page');
-        } else {}
-      });
-    }
-  }
-
-  /// Get data terminal yang terhubung dengan akun user
-  ///
-  /// PS:
-  /// Sementara ketika login data terminal yang pernah terhubung dengan akun
-  /// user akan otomatis tampil di dashboard.
-  /// Next data terminal baru akan muncul ketika terminal sudah bisa ditambahkan
-  /// melalui aplikasi.
-  void _getTerminal(int id) async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      await _terminalController.getTerminal();
-    } catch (e) {
-      print(e);
-    }
-  }
-
+  /// ==========================================================================
+  /// Widget Page
+  /// ==========================================================================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,6 +141,84 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  /// ==========================================================================
+  /// Deklarasi Variable
+  /// ==========================================================================
+  /// 
+  /// Key untuk Form
+  final _loginFormKey = GlobalKey<FormState>();
+
+  /// Controller untuk form login
+  final LoginController _loginController = LoginController();
+
+  /// Controller untuk mendapatkan data terminal ketika login berhasil
+  final _terminalController = TerminalController();
+
+  /// Apakah password disembunyikan dalam input [PasswordTextForm]
+  final bool _isPasswordHidden = false;
+
+  /// ==========================================================================
+  /// Local Function
+  /// ==========================================================================
+  /// 
+  /// Autentikasi akun user
+  ///
+  /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
+  /// dari [LoginController]
+  void _login() async {
+    int id;
+    // Jika validasi form berhasil
+    if (_loginFormKey.currentState!.validate()) {
+      // Menampilkan animasi loading
+      setState(() {
+        _loginController.isLoading = true;
+      });
+
+      // Memproses API
+      MyResponse loginResponse = await _loginController.login();
+      id = loginResponse.data.id;
+      _getTerminal(id);
+
+      // Menyembunyikan animasi loading
+      setState(() {
+        _loginController.isLoading = false;
+      });
+
+      // Menampilkan pesan status autentikasi
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(loginResponse.message)),
+      );
+
+      // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
+      // membaca pesan status autentikasi
+      Future.delayed(const Duration(seconds: 1), () {
+        // Jika status autentikasi sukses dengan kode 0
+        if (loginResponse.code == 0) {
+          User user = loginResponse.data;
+          User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
+          // context.pushNamed('main_page', extra: user);
+          context.pushNamed('main_page');
+        } else {}
+      });
+    }
+  }
+
+  /// Get data terminal yang terhubung dengan akun user
+  ///
+  /// PS:
+  /// Sementara ketika login data terminal yang pernah terhubung dengan akun
+  /// user akan otomatis tampil di dashboard.
+  /// Next data terminal baru akan muncul ketika terminal sudah bisa ditambahkan
+  /// melalui aplikasi.
+  void _getTerminal(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    try {
+      await _terminalController.getTerminal();
+    } catch (e) {
+      print(e);
+    }
   }
 }
 

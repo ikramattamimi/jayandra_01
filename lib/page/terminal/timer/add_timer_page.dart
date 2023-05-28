@@ -18,57 +18,9 @@ class AddTimerPage extends StatefulWidget {
 }
 
 class _AddTimerPageState extends State<AddTimerPage> {
-  var timerMinute = 0;
-  var timerHour = 0;
-  String selectedOption = "";
-  String selectedValue = "";
-  bool isSwitched = true;
-  var socketStatus = "Aktif";
-  TerminalModel? terminal;
-  final _timerController = TimerController();
-  TimeOfDay endTime = TimeOfDay.now();
-
-  @override
-  void initState() {
-    super.initState();
-    terminal = widget.terminal;
-    selectedValue = widget.terminal.sockets[0].id_socket.toString();
-    print(terminal!.name);
-  }
-
-  addTimer() async {
-    TimerModel timer = TimerModel(
-      id_socket: int.parse(selectedValue),
-      time: TimeOfDay(hour: timerHour, minute: timerMinute),
-      status: isSwitched,
-    );
-    MyResponse? addTimerResponse = await _timerController.addTimer(timer);
-    print(addTimerResponse);
-  }
-
-  List<DropdownMenuItem<String>> get dropdownItems {
-    List<DropdownMenuItem<String>> menuItems = [];
-    for (var socket in terminal!.sockets) {
-      menuItems.add(
-        DropdownMenuItem(
-          value: socket.id_socket.toString(),
-          child: Text(
-            socket.name!,
-            style: Styles.bodyTextBlack2,
-          ),
-        ),
-      );
-    }
-    return menuItems;
-  }
-
-  setTime(int hour, int minute) {
-    setState(() {
-      timerHour = hour;
-      timerMinute = minute;
-    });
-  }
-
+  /// ==========================================================================
+  /// Widget Page
+  /// ==========================================================================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,5 +131,62 @@ class _AddTimerPageState extends State<AddTimerPage> {
         ],
       ),
     );
+  }
+
+  /// ==========================================================================
+  /// Deklarasi Variable
+  /// ==========================================================================
+  var timerMinute = 0;
+  var timerHour = 0;
+  String selectedOption = "";
+  String selectedValue = "";
+  bool isSwitched = true;
+  var socketStatus = "Aktif";
+  TerminalModel? terminal;
+  final _timerController = TimerController();
+  TimeOfDay endTime = TimeOfDay(hour: 1, minute: 0);
+
+  /// ==========================================================================
+  /// Local Function
+  /// ==========================================================================
+  @override
+  void initState() {
+    super.initState();
+    terminal = widget.terminal;
+    selectedValue = widget.terminal.sockets[0].id_socket.toString();
+    print(terminal!.name);
+  }
+
+  addTimer() async {
+    TimerModel timer = TimerModel(
+      id_socket: int.parse(selectedValue),
+      time: endTime,
+      status: isSwitched,
+    );
+    MyResponse? addTimerResponse = await _timerController.addTimer(timer);
+    print(addTimerResponse);
+  }
+
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [];
+    for (var socket in terminal!.sockets) {
+      menuItems.add(
+        DropdownMenuItem(
+          value: socket.id_socket.toString(),
+          child: Text(
+            socket.name!,
+            style: Styles.bodyTextBlack2,
+          ),
+        ),
+      );
+    }
+    return menuItems;
+  }
+
+  setTime(int hour, int minute) {
+    setState(() {
+      timerHour = hour;
+      timerMinute = minute;
+    });
   }
 }

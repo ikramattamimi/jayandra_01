@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/terminal/timer_controller.dart';
@@ -218,46 +217,49 @@ class _EditTimerPageState extends State<EditTimerPage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: Text(
-          'Log Out',
+          'Hapus Timer',
           style: Styles.headingStyle1,
         ),
         content: Text(
-          'Apakah Anda yakin ingin keluar?',
+          'Apakah Anda yakin ingin menghapus timer?',
           style: Styles.bodyTextBlack,
         ),
         actions: <Widget>[
           Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    deleteTimer();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      deleteTimer();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: Colors.red.shade400,
+                        minimumSize: const Size(50, 50),
+                        padding: EdgeInsets.zero),
+                    child: Text(
+                      "Oke".toUpperCase(),
+                      style: Styles.buttonTextWhite,
                     ),
-                    backgroundColor: Colors.red.shade400,
-                    minimumSize: const Size(50, 50),
                   ),
-                  child: Text(
-                    "Oke".toUpperCase(),
-                    style: Styles.buttonTextWhite,
+                  const Gap(8),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Batalkan'),
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(50, 50),
+                    ),
+                    child: Text(
+                      'Batal'.toUpperCase(),
+                      style: Styles.bodyTextGrey2,
+                    ),
                   ),
-                ),
-                const Gap(8),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Batalkan'),
-                  style: TextButton.styleFrom(
-                    minimumSize: const Size(50, 50),
-                  ),
-                  child: Text(
-                    'Batal'.toUpperCase(),
-                    style: Styles.buttonTextBlue,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

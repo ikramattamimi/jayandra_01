@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/page/terminal/schedule_view.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/page/terminal/schedule/schedule_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
 class SchedulePage extends StatefulWidget {
-  const SchedulePage({super.key});
+  const SchedulePage({super.key, required this.terminal});
+
+  final TerminalModel terminal;
 
   @override
   State<SchedulePage> createState() => _SchedulePageState();
@@ -43,7 +46,7 @@ class _SchedulePageState extends State<SchedulePage> {
         actions: [
           IconButton(
             onPressed: () {
-              context.pushNamed("terminal_schedule_add");
+              context.pushNamed("terminal_schedule_add", extra: terminal);
             },
             icon: const Icon(Icons.add_rounded),
           )
@@ -56,5 +59,23 @@ class _SchedulePageState extends State<SchedulePage> {
         ],
       ),
     );
+  }
+
+  /// ==========================================================================
+  /// Variable Init
+  /// ==========================================================================
+
+  late TerminalModel terminal;
+
+  /// ==========================================================================
+  /// Local Function
+  /// ==========================================================================
+  ///
+  /// State Init
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    terminal = widget.terminal;
   }
 }
