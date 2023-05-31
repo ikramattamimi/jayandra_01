@@ -17,36 +17,9 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-  late TerminalModel terminal;
-  List? timers;
-
-  // Controller untuk model Timer
-  final _timerController = TimerController();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    terminal = widget.terminal;
-    getTimer();
-  }
-
-  getTimer() async {
-    await _timerController.getTimer(terminal.id).then((value) {
-      setState(() {
-        timers = value!.data!;
-      });
-    });
-  }
-
-  Widget getTimerWidget(TimerModel timer) {
-    // print('get timer widget');
-    var terminalTimer = TerminalTimer(terminal: terminal!, timer: timer);
-    return TimerView(
-      terminalTimer: terminalTimer,
-    );
-  }
-
+  /// ==========================================================================
+  /// Page's Widget
+  /// ==========================================================================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,4 +63,45 @@ class _TimerPageState extends State<TimerPage> {
       ),
     );
   }
+
+  /// ==========================================================================
+  /// Variable Init
+  /// ==========================================================================
+  late TerminalModel terminal;
+  List? timers;
+
+  // Controller untuk model Timer
+  final _timerController = TimerController();
+
+  /// ==========================================================================
+  /// Local Function
+  /// ==========================================================================
+  
+  /// State Init
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    terminal = widget.terminal;
+    getTimer();
+  }
+
+  /// Get Timer data from API
+  getTimer() async {
+    await _timerController.getTimer(terminal.id).then((value) {
+      setState(() {
+        timers = value!.data!;
+      });
+    });
+  }
+
+  /// Get Timer widget by data from [getTimer]
+  Widget getTimerWidget(TimerModel timer) {
+    // print('get timer widget');
+    var terminalTimer = TerminalTimer(terminal: terminal!, timer: timer);
+    return TimerView(
+      terminalTimer: terminalTimer,
+    );
+  }
+
 }

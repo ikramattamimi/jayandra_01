@@ -18,14 +18,16 @@ class _TimerViewState extends State<TimerView> {
   late TimerModel? timer;
   late TerminalModel? terminal;
   late TerminalTimer? terminalTimer;
+  late String socketName;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    timer = widget.terminalTimer.timer;
-    terminal = widget.terminalTimer.terminal;
-    terminalTimer = TerminalTimer(terminal: terminal!, timer: timer!);
+    terminalTimer = widget.terminalTimer;
+    timer = terminalTimer!.timer;
+    terminal = terminalTimer!.terminal;
+    socketName = terminal!.sockets.firstWhere((element) => element.id_socket! == timer!.id_socket).name!;
   }
 
   @override
@@ -70,7 +72,7 @@ class _TimerViewState extends State<TimerView> {
                 ),
                 // const Gap(4),
                 Text(
-                  timer!.id_socket.toString(),
+                  socketName,
                   style: Styles.bodyTextGrey2,
                 ),
               ],

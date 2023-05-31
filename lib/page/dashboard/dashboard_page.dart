@@ -1,15 +1,20 @@
-
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:carbon_icons/carbon_icons.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/report/report_view.dart';
+import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/terminal_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:timezone/timezone.dart' as tz;
+
+final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 /// Widget ini menampilkan halaman Dashboard
 class DashboardPage extends StatefulWidget {
@@ -37,6 +42,7 @@ class _DashboardPageState extends State<DashboardPage> {
     getUserName();
     _isTerminalNull();
     _getTerminal();
+
     // print(widget.user);
   }
 
@@ -150,7 +156,21 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: null,
+                          onPressed: () {
+                            // final now = DateTime.now();
+                            // final scheduledDate = tz.TZDateTime.from(
+                            //   now.add(const Duration(seconds: 5)), // Set the notification for tomorrow
+                            //   tz.local,
+                            // );
+                            // final time = Time(10, 0, 0); // Set the time for the notification (e.g., 10:00 AM)
+                            // final schedule = DailyTimeIntervalSchedule(
+                            //   startTime: TimeOfDay.fromDateTime(time).toDuration(),
+                            //   endTime: TimeOfDay.fromDateTime(time).toDuration(),
+                            //   interval: const Duration(days: 1), // Repeat daily
+                            // );
+                            AndroidAlarmManager.oneShot(Duration(seconds: 5), 1, getNotification, wakeup: true);
+                            // NotificationService().showNotificationAtTime(title: "Halo", body: "Notif", scheduledDate: scheduledDate);
+                          },
                           icon: Icon(
                             Icons.notifications_rounded,
                             size: 30,
@@ -194,4 +214,9 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+}
+
+void getNotification() {
+  print("Get Notification");
+  NotificationService().showNotification(title: "Halo", body: "Bjirr");
 }

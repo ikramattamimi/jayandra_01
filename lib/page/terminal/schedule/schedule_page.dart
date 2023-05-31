@@ -79,7 +79,7 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    super.initState(); 
     terminal = widget.terminal;
     getSchedule();
   }
