@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 
-class TimerModel {
+class TimerModel extends ChangeNotifier {
   final int? id_timer;
   final int? id_socket;
   final TimeOfDay? time;
@@ -21,6 +21,11 @@ class TimerModel {
       time: time,
       status: json['status'],
     );
+  }
+
+  void changeSocketStatus(bool isSocketOn) {
+    status = isSocketOn;
+    notifyListeners();
   }
 }
 

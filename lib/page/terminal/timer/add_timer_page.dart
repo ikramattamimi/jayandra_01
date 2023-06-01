@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -6,8 +7,10 @@ import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/terminal/timer_controller.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
+import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class AddTimerPage extends StatefulWidget {
   const AddTimerPage({super.key, required this.terminal});
@@ -155,18 +158,42 @@ class _AddTimerPageState extends State<AddTimerPage> {
     terminal = widget.terminal;
     selectedValue = widget.terminal.sockets[0].id_socket.toString();
     print(terminal!.name);
+    var scheduledTime = DateTime.now().add(Duration(hours: 0, minutes: 2));
+    print(scheduledTime);
   }
 
+  /// Simpan timer ke database
   addTimer() async {
     TimerModel timer = TimerModel(
       id_socket: int.parse(selectedValue),
       time: endTime,
       status: isSwitched,
     );
-    MyResponse? addTimerResponse = await _timerController.addTimer(timer);
-    print(addTimerResponse);
+    await _timerController.addTimer(timer).then((value) {
+      print(value);
+      var scheduledDateTime = tz.TZDateTime.from(
+        DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute)),
+        tz.local,
+      );
+
+      var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
+
+      // NotificationService().showNotificationAtTime(
+      //   id: value!.data.id_timer,
+      //   title: "Timer selesai",
+      //   body: "Timer untuk Socket",
+      //   scheduledDate: scheduledDateTime,
+      // );
+
+      AndroidAlarmManager.oneShotAt(
+        scheduledTime,
+        value!.data.id_timer,
+        getTimerNotification,
+      );
+    });
   }
 
+  /// Getter nama socket untuk dropdown
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [];
     for (var socket in terminal!.sockets) {
@@ -189,4 +216,12 @@ class _AddTimerPageState extends State<AddTimerPage> {
       timerMinute = minute;
     });
   }
+}
+
+getTimerNotification(int idTimer) {
+  NotificationService().showNotification(
+    id: idTimer,
+    title: "Timer $idTimer selesai",
+    body: "Timer untuk Socket $idTimer",
+  );
 }

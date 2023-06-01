@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jayandra_01/page/terminal/timer/timer_provider.dart';
 import 'package:jayandra_01/router/app_router.dart';
 import 'package:jayandra_01/services/alarm_manager_service.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -17,7 +19,16 @@ void main() {
   NotificationService().initNotification();
   AlarmManagerService().initAlarmManager();
   tz.initializeTimeZones();
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TimerProvider>(
+          create: (_) => TimerProvider(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

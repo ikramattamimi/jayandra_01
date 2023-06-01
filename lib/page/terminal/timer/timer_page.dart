@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/terminal/timer_controller.dart';
+import 'package:jayandra_01/page/terminal/timer/timer_provider.dart';
 import 'package:jayandra_01/page/terminal/timer/timer_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
   const TimerPage({super.key, required this.terminal});
@@ -22,6 +24,9 @@ class _TimerPageState extends State<TimerPage> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
+    final timerProvider = Provider.of<TimerProvider>(context);
+    final timersfromprovider = timerProvider.timers;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -58,8 +63,15 @@ class _TimerPageState extends State<TimerPage> {
         ],
       ),
       backgroundColor: Styles.primaryColor,
-      body: ListView(
-        children: timers == null ? [] : timers!.map((timer) => getTimerWidget(timer)).toList(),
+      // body: ListView(
+      // children: timers == null ? [] : timers!.map((timer) => getTimerWidget(timer)).toList(),
+      // ),
+      body: ListView.builder(
+        itemCount: timersfromprovider.length,
+        itemBuilder: (context, index) {
+          final timerModel = timersfromprovider[index];
+          return TimerView(terminalTimer: TerminalTimer(terminal: terminal, timer: timerModel));
+        },
       ),
     );
   }
@@ -70,13 +82,16 @@ class _TimerPageState extends State<TimerPage> {
   late TerminalModel terminal;
   List? timers;
 
+  // late TimerProvider timerProvider;
+  // late List<TimerModel> timersfromprovider;
+
   // Controller untuk model Timer
   final _timerController = TimerController();
 
   /// ==========================================================================
   /// Local Function
   /// ==========================================================================
-  
+
   /// State Init
   @override
   void initState() {
@@ -103,5 +118,4 @@ class _TimerPageState extends State<TimerPage> {
       terminalTimer: terminalTimer,
     );
   }
-
 }

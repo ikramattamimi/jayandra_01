@@ -168,7 +168,13 @@ class _DashboardPageState extends State<DashboardPage> {
                             //   endTime: TimeOfDay.fromDateTime(time).toDuration(),
                             //   interval: const Duration(days: 1), // Repeat daily
                             // );
-                            AndroidAlarmManager.oneShot(Duration(seconds: 5), 1, getNotification, wakeup: true);
+                            AndroidAlarmManager.oneShotAt(
+                                DateTime.now().add(
+                                  Duration(minutes: 1),
+                                ),
+                                1,
+                                getNotification,
+                                wakeup: true);
                             // NotificationService().showNotificationAtTime(title: "Halo", body: "Notif", scheduledDate: scheduledDate);
                           },
                           icon: Icon(
