@@ -81,7 +81,7 @@ class AppRouter {
       GoRoute(
         path: "/",
         name: "main_page",
-        builder: (BuildContext context, GoRouterState state) => MainScreen(user: state.extra as UserModel,),
+        builder: (BuildContext context, GoRouterState state) => MainScreen(),
         routes: <GoRoute>[
           GoRoute(
             path: "edit_profile",

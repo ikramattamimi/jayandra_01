@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/module/user/login_controller.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
@@ -14,6 +15,7 @@ import 'package:jayandra_01/widget/custom_elevated_button.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Widget ini menampilkan halaman Login
@@ -30,6 +32,8 @@ class _LoginPageState extends State<LoginPage> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
+    final terminalProvider = Provider.of<TerminalProvider>(context);
     return Scaffold(
       backgroundColor: Styles.accentColor,
       appBar: AppBar(
@@ -104,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                                     textStyle: Styles.buttonTextWhite,
                                     onPressed: () async {
                                       try {
-                                        _login();
+                                        _login(userModel, terminalProvider);
                                       } catch (e) {}
                                     },
                                   ),
@@ -169,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
   ///
   /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
   /// dari [LoginController]
-  void _login() async {
+  void _login(UserModel userModel, TerminalProvider terminalProvider) async {
     // int id;
     // Jika validasi form berhasil
     if (_loginFormKey.currentState!.validate()) {
@@ -202,7 +206,10 @@ class _LoginPageState extends State<LoginPage> {
           // User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
           // context.pushNamed('main_page', extra: user);
           UserModel user = loginResponse.data;
-          user.updateUser();
+          // print("sukses");
+          // print(loginResponse.data);
+          userModel.updateUser(user);
+          terminalProvider.initializeData(userModel.id);
           context.pushNamed('main_page', extra: user);
         } else {}
       });
@@ -216,14 +223,14 @@ class _LoginPageState extends State<LoginPage> {
   /// user akan otomatis tampil di dashboard.
   /// Next data terminal baru akan muncul ketika terminal sudah bisa ditambahkan
   /// melalui aplikasi.
-  void _getTerminal(int id) async {
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      await _terminalController.getTerminal();
-    } catch (e) {
-      print(e);
-    }
-  }
+  // void _getTerminal(int id) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   try {
+  //     await _terminalController.getTerminal();
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 }
 
 /// Widget ini menampilkan [TextFormField] untuk field password.

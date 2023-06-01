@@ -18,40 +18,29 @@ class TerminalController {
   var passwordController = TextEditingController();
   String electricityClassValue = "";
 
-  Future<TerminalResponse?> getTerminal() async {
-    // print('get terminal dipanggil');
+  Future<TerminalResponse?> getTerminal(int userId) async {
     final prefs = await SharedPreferences.getInstance();
+    TerminalResponse terminalObjectResponse;
+    // Get API data terminal
+    http.Response response = await _terminalRepositroy.getTerminal(userId);
+    // Jika status 200
+    if (response.statusCode == 200) {
+      // Setting SharedPreferences untuk data terminal
+      prefs.setBool('isTerminalFetched', true);
 
-    // Data terminal berupa string json dari response API
-    // yang disimpan di SharedPreferences
-    String? terminalData = prefs.getString('terminal');
+      // Parse String jsonke Map
+      Map<String, dynamic> terminalMapData = jsonDecode(response.body);
 
-    http.Response response;
-
-    // Jika data terminal belum disetting di SharedPreferences
-    if (terminalData == null) {
-      // Get API data terminal
-      response = await _terminalRepositroy.getTerminal();
-
-      // Jika status 200
-      if (response.statusCode == 200) {
-        // Setting SharedPreferences untuk data terminal
-        prefs.setString('terminal', response.body);
-        terminalData = prefs.getString('terminal');
-        // print(terminalData);
-      } else {
-        return TerminalResponse(code: 1, message: "Terjadi Masalah");
-      }
+      // Response dengan response.data berupa List dari objek Terminal
+      terminalObjectResponse = TerminalResponse.fromJsonArray(terminalMapData, TerminalModel.fromJson);
+      terminalObjectResponse.message = "Data terminal berhasil dimuat";
+      print(terminalObjectResponse.data);
+      return terminalObjectResponse;
+    } else {
+      return TerminalResponse(code: 1, message: "Terjadi Masalah");
     }
 
-    // Parse String jsonke Map
-    Map<String, dynamic> terminalMapData = jsonDecode(terminalData!);
-
-    // Response dengan response.data berupa List dari objek Terminal
-    TerminalResponse terminalObjectResponse = TerminalResponse.fromJsonArray(terminalMapData, TerminalModel.fromJson);
-    terminalObjectResponse.message = "Data terminal berhasil dimuat";
-
-    return terminalObjectResponse;
+    // return terminalObjectResponse;
   }
 
   Future<MyResponse?> updateSocket(Socket socket) async {
@@ -69,7 +58,7 @@ class TerminalController {
     final prefs = await SharedPreferences.getInstance();
     int? userId = prefs.getInt('user_id');
     prefs.remove('terminal');
-    getTerminal();
+    // getTerminal();
 
     return updateSocketResponse;
   }
@@ -84,7 +73,7 @@ class TerminalController {
     // Get API data terminal
     await _terminalRepositroy.changeAllSocketStatus(idTerminal, status).then((value) async {
       prefs.remove('terminal');
-      terminalObjectResponse = await getTerminal();
+      // terminalObjectResponse = await getTerminal();
     });
     return terminalObjectResponse;
   }

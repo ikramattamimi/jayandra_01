@@ -5,9 +5,7 @@ import 'package:jayandra_01/utils/network_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TerminalRepository {
-  Future<http.Response> getTerminal() async {
-    final prefs = await SharedPreferences.getInstance();
-    var userId = prefs.getInt('user_id');
+  Future<http.Response> getTerminal(int userId) async {
     return http.get(
       Uri.parse('${NetworkAPI.ip}/getpowerstrip/$userId'),
       headers: <String, String>{

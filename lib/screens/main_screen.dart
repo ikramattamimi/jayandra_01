@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:flutter/services.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/page/dashboard/dashboard_page.dart';
 import 'package:jayandra_01/screens/profile_screen.dart';
 import 'package:jayandra_01/page/report/report_screen.dart';
@@ -13,8 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MainScreen extends StatelessWidget {
   // final User user;
   // MainScreen({super.key, required this.user});
-  MainScreen({super.key, required this.user});
-  final UserModel user;
+  MainScreen({super.key});
+  // final UserModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +35,9 @@ class MainScreen extends StatelessWidget {
         primarySwatch: Colors.red,
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
-      home: ChangeNotifierProvider(
-        create: (context) => user,
-        child: BottomBar(
-            // user: user1,
-            ),
-      ),
+      home: BottomBar(
+          // user: user1,
+          ),
     );
   }
 }
@@ -88,6 +86,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Styles.primaryColor,

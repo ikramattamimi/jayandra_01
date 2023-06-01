@@ -7,6 +7,8 @@ import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
+import 'package:jayandra_01/module/terminal/terminal_provider.dart';
+import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/page/report/report_view.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -29,115 +31,11 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  String? userName;
-  final _controller = TerminalController();
-  List<TerminalModel>? _terminals = [];
-  List<Widget>? _terminalWidgets = [];
-
-  /// Response pemanggilan API yang sudah dalam bentuk objek [TerminalResponse]
-  late TerminalResponse? _terminalObjectResponse;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUserName();
-    _isTerminalNull();
-    _getTerminal();
-
-    // print(widget.user);
-  }
-
-  void getUserName() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userName = prefs.getString('user_name');
-    });
-  }
-
-  void _isTerminalNull() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    if (prefs.getString('terminal') == null) {
-      _terminalWidgets = [
-        SizedBox(
-          height: 140,
-          width: 170,
-          child: Container(
-            margin: const EdgeInsets.only(
-              left: 16,
-              bottom: 16,
-            ),
-            decoration: BoxDecoration(
-              color: Styles.secondaryColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(5),
-              ),
-            ),
-            child: Center(
-              child: CircularProgressIndicator(color: Styles.accentColor),
-            ),
-          ),
-        ),
-      ];
-    }
-  }
-
-  /// Mengambil data terminal
-  ///
-  /// Jika data terminal berhasil didapat ketika login data akan
-  /// diambil dari [SharedPreferences].
-  ///
-  /// Sebaliknya, data terminal akan diambil dengan melakukan pemanggilan
-  /// API getTerminal pada [LoginController]
-  void _getTerminal() async {
-    try {
-      _terminalObjectResponse = await _controller.getTerminal().then((value) {
-        setState(() {
-          if (value!.data != null) {
-            _terminals = value.data;
-          } else {
-            _terminals = null;
-            _terminalWidgets = [
-              SizedBox(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                child: Center(
-                  child: Text(
-                    "Belum ada perangkat",
-                    style: Styles.bodyTextBlack,
-                  ),
-                ),
-              ),
-            ];
-          }
-          _getTerminalWidget();
-        });
-        return null;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void _getTerminalWidget() {
-    if (_terminals != null) {
-      _terminalWidgets = [];
-      for (var terminal in _terminals!) {
-        print(terminal.totalActiveSocket);
-        _terminalWidgets!.add(
-          TerminalView(
-            terminalIcon: Icons.bed,
-            terminal: terminal,
-          ),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final userModel = Provider.of<UserModel>(context);
+    final terminalProvider = Provider.of<TerminalProvider>(context);
+    var terminals = terminalProvider.terminals;
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: ListView(
@@ -217,12 +115,119 @@ class _DashboardPageState extends State<DashboardPage> {
           const Gap(24),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(children: _terminalWidgets!),
+            child: Row(children: _getTerminalWidget(terminals)),
           )
         ],
       ),
     );
   }
+
+  List<Widget> _getTerminalWidget(List<TerminalModel> terminals) {
+    if (terminals != []) {
+      _terminalWidgets = [];
+      for (var terminal in terminals) {
+        // print(terminal.totalActiveSocket);
+        _terminalWidgets!.add(
+          TerminalView(
+            terminalIcon: Icons.bed,
+            terminal: terminal,
+          ),
+        );
+      }
+    }
+    return _terminalWidgets!;
+  }
+
+  String? userName;
+  // final _controller = TerminalController();
+  // List<TerminalModel>? _terminals = [];
+  List<Widget>? _terminalWidgets = [];
+
+  /// Response pemanggilan API yang sudah dalam bentuk objek [TerminalResponse]
+  // late TerminalResponse? _terminalObjectResponse;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserName();
+    _isTerminalNull();
+    // _getTerminal();
+
+    // print(widget.user);
+  }
+
+  void getUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString('user_name');
+    });
+  }
+
+  void _isTerminalNull() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getString('terminal') == null) {
+      _terminalWidgets = [
+        SizedBox(
+          height: 140,
+          width: 170,
+          child: Container(
+            margin: const EdgeInsets.only(
+              left: 16,
+              bottom: 16,
+            ),
+            decoration: BoxDecoration(
+              color: Styles.secondaryColor,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
+            child: Center(
+              child: CircularProgressIndicator(color: Styles.accentColor),
+            ),
+          ),
+        ),
+      ];
+    }
+  }
+
+  /// Mengambil data terminal
+  ///
+  /// Jika data terminal berhasil didapat ketika login data akan
+  /// diambil dari [SharedPreferences].
+  ///
+  /// Sebaliknya, data terminal akan diambil dengan melakukan pemanggilan
+  /// API getTerminal pada [LoginController]
+  // void _getTerminal() async {
+  //   try {
+  //     _terminalObjectResponse = await _controller.getTerminal().then((value) {
+  //       setState(() {
+  //         if (value!.data != null) {
+  //           _terminals = value.data;
+  //         } else {
+  //           _terminals = null;
+  //           _terminalWidgets = [
+  //             SizedBox(
+  //               height: 50,
+  //               width: MediaQuery.of(context).size.width,
+  //               child: Center(
+  //                 child: Text(
+  //                   "Belum ada perangkat",
+  //                   style: Styles.bodyTextBlack,
+  //                 ),
+  //               ),
+  //             ),
+  //           ];
+  //         }
+  //         _getTerminalWidget();
+  //       });
+  //       return null;
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 }
 
 void getNotification() {

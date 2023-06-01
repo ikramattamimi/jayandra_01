@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,6 +29,10 @@ class _LandingPageState extends State<SplashScreen> {
   Future<void> checkAuth() async {
     final prefs = await SharedPreferences.getInstance();
     bool? isUserLoggedIn = prefs.getBool('isUserLoggedIn');
+
+    // prefs.clear();
+
+    // final userModel = Provider.of<UserModel>(context, listen: false);
 
     // Biar terminal auto refresh
     prefs.remove('terminal');

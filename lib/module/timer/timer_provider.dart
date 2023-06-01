@@ -13,7 +13,7 @@ class TimerProvider with ChangeNotifier {
 
   final _timerRepository = TimerRepository();
 
-    TimerProvider() {
+  TimerProvider() {
     initializeData();
   }
 
@@ -48,7 +48,7 @@ class TimerProvider with ChangeNotifier {
         timerObjectResponse = MyArrayResponse.fromJson(timerMapData, TimerModel.fromJson);
         timerObjectResponse.message = "Data terminal berhasil dimuat";
         // return timerObjectResponse.data;
-      } 
+      }
     });
 
     // Contoh data hardcoded:
