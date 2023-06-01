@@ -7,13 +7,14 @@ import 'package:jayandra_01/page/dashboard/dashboard_page.dart';
 import 'package:jayandra_01/screens/profile_screen.dart';
 import 'package:jayandra_01/page/report/report_screen.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatelessWidget {
   // final User user;
   // MainScreen({super.key, required this.user});
-  MainScreen({super.key});
-  User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
+  MainScreen({super.key, required this.user});
+  final UserModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +34,11 @@ class MainScreen extends StatelessWidget {
         primarySwatch: Colors.red,
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
-      home: const BottomBar(
-        // user: user1,
+      home: ChangeNotifierProvider(
+        create: (context) => user,
+        child: BottomBar(
+            // user: user1,
+            ),
       ),
     );
   }
@@ -52,13 +56,13 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
   late String userName;
-  late User user;
+  late UserModel user;
   List<Widget> _widgetoptions = <Widget>[
-      // DashboardPage(user: user1),
-      const DashboardPage(),
-      const ReportScreen(),
-      const ProfileScreen(),
-    ];
+    // DashboardPage(user: user1),
+    const DashboardPage(),
+    const ReportScreen(),
+    const ProfileScreen(),
+  ];
 
   void getUserName() async {
     final prefs = await SharedPreferences.getInstance();
@@ -66,7 +70,7 @@ class _BottomBarState extends State<BottomBar> {
       userName = prefs.getString('user_name').toString();
     });
     // user = widget.user;
-    User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
+    UserModel user1 = UserModel(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
 
     _widgetoptions = <Widget>[
       // DashboardPage(user: user1),

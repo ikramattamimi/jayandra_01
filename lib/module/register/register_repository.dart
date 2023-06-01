@@ -4,7 +4,7 @@ import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
 
 class RegisterRepository {
-  Future<http.Response> register(User user) async {
+  Future<http.Response> register(UserModel user) async {
     return http.post(
       Uri.parse('${NetworkAPI.ip}/tambahData'),
       headers: <String, String>{

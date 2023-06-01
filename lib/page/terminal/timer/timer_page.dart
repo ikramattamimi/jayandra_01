@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/terminal/timer_controller.dart';
-import 'package:jayandra_01/page/terminal/timer/timer_provider.dart';
+import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/page/terminal/timer/timer_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:provider/provider.dart';

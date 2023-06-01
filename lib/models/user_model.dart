@@ -1,15 +1,17 @@
-class User {
-  final int? id;
-  final String? name;
-  final String email;
-  final String? password;
-  final String? electricityclass;
-  final String? token;
+import 'package:flutter/material.dart';
 
-  User({this.id = 0, this.name = "", this.email = "", this.password = "", this.electricityclass = "", this.token = ""});
+class UserModel extends ChangeNotifier {
+  int id;
+  String name;
+  String email;
+  String password;
+  String electricityclass;
+  String token;
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  UserModel({this.id = 0, this.name = "", this.email = "", this.password = "", this.electricityclass = "", this.token = ""});
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
       id: json['id'],
       name: json['name'],
       email: json['email'],
@@ -17,5 +19,9 @@ class User {
       electricityclass: (json['electricityclass'] != "") ? json['electricityClass'] : "",
       token: json['token'],
     );
+  }
+
+  void updateUser() {
+    notifyListeners();
   }
 }

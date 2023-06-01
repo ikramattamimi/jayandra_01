@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/timer_model.dart';
-import 'package:jayandra_01/module/terminal/timer_repository.dart';
+import 'package:jayandra_01/module/timer/timer_repository.dart';
 import 'package:provider/provider.dart';
 
 class TimerProvider with ChangeNotifier {
@@ -49,9 +49,6 @@ class TimerProvider with ChangeNotifier {
         timerObjectResponse.message = "Data terminal berhasil dimuat";
         // return timerObjectResponse.data;
       } 
-      // else {
-      //   return MyArrayResponse(code: 1, message: "Terjadi Masalah");
-      // }
     });
 
     // Contoh data hardcoded:
@@ -76,5 +73,11 @@ class TimerProvider with ChangeNotifier {
 
   static TimerProvider of(BuildContext context, {bool listen = true}) {
     return Provider.of<TimerProvider>(context, listen: listen);
+  }
+
+  void changeTimerStatus(int timerId, bool isTimerOn) {
+    final timer = _timers.firstWhere((timer) => timer.id_timer == timerId);
+    timer.changeTimerStatus(isTimerOn);
+    notifyListeners();
   }
 }

@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/socket_model.dart';
 
-class TerminalModel {
+class TerminalModel extends ChangeNotifier {
   final int id;
   final String name;
   final List<Socket> sockets;
@@ -8,7 +9,7 @@ class TerminalModel {
   int totalActiveSocket;
 
   TerminalModel({
-    this.id = 0,                             
+    this.id = 0,
     this.name = "",
     required this.sockets,
     this.isTerminalActive = false,
@@ -34,5 +35,9 @@ class TerminalModel {
       totalActiveSocket: totalActiveSoccket,
       // user_id: json['user_id'],
     );
+  }
+
+  void updateTerminalStatus(bool isTerminalOn) {
+    isTerminalActive = isTerminalOn;
   }
 }

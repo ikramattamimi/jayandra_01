@@ -17,7 +17,7 @@ class CekEmailController {
 
     if (result.statusCode == 200) {
       Map<String, dynamic> myBody = jsonDecode(result.body);
-      MyResponse<User> myResponse = MyResponse.fromJson(myBody, User.fromJson);
+      MyResponse<UserModel> myResponse = MyResponse.fromJson(myBody, UserModel.fromJson);
 
       if (myResponse.code == 0) {
         myResponse.message = "Email sudah terdaftar";

@@ -5,11 +5,13 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/report/report_view.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/terminal_view.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -135,6 +137,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: ListView(
@@ -148,7 +151,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      (userName != null) ? "Halo $userName!" : "Halo",
+                      'Halo ${userModel.name}!',
                       style: Styles.headingStyle1,
                     ),
                     Row(

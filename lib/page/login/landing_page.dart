@@ -26,13 +26,17 @@ class _LandingPageState extends State<SplashScreen> {
 
   Future<void> checkAuth() async {
     final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
+    bool? isUserLoggedIn = prefs.getBool('isUserLoggedIn');
 
     // Biar terminal auto refresh
     prefs.remove('terminal');
 
     Timer(const Duration(seconds: 2), (() {
-      token != null ? context.pushNamed('main_page') : context.pushNamed('landing_page');
+      isUserLoggedIn != null
+          ? isUserLoggedIn
+              ? context.pushNamed('main_page')
+              : context.pushNamed('landing_page')
+          : context.pushNamed('landing_page');
     }));
   }
 

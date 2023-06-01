@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'login_repository.dart';
+import 'user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class LoginController {
-  final LoginRepository _repository = LoginRepository();
+  final UserRepository _repository = UserRepository();
 
   bool isLoading = false;
   var emailController = TextEditingController();
@@ -19,20 +19,20 @@ class LoginController {
 
     if (result.statusCode == 200) {
       Map<String, dynamic> myBody = jsonDecode(result.body);
-      MyResponse<User> myResponse = MyResponse.fromJson(myBody, User.fromJson);
+      MyResponse<UserModel> myResponse = MyResponse.fromJson(myBody, UserModel.fromJson);
 
       if (myResponse.code == 0) {
         final prefs = await SharedPreferences.getInstance();
 
-        // simpan token
-        await prefs.setString('token', myResponse.data?.token ?? "");
-        await prefs.setString('user_name', myResponse.data?.name ?? "");
-        await prefs.setString('email', myResponse.data?.email ?? "");
-        await prefs.setString('electricityclass', myResponse.data?.electricityclass ?? "");
-        await prefs.setInt('user_id', myResponse.data?.id ?? 0);
+        // simpan status user sudah login
+        await prefs.setBool('isUserLoggedIn', true);
+        // await prefs.setString('user_name', myResponse.data?.name ?? "");
+        // await prefs.setString('email', myResponse.data?.email ?? "");
+        // await prefs.setString('electricityclass', myResponse.data?.electricityclass ?? "");
+        // await prefs.setInt('user_id', myResponse.data?.id ?? 0);
 
-        String? name = prefs.getString('user_name');
-        print(name);
+        // String? name = prefs.getString('user_name');
+        // print(name);
       }
 
       myResponse.message = "Login Berhasil";

@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/user_model.dart';
-import 'package:jayandra_01/module/login/login_controller.dart';
+import 'package:jayandra_01/module/user/login_controller.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -104,10 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                                     textStyle: Styles.buttonTextWhite,
                                     onPressed: () async {
                                       try {
-                                        final prefs = await SharedPreferences.getInstance();
                                         _login();
-                                        print('terminal ketika login:');
-                                        print(prefs.getString('terminal'));
                                       } catch (e) {}
                                     },
                                   ),
@@ -161,6 +158,9 @@ class _LoginPageState extends State<LoginPage> {
   /// Apakah password disembunyikan dalam input [PasswordTextForm]
   final bool _isPasswordHidden = false;
 
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+
   /// ==========================================================================
   /// Local Function
   /// ==========================================================================
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
   /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
   /// dari [LoginController]
   void _login() async {
-    int id;
+    // int id;
     // Jika validasi form berhasil
     if (_loginFormKey.currentState!.validate()) {
       // Menampilkan animasi loading
@@ -180,8 +180,8 @@ class _LoginPageState extends State<LoginPage> {
 
       // Memproses API
       MyResponse loginResponse = await _loginController.login();
-      id = loginResponse.data.id;
-      _getTerminal(id);
+      // id = loginResponse.data.id;
+      // _getTerminal(id);
 
       // Menyembunyikan animasi loading
       setState(() {
@@ -198,10 +198,12 @@ class _LoginPageState extends State<LoginPage> {
       Future.delayed(const Duration(seconds: 1), () {
         // Jika status autentikasi sukses dengan kode 0
         if (loginResponse.code == 0) {
-          User user = loginResponse.data;
-          User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
+          // User user = loginResponse.data;
+          // User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
           // context.pushNamed('main_page', extra: user);
-          context.pushNamed('main_page');
+          UserModel user = loginResponse.data;
+          user.updateUser();
+          context.pushNamed('main_page', extra: user);
         } else {}
       });
     }

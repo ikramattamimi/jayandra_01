@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
-import 'package:jayandra_01/page/terminal/timer/timer_provider.dart';
+import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/timeofday_converter.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +34,9 @@ class _TimerViewState extends State<TimerView> {
 
   @override
   Widget build(BuildContext context) {
+    final timerProvider = Provider.of<TimerProvider>(context);
+    // final timers = timerProvider.timers.wh;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Card(
@@ -64,7 +67,7 @@ class _TimerViewState extends State<TimerView> {
                         onChanged: (value) {
                           setState(() {
                             timer!.status = value;
-                            // print(timer!.status);
+                            timerProvider.changeTimerStatus(timer!.id_timer!, timer!.status);
                           });
                         },
                         activeColor: Styles.accentColor,

@@ -16,7 +16,7 @@ class RegisterController {
   String electricityClassValue = "";
 
   Future<MyResponse> register() async {
-    User user = User(
+    UserModel user = UserModel(
       name: nameController.text,
       password: passwordController.text,
       email: emailValue,
@@ -27,7 +27,7 @@ class RegisterController {
 
     if (result.statusCode == 200) {
       Map<String, dynamic> myBody = jsonDecode(result.body);
-      MyResponse<User> myResponse = MyResponse.fromJson(myBody, User.fromJson);
+      MyResponse<UserModel> myResponse = MyResponse.fromJson(myBody, UserModel.fromJson);
 
       if (myResponse.code == 0) {
         myResponse.message = "Akun berhasil dibuat";

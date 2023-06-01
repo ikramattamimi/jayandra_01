@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/timer_model.dart';
-import 'package:jayandra_01/module/terminal/timer_repository.dart';
+import 'package:jayandra_01/module/timer/timer_repository.dart';
 
 class TimerController {
   final _timerRepository = TimerRepository();

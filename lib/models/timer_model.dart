@@ -23,8 +23,8 @@ class TimerModel extends ChangeNotifier {
     );
   }
 
-  void changeSocketStatus(bool isSocketOn) {
-    status = isSocketOn;
+  void changeTimerStatus(bool isTimerOn) {
+    status = isTimerOn;
     notifyListeners();
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jayandra_01/page/terminal/timer/timer_provider.dart';
+import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/router/app_router.dart';
 import 'package:jayandra_01/services/alarm_manager_service.dart';
 import 'package:jayandra_01/services/notification_service.dart';

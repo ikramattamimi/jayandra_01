@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/page/add_device/add_device_page.dart';
 import 'package:jayandra_01/page/add_device/adding_device.dart';
 import 'package:jayandra_01/page/add_device/confirm_pairing.dart';
@@ -80,7 +81,7 @@ class AppRouter {
       GoRoute(
         path: "/",
         name: "main_page",
-        builder: (BuildContext context, GoRouterState state) => MainScreen(),
+        builder: (BuildContext context, GoRouterState state) => MainScreen(user: state.extra as UserModel,),
         routes: <GoRoute>[
           GoRoute(
             path: "edit_profile",
