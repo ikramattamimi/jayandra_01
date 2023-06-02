@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
@@ -19,10 +20,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _LandingPageState extends State<SplashScreen> {
+  late BuildContext _myContext;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // _myContext = context;
+    // final userModel = Provider.of<UserModel>(_myContext, listen: false);
+    // final terminalProvider = Provider.of<TerminalProvider>(_myContext, listen: false);
+    // initWidgets(userModel, terminalProvider);
     checkAuth();
   }
 
@@ -38,16 +44,35 @@ class _LandingPageState extends State<SplashScreen> {
     prefs.remove('terminal');
 
     Timer(const Duration(seconds: 2), (() {
-      isUserLoggedIn != null
-          ? isUserLoggedIn
-              ? context.pushNamed('main_page')
-              : context.pushNamed('landing_page')
-          : context.pushNamed('landing_page');
+      if (isUserLoggedIn != null && isUserLoggedIn) {
+        context.pushReplacementNamed('main_page');
+      } else {
+        context.pushReplacementNamed('landing_page');
+      }
     }));
+  }
+
+  void initWidgets(UserModel userModel, TerminalProvider terminalProvider) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('isUserLoggedIn') ?? false) {
+      UserModel user = UserModel(
+        id: prefs.getInt('user_id')!,
+        name: prefs.getString('user_name')!,
+        email: prefs.getString('email')!,
+        electricityclass: prefs.getString('electricityclass')!,
+      );
+
+      userModel.updateUser(user);
+
+      terminalProvider.initializeData(user.id);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // final userModel = Provider.of<UserModel>(context);
+    // final terminalProvider = Provider.of<TerminalProvider>(context);
+
     return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),

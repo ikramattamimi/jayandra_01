@@ -31,12 +31,12 @@ class TerminalProvider with ChangeNotifier {
     var isTerminalFetched = prefs.getBool('isTerminalFetched');
     // print("Terminal");
     // print(_terminals);
-    if (isTerminalFetched == null) {
-      // print("fetch terminal");
-      List<TerminalModel> terminalModels = await createTerminalModelsFromApi(userId);
-      _terminals = terminalModels;
-      notifyListeners();
-    }
+    // if (isTerminalFetched == null) {
+    // print("fetch terminal");
+    List<TerminalModel> terminalModels = await createTerminalModelsFromApi(userId);
+    _terminals = terminalModels;
+    notifyListeners();
+    // }
   }
 
   Future<List<TerminalModel>> createTerminalModelsFromApi(userId) async {

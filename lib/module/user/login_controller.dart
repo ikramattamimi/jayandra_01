@@ -26,10 +26,10 @@ class LoginController {
 
         // simpan status user sudah login
         await prefs.setBool('isUserLoggedIn', true);
-        // await prefs.setString('user_name', myResponse.data?.name ?? "");
-        // await prefs.setString('email', myResponse.data?.email ?? "");
-        // await prefs.setString('electricityclass', myResponse.data?.electricityclass ?? "");
-        // await prefs.setInt('user_id', myResponse.data?.id ?? 0);
+        await prefs.setString('user_name', myResponse.data?.name ?? "");
+        await prefs.setString('email', myResponse.data?.email ?? "");
+        await prefs.setString('electricityclass', myResponse.data?.electricityclass ?? "");
+        await prefs.setInt('user_id', myResponse.data?.id ?? 0);
 
         // String? name = prefs.getString('user_name');
         // print(name);

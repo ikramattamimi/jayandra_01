@@ -8,7 +8,7 @@ class UserModel extends ChangeNotifier {
   String electricityclass;
   String token;
 
-  UserModel({this.id = 0, this.name = "Ikram", this.email = "", this.password = "", this.electricityclass = "", this.token = ""});
+  UserModel({this.id = 0, this.name = "", this.email = "", this.password = "", this.electricityclass = "", this.token = ""});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

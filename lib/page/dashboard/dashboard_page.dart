@@ -35,6 +35,8 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final userModel = Provider.of<UserModel>(context);
     final terminalProvider = Provider.of<TerminalProvider>(context);
+
+    // initWidgets(userModel, terminalProvider);
     var terminals = terminalProvider.terminals;
     return Scaffold(
       backgroundColor: Styles.primaryColor,
@@ -142,6 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
   // final _controller = TerminalController();
   // List<TerminalModel>? _terminals = [];
   List<Widget>? _terminalWidgets = [];
+  late BuildContext _myContext;
 
   /// Response pemanggilan API yang sudah dalam bentuk objek [TerminalResponse]
   // late TerminalResponse? _terminalObjectResponse;
@@ -153,8 +156,29 @@ class _DashboardPageState extends State<DashboardPage> {
     getUserName();
     _isTerminalNull();
     // _getTerminal();
-
+    _myContext = context;
+    final userModel = Provider.of<UserModel>(_myContext, listen: false);
+    final terminalProvider = Provider.of<TerminalProvider>(_myContext, listen: false);
+    initWidgets(userModel, terminalProvider);
     // print(widget.user);
+  }
+
+  void initWidgets(UserModel userModel, TerminalProvider terminalProvider) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('isUserLoggedIn') ?? false) {
+      UserModel user = UserModel(
+        id: prefs.getInt('user_id')!,
+        name: prefs.getString('user_name')!,
+        email: prefs.getString('email')!,
+        electricityclass: prefs.getString('electricityclass')!,
+      );
+      if (userModel.email == "") {
+        userModel.updateUser(user);
+      }
+      if (terminalProvider.terminals.isEmpty) {
+        terminalProvider.initializeData(user.id);
+      }
+    }
   }
 
   void getUserName() async {
