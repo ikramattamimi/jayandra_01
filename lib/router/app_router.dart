@@ -103,7 +103,8 @@ class AppRouter {
             path: "terminal",
             name: "terminal",
             builder: (BuildContext context, GoRouterState state) => TerminalPage(
-              terminal: state.extra as TerminalModel,
+              idTerminal: state.extra as int,
+              // terminal: state.extra as TerminalModel,
             ),
           ),
           GoRoute(

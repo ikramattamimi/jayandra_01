@@ -1,36 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
+import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 
 class SocketView extends StatefulWidget {
   const SocketView({
     super.key,
-    required this.socket,
+    required this.socketId,
+    required this.terminalId,
+    // required this.socket,
     required this.changeParentState,
   });
-  final Socket socket;
-  final Function() changeParentState;
+  // final SocketModel socket;
+  final Function changeParentState;
+  final int socketId;
+  final int terminalId;
 
   @override
   State<SocketView> createState() => _SocketState();
 }
 
 class _SocketState extends State<SocketView> {
-  late Socket socket;
+  // late SocketModel socket;
   final TerminalController _terminalController = TerminalController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    socket = widget.socket;
+    // socket = widget.socket;
   }
 
   @override
   Widget build(BuildContext context) {
+    final terminalProvider = Provider.of<TerminalProvider>(context);
+
+    // initWidgets(userModel, terminalProvider);
+    var terminal = terminalProvider.terminals.firstWhere((element) => element.id == widget.terminalId);
+    var mySocket = terminal.sockets.firstWhere((element) => element.id_socket == widget.socketId);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -42,14 +52,15 @@ class _SocketState extends State<SocketView> {
             icon: Icon(
               MdiIcons.powerSocketDe,
               size: 85,
-              color: (socket.status != false) ? Styles.accentColor : Styles.accentColor2,
+              color: (mySocket.status != false) ? Styles.accentColor : Styles.accentColor2,
             ),
             onPressed: () {
               setState(() {
-                socket.status = socket.status != null ? !socket.status! : true;
-                widget.changeParentState();
+                mySocket.status = !mySocket.status!;
+                terminal.updateOneSocketStatus(mySocket.id_socket!, mySocket.status!);
+                widget.changeParentState(terminal);
               });
-              _terminalController.updateSocket(socket);
+              _terminalController.updateSocket(mySocket);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Message'),
@@ -65,7 +76,7 @@ class _SocketState extends State<SocketView> {
           child: Wrap(
             children: [
               Text(
-                socket.name!,
+                mySocket.name!,
                 style: Styles.bodyTextBlack3,
               ),
             ],

@@ -5,85 +5,41 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
+import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/page/terminal/socket_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:provider/provider.dart';
 
 class TerminalPage extends StatefulWidget {
-  const TerminalPage({super.key, required this.terminal});
-  final TerminalModel terminal;
+  const TerminalPage({
+    super.key,
+    required this.idTerminal,
+    // required this.terminal,
+  });
+  // final TerminalModel terminal;
+  final int idTerminal;
 
   @override
   State<TerminalPage> createState() => _TerminalPageState();
 }
 
 class _TerminalPageState extends State<TerminalPage> {
-  String pageTitle = "";
-  List<String> sockets = ['Socket 1', 'Socket 2', 'Socket 3', 'Socket 4'];
-  final _terminalController = TerminalController();
-
-  List<Socket>? socketss;
-  TerminalModel? terminal;
-
-  @override
-  void initState() {
-    super.initState();
-    getTerminalState();
-    pageTitle = widget.terminal.name;
-  }
-
-  void getTerminalState() {
-    terminal = widget.terminal;
-    socketss = terminal?.sockets;
-  }
-
-  void setTerminalByOneSocket() {
-    for (var socket in terminal!.sockets) {
-      if (socket.status == true) {
-        setState(() {
-          terminal!.isTerminalActive = true;
-        });
-        break;
-      } else {
-        setState(() {
-          terminal!.isTerminalActive = false;
-        });
-      }
-    }
-  }
-
-  void setTerminal() async {
-    setState(() {
-      terminal!.isTerminalActive = !terminal!.isTerminalActive;
-      for (var socket in socketss!) {
-        socket.status = terminal!.isTerminalActive;
-      }
-    });
-    await _terminalController.changeAllSocketStatus(widget.terminal.id, terminal!.isTerminalActive);
-  }
-
-  List<Widget> getSockets() {
-    List<Widget> mySockets = [];
-    for (var element in socketss!) {
-      mySockets.add(
-        Expanded(
-          child: SocketView(
-            socket: element,
-            changeParentState: setTerminalByOneSocket,
-          ),
-        ),
-      );
-    }
-    return mySockets;
-  }
-
+  /// ==========================================================================
+  /// Page's Widget
+  /// ==========================================================================
   @override
   Widget build(BuildContext context) {
+    final terminalProvider = Provider.of<TerminalProvider>(context);
+
+    // initWidgets(userModel, terminalProvider);
+    var myTerminal = terminalProvider.terminals.firstWhere((element) => element.id == widget.idTerminal);
+    var myPageTitle = myTerminal.name;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
         title: Text(
-          pageTitle,
+          myPageTitle,
           style: Styles.pageTitle,
         ),
         backgroundColor: Styles.secondaryColor,
@@ -122,10 +78,10 @@ class _TerminalPageState extends State<TerminalPage> {
                   children: [
                     IconButton(
                       padding: EdgeInsets.zero,
-                      onPressed: () => setTerminal(),
+                      onPressed: () => setTerminal(myTerminal),
                       icon: Icon(
                         Icons.power_settings_new_rounded,
-                        color: terminal!.isTerminalActive ? Styles.accentColor : Styles.accentColor2,
+                        color: myTerminal.isTerminalActive ? Styles.accentColor : Styles.accentColor2,
                         size: 32,
                       ),
                     ),
@@ -133,7 +89,7 @@ class _TerminalPageState extends State<TerminalPage> {
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: getSockets(),
+                        children: getSockets(myTerminal.sockets),
                       ),
                     ),
                   ],
@@ -188,5 +144,72 @@ class _TerminalPageState extends State<TerminalPage> {
         ),
       ),
     );
+  }
+
+  /// ==========================================================================
+  /// Data Dictionary
+  /// ==========================================================================
+  String pageTitle = "";
+  List<String> sockets = ['Socket 1', 'Socket 2', 'Socket 3', 'Socket 4'];
+  final _terminalController = TerminalController();
+
+  List<SocketModel>? socketss;
+  TerminalModel? terminal;
+
+  /// ==========================================================================
+  /// Local Function
+  /// ==========================================================================
+  @override
+  void initState() {
+    super.initState();
+    getTerminalState();
+    // pageTitle = widget.terminal.name;
+  }
+
+  void getTerminalState() {
+    // terminal = widget.terminal;
+    // socketss = terminal?.sockets;
+  }
+
+  updateTerminalStatusByOneSocketChange(TerminalModel terminal) {
+    for (var socket in terminal.sockets) {
+      if (socket.status == true) {
+        setState(() {
+          terminal.isTerminalActive = true;
+        });
+        break;
+      } else {
+        setState(() {
+          terminal.isTerminalActive = false;
+        });
+      }
+    }
+  }
+
+  void setTerminal(TerminalModel myTerminal) async {
+    setState(() {
+      myTerminal.isTerminalActive = !myTerminal.isTerminalActive;
+      for (var socket in myTerminal.sockets) {
+        socket.status = myTerminal.isTerminalActive;
+      }
+    });
+    myTerminal.updateAllSocketStatus(myTerminal.isTerminalActive);
+    await _terminalController.changeAllSocketStatus(myTerminal.id, myTerminal.isTerminalActive);
+  }
+
+  List<Widget> getSockets(List<SocketModel> mySockets) {
+    List<Widget> socketWidgets = [];
+    for (var element in mySockets) {
+      socketWidgets.add(
+        Expanded(
+          child: SocketView(
+            socketId: element.id_socket!,
+            terminalId: element.id_terminal!,
+            changeParentState: updateTerminalStatusByOneSocketChange,
+          ),
+        ),
+      );
+    }
+    return socketWidgets;
   }
 }

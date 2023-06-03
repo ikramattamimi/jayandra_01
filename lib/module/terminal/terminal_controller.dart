@@ -43,16 +43,16 @@ class TerminalController {
     // return terminalObjectResponse;
   }
 
-  Future<MyResponse?> updateSocket(Socket socket) async {
+  Future<MyResponse?> updateSocket(SocketModel socket) async {
     http.Response responseSocket;
     responseSocket = await _terminalRepositroy.updateSocket(socket);
 
     // Parse String jsonke Map
     Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
 
-    MyResponse updateSocketResponse = MyResponse.fromJson(socketMapData, Socket.fromJson);
+    MyResponse updateSocketResponse = MyResponse.fromJson(socketMapData, SocketModel.fromJson);
     // print(updateSocketResponse.data.status);
-    Socket updatedSocket = updateSocketResponse.data;
+    SocketModel updatedSocket = updateSocketResponse.data;
     /////
 
     final prefs = await SharedPreferences.getInstance();

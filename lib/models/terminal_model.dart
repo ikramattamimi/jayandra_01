@@ -4,7 +4,7 @@ import 'package:jayandra_01/models/socket_model.dart';
 class TerminalModel extends ChangeNotifier {
   final int id;
   final String name;
-  final List<Socket> sockets;
+  final List<SocketModel> sockets;
   bool isTerminalActive;
   int totalActiveSocket;
 
@@ -19,9 +19,9 @@ class TerminalModel extends ChangeNotifier {
   factory TerminalModel.fromJson(Map<String, dynamic> json) {
     var isTerminalActive = false;
     var totalActiveSoccket = 0;
-    List<Socket> sockets = [];
+    List<SocketModel> sockets = [];
     for (var socket in json['sockets']) {
-      sockets.add(Socket.fromJson(socket));
+      sockets.add(SocketModel.fromJson(socket));
       if (socket['status'] == true) {
         totalActiveSoccket++;
         isTerminalActive = true;
@@ -37,7 +37,44 @@ class TerminalModel extends ChangeNotifier {
     );
   }
 
-  void updateTerminalStatus(bool isTerminalOn) {
+  void updateAllSocketStatus(bool isTerminalOn) {
+    setTerminalStatus(isTerminalOn);
+    isTerminalOn ? totalActiveSocket = 4 : totalActiveSocket = 0;
+    notifyListeners();
+  }
+
+  void updateOneSocketStatus(int socketId, bool isSocketOn) {
+    SocketModel socket = sockets.firstWhere((element) => element.id_socket == socketId);
+    socket.updateSocketStatus(isSocketOn);
+    setTerminalStatusWhenSocketChange();
+    setTotalActiveSocket();
+    notifyListeners();
+  }
+
+  void setTerminalStatus(bool isTerminalOn) {
     isTerminalActive = isTerminalOn;
+    notifyListeners();
+  }
+
+  void setTerminalStatusWhenSocketChange() {
+    for (var socket in sockets) {
+      if (socket.status == true) {
+        isTerminalActive = true;
+        break;
+      } else {
+        isTerminalActive = false;
+      }
+      // notifyListeners();
+    }
+  }
+
+  void setTotalActiveSocket() {
+    int total = 0;
+    for (var socket in sockets) {
+      if (socket.status == true) {
+        total++;
+      }
+    }
+    totalActiveSocket = total;
   }
 }

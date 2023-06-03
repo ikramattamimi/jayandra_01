@@ -14,7 +14,7 @@ class TerminalRepository {
     );
   }
 
-  Future<http.Response> updateSocket(Socket socket) async {
+  Future<http.Response> updateSocket(SocketModel socket) async {
     return http.post(
       Uri.parse('${NetworkAPI.ip}/updateSocketStatus/'),
       headers: <String, String>{
@@ -22,8 +22,8 @@ class TerminalRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': socket.id_socket.toString(),
-          'id_terminal': socket.id_terminal.toString(),
+          'id_socket': socket.id_socket,
+          'id_terminal': socket.id_terminal,
           'status': socket.status,
         },
       ),
@@ -39,5 +39,4 @@ class TerminalRepository {
       },
     );
   }
-
 }

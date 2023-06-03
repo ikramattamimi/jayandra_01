@@ -3,12 +3,20 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
+import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:provider/provider.dart';
 
 class TerminalView extends StatefulWidget {
-  const TerminalView({super.key, required this.terminal, required this.terminalIcon});
-  final TerminalModel terminal;
-  final IconData terminalIcon;
+  const TerminalView({
+    super.key,
+    required this.terminalId,
+    // required this.terminal,
+    // required this.terminalIcon,
+  });
+  // final TerminalModel terminal;
+  // final IconData terminalIcon;
+  final int terminalId;
 
   @override
   State<TerminalView> createState() => _TerminalViewState();
@@ -29,14 +37,14 @@ class _TerminalViewState extends State<TerminalView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _toggleStatus = widget.terminal.isTerminalActive;
-    _totalActiveSocket = widget.terminal.totalActiveSocket;
-    getTogglesStatus();
+    // _toggleStatus = widget.terminal.isTerminalActive;
+    // _totalActiveSocket = widget.terminal.totalActiveSocket;
+    // getTogglesStatus();
   }
 
-  void getTogglesStatus() {
-    if (_toggleStatus == true) {
-      _activeSocket = "$_totalActiveSocket Socket Aktif";
+  void getTogglesStatus(bool isTerminalOn, int totalActiveSocket) {
+    if (isTerminalOn == true) {
+      _activeSocket = "$totalActiveSocket Socket Aktif";
       _toggleIcon = Icons.toggle_on;
       _toggleColor = Styles.accentColor;
     } else {
@@ -49,19 +57,23 @@ class _TerminalViewState extends State<TerminalView> {
   void setToggle() async {
     _toggleStatus = !_toggleStatus;
     // _totalActiveSocket = 4;
-    _terminalObjectResponse = await _terminalController.changeAllSocketStatus(widget.terminal.id, _toggleStatus);
+    // _terminalObjectResponse = await _terminalController.changeAllSocketStatus(widget.terminal.id, _toggleStatus);
     setState(() {
-      getTogglesStatus();
+      // getTogglesStatus();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final size = AppLayout.getSize(context);
+    final terminalProvider = Provider.of<TerminalProvider>(context);
+    final myTerminal = terminalProvider.terminals.firstWhere((element) => element.id == widget.terminalId);
+
+    getTogglesStatus(myTerminal.isTerminalActive, myTerminal.totalActiveSocket);
+
     return GestureDetector(
       onTap: () {
         print("Perangkat ditekan");
-        context.pushNamed('terminal', extra: widget.terminal);
+        context.pushNamed('terminal', extra: myTerminal.id);
       },
       child: SizedBox(
         width: 170,
@@ -89,8 +101,8 @@ class _TerminalViewState extends State<TerminalView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    widget.terminalIcon,
+                  const Icon(
+                    Icons.electrical_services_rounded,
                     size: 30,
                   ),
                   // IconButton(
@@ -111,7 +123,7 @@ class _TerminalViewState extends State<TerminalView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.terminal.name,
+                    myTerminal.name,
                     style: Styles.title,
                   ),
                   Text(

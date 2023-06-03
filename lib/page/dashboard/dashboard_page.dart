@@ -131,8 +131,9 @@ class _DashboardPageState extends State<DashboardPage> {
         // print(terminal.totalActiveSocket);
         _terminalWidgets!.add(
           TerminalView(
-            terminalIcon: Icons.bed,
-            terminal: terminal,
+            terminalId: terminal.id,
+            // terminalIcon: Icons.bed,
+            // terminal: terminal,
           ),
         );
       }
@@ -144,7 +145,7 @@ class _DashboardPageState extends State<DashboardPage> {
   // final _controller = TerminalController();
   // List<TerminalModel>? _terminals = [];
   List<Widget>? _terminalWidgets = [];
-  late BuildContext _myContext;
+  
 
   /// Response pemanggilan API yang sudah dalam bentuk objek [TerminalResponse]
   // late TerminalResponse? _terminalObjectResponse;
@@ -156,7 +157,7 @@ class _DashboardPageState extends State<DashboardPage> {
     getUserName();
     _isTerminalNull();
     // _getTerminal();
-    _myContext = context;
+    BuildContext _myContext = context;
     final userModel = Provider.of<UserModel>(_myContext, listen: false);
     final terminalProvider = Provider.of<TerminalProvider>(_myContext, listen: false);
     initWidgets(userModel, terminalProvider);
