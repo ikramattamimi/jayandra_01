@@ -2,7 +2,6 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/terminal/timer_controller.dart';
@@ -10,7 +9,7 @@ import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/white_container.dart';
-import 'package:timezone/timezone.dart' as tz;
+// import 'package:timezone/timezone.dart' as tz;
 
 class AddTimerPage extends StatefulWidget {
   const AddTimerPage({super.key, required this.terminal});
@@ -156,7 +155,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
   void initState() {
     super.initState();
     terminal = widget.terminal;
-    selectedValue = widget.terminal.sockets[0].id_socket.toString();
+    selectedValue = widget.terminal.sockets![0].socketId.toString();
     print(terminal!.name);
     var scheduledTime = DateTime.now().add(Duration(hours: 0, minutes: 2));
     print(scheduledTime);
@@ -165,16 +164,16 @@ class _AddTimerPageState extends State<AddTimerPage> {
   /// Simpan timer ke database
   addTimer() async {
     TimerModel timer = TimerModel(
-      id_socket: int.parse(selectedValue),
+      socketId: int.parse(selectedValue),
       time: endTime,
       status: isSwitched,
     );
     await _timerController.addTimer(timer).then((value) {
       print(value);
-      var scheduledDateTime = tz.TZDateTime.from(
-        DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute)),
-        tz.local,
-      );
+      // var scheduledDateTime = tz.TZDateTime.from(
+      //   DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute)),
+      //   tz.local,
+      // );
 
       var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
 
@@ -196,10 +195,10 @@ class _AddTimerPageState extends State<AddTimerPage> {
   /// Getter nama socket untuk dropdown
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [];
-    for (var socket in terminal!.sockets) {
+    for (var socket in terminal!.sockets!) {
       menuItems.add(
         DropdownMenuItem(
-          value: socket.id_socket.toString(),
+          value: socket.socketId.toString(),
           child: Text(
             socket.name!,
             style: Styles.bodyTextBlack2,

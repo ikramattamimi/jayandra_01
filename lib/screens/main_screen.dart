@@ -3,12 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:flutter/services.dart';
 import 'package:jayandra_01/models/user_model.dart';
-import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/page/dashboard/dashboard_page.dart';
 import 'package:jayandra_01/screens/profile_screen.dart';
 import 'package:jayandra_01/page/report/report_screen.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatelessWidget {
@@ -68,7 +66,7 @@ class _BottomBarState extends State<BottomBar> {
       userName = prefs.getString('user_name').toString();
     });
     // user = widget.user;
-    UserModel user1 = UserModel(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
+    // UserModel user1 = UserModel(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
 
     _widgetoptions = <Widget>[
       // DashboardPage(user: user1),
@@ -86,7 +84,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final userModel = Provider.of<UserModel>(context);
+    // final userModel = Provider.of<UserModel>(context);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Styles.primaryColor,

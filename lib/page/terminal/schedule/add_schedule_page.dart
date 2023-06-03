@@ -230,7 +230,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   void initState() {
     super.initState();
     terminal = widget.terminal;
-    selectedSocket = widget.terminal.sockets[0].id_socket.toString();
+    selectedSocket = widget.terminal.sockets![0].socketId.toString();
     daysIndo[dayOfWeek - 1].isSelected = true;
     getRepeatDay();
   }
@@ -284,10 +284,10 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   /// Drop Down Socket
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [];
-    for (var socket in terminal.sockets) {
+    for (var socket in terminal.sockets!) {
       menuItems.add(
         DropdownMenuItem(
-          value: socket.id_socket.toString(),
+          value: socket.socketId.toString(),
           child: Text(
             socket.name!,
             style: Styles.bodyTextBlack2,

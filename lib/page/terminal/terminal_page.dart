@@ -47,7 +47,7 @@ class _TerminalPageState extends State<TerminalPage> {
         foregroundColor: Styles.textColor,
         leading: IconButton(
           onPressed: () {
-            context.pushNamed('main_page');
+            context.pop();
             SystemChrome.setSystemUIOverlayStyle(
               SystemUiOverlayStyle(
                 statusBarColor: Styles.primaryColor,
@@ -89,7 +89,7 @@ class _TerminalPageState extends State<TerminalPage> {
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: getSockets(myTerminal.sockets),
+                        children: getSockets(myTerminal.sockets!),
                       ),
                     ),
                   ],
@@ -163,6 +163,10 @@ class _TerminalPageState extends State<TerminalPage> {
   void initState() {
     super.initState();
     getTerminalState();
+
+    BuildContext myContext = context;
+    final terminalProvider = Provider.of<TerminalProvider>(myContext, listen: false);
+    terminal = terminalProvider.terminals.firstWhere((element) => element.id == widget.idTerminal);
     // pageTitle = widget.terminal.name;
   }
 
@@ -172,7 +176,7 @@ class _TerminalPageState extends State<TerminalPage> {
   }
 
   updateTerminalStatusByOneSocketChange(TerminalModel terminal) {
-    for (var socket in terminal.sockets) {
+    for (var socket in terminal.sockets!) {
       if (socket.status == true) {
         setState(() {
           terminal.isTerminalActive = true;
@@ -189,7 +193,7 @@ class _TerminalPageState extends State<TerminalPage> {
   void setTerminal(TerminalModel myTerminal) async {
     setState(() {
       myTerminal.isTerminalActive = !myTerminal.isTerminalActive;
-      for (var socket in myTerminal.sockets) {
+      for (var socket in myTerminal.sockets!) {
         socket.status = myTerminal.isTerminalActive;
       }
     });
@@ -203,8 +207,8 @@ class _TerminalPageState extends State<TerminalPage> {
       socketWidgets.add(
         Expanded(
           child: SocketView(
-            socketId: element.id_socket!,
-            terminalId: element.id_terminal!,
+            socketId: element.socketId!,
+            terminalId: element.terminalId!,
             changeParentState: updateTerminalStatusByOneSocketChange,
           ),
         ),

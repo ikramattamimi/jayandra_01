@@ -25,7 +25,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<TimerProvider>(
-          create: (_) => TimerProvider(),
+          create: (context) => TimerProvider(),
         ),
         ChangeNotifierProvider<UserModel>(
         create: (context) => UserModel(),

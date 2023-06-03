@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 
 class TimerModel extends ChangeNotifier {
-  final int? id_timer;
-  final int? id_socket;
+  final int? timerId;
+  final int? socketId;
+  int? terminalId;
   final TimeOfDay? time;
   bool status;
 
-  TimerModel({this.id_timer = 0, this.id_socket = 0, this.time, this.status = false});
+  TimerModel({this.timerId = 0, this.socketId = 0, this.time, this.status = false});
 
   factory TimerModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');
@@ -16,8 +17,8 @@ class TimerModel extends ChangeNotifier {
     final time = TimeOfDay(hour: hour, minute: minute);
 
     return TimerModel(
-      id_timer: json['id_timer'],
-      id_socket: json['id_socket'],
+      timerId: json['id_timer'],
+      socketId: json['id_socket'],
       time: time,
       status: json['status'],
     );

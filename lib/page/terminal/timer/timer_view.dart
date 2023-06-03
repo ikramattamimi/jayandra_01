@@ -29,7 +29,7 @@ class _TimerViewState extends State<TimerView> {
     terminalTimer = widget.terminalTimer;
     timer = terminalTimer!.timer;
     terminal = terminalTimer!.terminal;
-    socketName = terminal!.sockets.firstWhere((element) => element.id_socket! == timer!.id_socket).name!;
+    socketName = terminal!.sockets!.firstWhere((element) => element.socketId! == timer!.socketId).name!;
   }
 
   @override
@@ -67,7 +67,7 @@ class _TimerViewState extends State<TimerView> {
                         onChanged: (value) {
                           setState(() {
                             timer!.status = value;
-                            timerProvider.changeTimerStatus(timer!.id_timer!, timer!.status);
+                            timerProvider.changeTimerStatus(timer!.timerId!, timer!.status);
                           });
                         },
                         activeColor: Styles.accentColor,

@@ -25,7 +25,7 @@ class TimerRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': timer.id_socket.toString(),
+          'id_socket': timer.socketId.toString(),
           'time': time,
           'status': timer.status,
         },

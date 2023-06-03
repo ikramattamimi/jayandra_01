@@ -4,14 +4,14 @@ import 'package:jayandra_01/models/socket_model.dart';
 class TerminalModel extends ChangeNotifier {
   final int id;
   final String name;
-  final List<SocketModel> sockets;
+  final List<SocketModel>? sockets;
   bool isTerminalActive;
   int totalActiveSocket;
 
   TerminalModel({
     this.id = 0,
     this.name = "",
-    required this.sockets,
+    this.sockets,
     this.isTerminalActive = false,
     this.totalActiveSocket = 0,
   });
@@ -44,7 +44,7 @@ class TerminalModel extends ChangeNotifier {
   }
 
   void updateOneSocketStatus(int socketId, bool isSocketOn) {
-    SocketModel socket = sockets.firstWhere((element) => element.id_socket == socketId);
+    SocketModel socket = sockets!.firstWhere((element) => element.socketId == socketId);
     socket.updateSocketStatus(isSocketOn);
     setTerminalStatusWhenSocketChange();
     setTotalActiveSocket();
@@ -57,7 +57,7 @@ class TerminalModel extends ChangeNotifier {
   }
 
   void setTerminalStatusWhenSocketChange() {
-    for (var socket in sockets) {
+    for (var socket in sockets!) {
       if (socket.status == true) {
         isTerminalActive = true;
         break;
@@ -70,7 +70,7 @@ class TerminalModel extends ChangeNotifier {
 
   void setTotalActiveSocket() {
     int total = 0;
-    for (var socket in sockets) {
+    for (var socket in sockets!) {
       if (socket.status == true) {
         total++;
       }

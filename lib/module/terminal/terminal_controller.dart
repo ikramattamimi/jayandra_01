@@ -34,7 +34,6 @@ class TerminalController {
       // Response dengan response.data berupa List dari objek Terminal
       terminalObjectResponse = TerminalResponse.fromJsonArray(terminalMapData, TerminalModel.fromJson);
       terminalObjectResponse.message = "Data terminal berhasil dimuat";
-      print(terminalObjectResponse.data);
       return terminalObjectResponse;
     } else {
       return TerminalResponse(code: 1, message: "Terjadi Masalah");
@@ -52,12 +51,12 @@ class TerminalController {
 
     MyResponse updateSocketResponse = MyResponse.fromJson(socketMapData, SocketModel.fromJson);
     // print(updateSocketResponse.data.status);
-    SocketModel updatedSocket = updateSocketResponse.data;
+    // SocketModel updatedSocket = updateSocketResponse.data;
     /////
 
-    final prefs = await SharedPreferences.getInstance();
-    int? userId = prefs.getInt('user_id');
-    prefs.remove('terminal');
+    // final prefs = await SharedPreferences.getInstance();
+    // int? userId = prefs.getInt('user_id');
+    // prefs.remove('terminal');
     // getTerminal();
 
     return updateSocketResponse;

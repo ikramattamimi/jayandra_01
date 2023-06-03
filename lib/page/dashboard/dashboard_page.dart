@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
-import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/page/report/report_view.dart';
@@ -16,7 +15,6 @@ import 'package:jayandra_01/widget/terminal_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -145,7 +143,6 @@ class _DashboardPageState extends State<DashboardPage> {
   // final _controller = TerminalController();
   // List<TerminalModel>? _terminals = [];
   List<Widget>? _terminalWidgets = [];
-  
 
   /// Response pemanggilan API yang sudah dalam bentuk objek [TerminalResponse]
   // late TerminalResponse? _terminalObjectResponse;
@@ -156,15 +153,17 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     getUserName();
     _isTerminalNull();
-    // _getTerminal();
-    BuildContext _myContext = context;
-    final userModel = Provider.of<UserModel>(_myContext, listen: false);
-    final terminalProvider = Provider.of<TerminalProvider>(_myContext, listen: false);
-    initWidgets(userModel, terminalProvider);
-    // print(widget.user);
+
+    BuildContext myContext = context;
+
+    // For get terminal
+    final userModel = Provider.of<UserModel>(myContext, listen: false);
+    final terminalProvider = Provider.of<TerminalProvider>(myContext, listen: false);
+    final timerProvider = Provider.of<TimerProvider>(myContext, listen: false);
+    initModels(userModel, terminalProvider, timerProvider);
   }
 
-  void initWidgets(UserModel userModel, TerminalProvider terminalProvider) async {
+  void initModels(UserModel userModel, TerminalProvider terminalProvider, TimerProvider timerProvider) async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('isUserLoggedIn') ?? false) {
       UserModel user = UserModel(
@@ -177,8 +176,16 @@ class _DashboardPageState extends State<DashboardPage> {
         userModel.updateUser(user);
       }
       if (terminalProvider.terminals.isEmpty) {
-        terminalProvider.initializeData(user.id);
+        terminalProvider.initializeData(user.id).then((value) {
+
+          // For get timer
+          for (var terminal in terminalProvider.terminals) {
+            timerProvider.setTerminal = terminal;
+            timerProvider.initializeData();
+          }
+        });
       }
+      // return terminalProvider.terminals;
     }
   }
 

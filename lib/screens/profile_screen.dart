@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = AppLayout.getSize(context);
+    // final size = AppLayout.getSize(context);
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: ListView(

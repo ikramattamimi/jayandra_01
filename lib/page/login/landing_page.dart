@@ -9,7 +9,6 @@ import 'package:jayandra_01/page/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,7 +19,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _LandingPageState extends State<SplashScreen> {
-  late BuildContext _myContext;
   @override
   void initState() {
     // TODO: implement initState

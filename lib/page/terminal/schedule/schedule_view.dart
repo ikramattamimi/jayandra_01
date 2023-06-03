@@ -5,7 +5,6 @@ import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/timeofday_converter.dart';
-import 'package:jayandra_01/widget/white_container.dart';
 
 class ScheduleView extends StatefulWidget {
   const ScheduleView({super.key, required this.terminalSchedule});
@@ -115,7 +114,7 @@ class _ScheduleViewState extends State<ScheduleView> {
   }
 
   void getSocketName() {
-    socketName = _terminal.sockets.where((socket) => socket.id_socket == _schedule.id_socket).first.name!;
+    socketName = _terminal.sockets!.where((socket) => socket.socketId == _schedule.id_socket).first.name!;
     _schedule.status == true ? scheduleStatus = "Aktif" : scheduleStatus = "Nonaktif";
   }
 }

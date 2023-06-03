@@ -16,7 +16,6 @@ import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// Widget ini menampilkan halaman Login
 class LoginPage extends StatefulWidget {

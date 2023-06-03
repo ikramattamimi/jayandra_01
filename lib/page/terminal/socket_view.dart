@@ -40,7 +40,7 @@ class _SocketState extends State<SocketView> {
 
     // initWidgets(userModel, terminalProvider);
     var terminal = terminalProvider.terminals.firstWhere((element) => element.id == widget.terminalId);
-    var mySocket = terminal.sockets.firstWhere((element) => element.id_socket == widget.socketId);
+    var mySocket = terminal.sockets!.firstWhere((element) => element.socketId == widget.socketId);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -57,7 +57,7 @@ class _SocketState extends State<SocketView> {
             onPressed: () {
               setState(() {
                 mySocket.status = !mySocket.status!;
-                terminal.updateOneSocketStatus(mySocket.id_socket!, mySocket.status!);
+                terminal.updateOneSocketStatus(mySocket.socketId!, mySocket.status!);
                 widget.changeParentState(terminal);
               });
               _terminalController.updateSocket(mySocket);

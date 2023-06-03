@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TerminalRepository {
   Future<http.Response> getTerminal(int userId) async {
@@ -22,8 +21,8 @@ class TerminalRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': socket.id_socket,
-          'id_terminal': socket.id_terminal,
+          'id_socket': socket.socketId,
+          'id_terminal': socket.terminalId,
           'status': socket.status,
         },
       ),

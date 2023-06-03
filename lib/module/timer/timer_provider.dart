@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/my_response.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/timer/timer_repository.dart';
 import 'package:provider/provider.dart';
@@ -11,11 +12,15 @@ class TimerProvider with ChangeNotifier {
 
   List<TimerModel> get timers => _timers;
 
+  late TerminalModel _terminal;
+
+  TerminalModel get terminal => _terminal;
+
   final _timerRepository = TimerRepository();
 
-  TimerProvider() {
-    initializeData();
-  }
+  // TimerProvider() {
+  //   initializeData();
+  // }
 
   void addTimer(TimerModel timer) {
     _timers.add(timer);
@@ -27,9 +32,14 @@ class TimerProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set setTerminal(TerminalModel terminal) {
+    _terminal = terminal;
+    notifyListeners();
+  }
+
   Future<void> initializeData() async {
     final timerModels = await createTimerModelsFromApi();
-    _timers = timerModels;
+    _timers.addAll(timerModels);
     notifyListeners();
   }
 
@@ -38,8 +48,7 @@ class TimerProvider with ChangeNotifier {
 
     // Logika pemanggilan API untuk mendapatkan data timer
     // Get API data timer
-    await _timerRepository.getTimer(1).then((value) {
-      print(value.statusCode);
+    await _timerRepository.getTimer(_terminal.id).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);
@@ -58,10 +67,11 @@ class TimerProvider with ChangeNotifier {
     // ];
 
     List<TimerModel> timerModels = [];
-    for (var timerData in timerObjectResponse.data!) {
+    for (TimerModel timerData in timerObjectResponse.data!) {
       // final id = timerData['id'];
       // final time = timerData['time'];
       // final timerModel = TimerModel(id_timer: id, time: time);
+      timerData.terminalId = _terminal.id;
       timerModels.add(timerData);
     }
 
@@ -76,7 +86,7 @@ class TimerProvider with ChangeNotifier {
   }
 
   void changeTimerStatus(int timerId, bool isTimerOn) {
-    final timer = _timers.firstWhere((timer) => timer.id_timer == timerId);
+    final timer = _timers.firstWhere((timer) => timer.timerId == timerId);
     timer.changeTimerStatus(isTimerOn);
     notifyListeners();
   }

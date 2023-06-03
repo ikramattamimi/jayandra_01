@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TerminalProvider with ChangeNotifier {
   // final int _userId;
@@ -27,12 +26,6 @@ class TerminalProvider with ChangeNotifier {
   }
 
   Future<void> initializeData(int userId) async {
-    final prefs = await SharedPreferences.getInstance();
-    var isTerminalFetched = prefs.getBool('isTerminalFetched');
-    // print("Terminal");
-    // print(_terminals);
-    // if (isTerminalFetched == null) {
-    // print("fetch terminal");
     List<TerminalModel> terminalModels = await createTerminalModelsFromApi(userId);
     _terminals = terminalModels;
     notifyListeners();

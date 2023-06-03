@@ -10,7 +10,10 @@ import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
-  const TimerPage({super.key, required this.terminal});
+  const TimerPage({
+    super.key,
+    required this.terminal,
+  });
 
   final TerminalModel terminal;
 
@@ -25,7 +28,7 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     final timerProvider = Provider.of<TimerProvider>(context);
-    final timersfromprovider = timerProvider.timers;
+    final timersfromprovider = timerProvider.timers.where((element) => element.terminalId == terminal.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,7 +72,7 @@ class _TimerPageState extends State<TimerPage> {
       body: ListView.builder(
         itemCount: timersfromprovider.length,
         itemBuilder: (context, index) {
-          final timerModel = timersfromprovider[index];
+          final timerModel = timersfromprovider.elementAt(index);
           return TimerView(terminalTimer: TerminalTimer(terminal: terminal, timer: timerModel));
         },
       ),
@@ -113,7 +116,7 @@ class _TimerPageState extends State<TimerPage> {
   /// Get Timer widget by data from [getTimer]
   Widget getTimerWidget(TimerModel timer) {
     // print('get timer widget');
-    var terminalTimer = TerminalTimer(terminal: terminal!, timer: timer);
+    var terminalTimer = TerminalTimer(terminal: terminal, timer: timer);
     return TimerView(
       terminalTimer: terminalTimer,
     );

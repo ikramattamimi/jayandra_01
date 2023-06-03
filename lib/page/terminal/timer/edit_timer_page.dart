@@ -188,7 +188,7 @@ class _EditTimerPageState extends State<EditTimerPage> {
     // Inisialisasi Timer
     isTimerActive = timer!.status;
     socketOffTime = timer!.time!;
-    selectedValue = timer!.id_socket.toString();
+    selectedValue = timer!.socketId.toString();
   }
 
   /// Update Timer
@@ -196,7 +196,7 @@ class _EditTimerPageState extends State<EditTimerPage> {
   /// TODO: ganti fungsi jadi update timer
   addTimer() async {
     TimerModel timer = TimerModel(
-      id_socket: int.parse(selectedValue),
+      socketId: int.parse(selectedValue),
       time: socketOffTime,
       status: isTimerActive,
     );
@@ -208,7 +208,7 @@ class _EditTimerPageState extends State<EditTimerPage> {
   ///
   /// Memanggil function [deleteTimer] dari [TimerController]
   deleteTimer() async {
-    await _timerController.deleteTimer(timer!.id_timer!).then((value) => print(value!.message));
+    await _timerController.deleteTimer(timer!.timerId!).then((value) => print(value!.message));
   }
 
   /// Menampilkan dialog konfirmasi hapus timer
@@ -270,10 +270,10 @@ class _EditTimerPageState extends State<EditTimerPage> {
   /// Inisiasi Menu Dropdown pemilihan Socket
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [];
-    for (var socket in terminal!.sockets) {
+    for (var socket in terminal!.sockets!) {
       menuItems.add(
         DropdownMenuItem(
-          value: socket.id_socket.toString(),
+          value: socket.socketId.toString(),
           child: Text(
             socket.name!,
             style: Styles.bodyTextBlack2,
