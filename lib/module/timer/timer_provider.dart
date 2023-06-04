@@ -24,10 +24,14 @@ class TimerProvider with ChangeNotifier {
 
   void addTimer(TimerModel timer) {
     _timers.add(timer);
+    print("timer ditambah ke provider");
+    print(_timers.length);
     notifyListeners();
   }
 
-  void removeTimer(int index) {
+  void removeTimer(int timerId) {
+    var timer = _timers.firstWhere((element) => element.timerId == timerId);
+    var index = _timers.indexOf(timer);
     _timers.removeAt(index);
     notifyListeners();
   }

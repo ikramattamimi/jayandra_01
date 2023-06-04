@@ -3,22 +3,23 @@ import 'package:jayandra_01/models/day_model.dart';
 import 'package:jayandra_01/models/days_indonesia.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 
-class ScheduleModel {
+class ScheduleModel extends ChangeNotifier {
   ScheduleModel({
-    this.id_schedule = 0,
-    this.id_socket = 0,
+    this.scheduleId = 0,
+    this.sockeId = 0,
     this.time,
     this.status = false,
     required this.note,
     required this.days,
   });
 
-  final int? id_schedule;
-  final int? id_socket;
+  final int? scheduleId;
+  final int? sockeId;
   final TimeOfDay? time;
   bool status;
   final String note;
   final List<DayModel> days;
+  int? terminalId;
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');
@@ -33,16 +34,20 @@ class ScheduleModel {
     }
 
     return ScheduleModel(
-      id_schedule: json['id_scheduling'],
-      id_socket: json['id_socket'],
+      scheduleId: json['id_scheduling'],
+      sockeId: json['id_socket'],
       time: time,
       status: json['status'],
       days: days,
       note: json['note'],
     );
   }
-}
 
+  void changeScheduleStatus(bool isScheduleOn) {
+    status = isScheduleOn;
+    notifyListeners();
+  }
+}
 
 class TerminalSchedule {
   TerminalModel terminal;

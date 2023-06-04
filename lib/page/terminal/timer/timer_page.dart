@@ -73,6 +73,7 @@ class _TimerPageState extends State<TimerPage> {
         itemCount: timersfromprovider.length,
         itemBuilder: (context, index) {
           final timerModel = timersfromprovider.elementAt(index);
+          print(timersfromprovider.length);
           return TimerView(terminalTimer: TerminalTimer(terminal: terminal, timer: timerModel));
         },
       ),
@@ -102,6 +103,10 @@ class _TimerPageState extends State<TimerPage> {
     super.initState();
     terminal = widget.terminal;
     getTimer();
+  }
+
+  updateState() {
+    setState(() {});
   }
 
   /// Get Timer data from API

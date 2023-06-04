@@ -35,7 +35,6 @@ class _TimerViewState extends State<TimerView> {
   @override
   Widget build(BuildContext context) {
     final timerProvider = Provider.of<TimerProvider>(context);
-    // final timers = timerProvider.timers.wh;
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -77,7 +76,7 @@ class _TimerViewState extends State<TimerView> {
                 ),
                 // const Gap(4),
                 Text(
-                  socketName,
+                  '${socketName} ${timer!.timerId}',
                   style: Styles.bodyTextGrey2,
                 ),
               ],

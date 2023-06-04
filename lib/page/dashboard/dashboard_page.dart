@@ -6,11 +6,13 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/page/report/report_view.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/widget/animated_container.dart';
 import 'package:jayandra_01/widget/terminal_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,7 +118,8 @@ class _DashboardPageState extends State<DashboardPage> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(children: _getTerminalWidget(terminals)),
-          )
+          ),
+          // AnimatedCard(),
         ],
       ),
     );
@@ -160,10 +163,11 @@ class _DashboardPageState extends State<DashboardPage> {
     final userModel = Provider.of<UserModel>(myContext, listen: false);
     final terminalProvider = Provider.of<TerminalProvider>(myContext, listen: false);
     final timerProvider = Provider.of<TimerProvider>(myContext, listen: false);
-    initModels(userModel, terminalProvider, timerProvider);
+    final scheduleProvider = Provider.of<ScheduleProvider>(myContext, listen: false);
+    initModels(userModel, terminalProvider, timerProvider, scheduleProvider);
   }
 
-  void initModels(UserModel userModel, TerminalProvider terminalProvider, TimerProvider timerProvider) async {
+  void initModels(UserModel userModel, TerminalProvider terminalProvider, TimerProvider timerProvider, ScheduleProvider scheduleProvider) async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('isUserLoggedIn') ?? false) {
       UserModel user = UserModel(
@@ -177,11 +181,13 @@ class _DashboardPageState extends State<DashboardPage> {
       }
       if (terminalProvider.terminals.isEmpty) {
         terminalProvider.initializeData(user.id).then((value) {
-
           // For get timer
           for (var terminal in terminalProvider.terminals) {
             timerProvider.setTerminal = terminal;
             timerProvider.initializeData();
+
+            scheduleProvider.setTerminal = terminal;
+            scheduleProvider.initializeData();
           }
         });
       }

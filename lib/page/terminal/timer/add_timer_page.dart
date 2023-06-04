@@ -5,11 +5,15 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/terminal/timer_controller.dart';
+import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:provider/provider.dart';
+
 // import 'package:timezone/timezone.dart' as tz;
+TimerModel? timerToChange;
 
 class AddTimerPage extends StatefulWidget {
   const AddTimerPage({super.key, required this.terminal});
@@ -25,6 +29,8 @@ class _AddTimerPageState extends State<AddTimerPage> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
+    final timerProvider = Provider.of<TimerProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -54,7 +60,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
         actions: [
           IconButton(
             onPressed: () {
-              addTimer();
+              addTimer(timerProvider);
             },
             icon: const Icon(Icons.check_rounded),
           ),
@@ -156,39 +162,45 @@ class _AddTimerPageState extends State<AddTimerPage> {
     super.initState();
     terminal = widget.terminal;
     selectedValue = widget.terminal.sockets![0].socketId.toString();
-    print(terminal!.name);
-    var scheduledTime = DateTime.now().add(Duration(hours: 0, minutes: 2));
-    print(scheduledTime);
+    // print(terminal!.name);
+    // var scheduledTime = DateTime.now().add(Duration(hours: 0, minutes: 2));
+    // print(scheduledTime);
   }
 
   /// Simpan timer ke database
-  addTimer() async {
+  addTimer(TimerProvider timerProvider) async {
     TimerModel timer = TimerModel(
       socketId: int.parse(selectedValue),
       time: endTime,
       status: isSwitched,
     );
+
+    timer.terminalId = terminal!.id;
+
     await _timerController.addTimer(timer).then((value) {
-      print(value);
-      // var scheduledDateTime = tz.TZDateTime.from(
-      //   DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute)),
-      //   tz.local,
-      // );
-
+      timerToChange = timer;
+      print(timerToChange);
       var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
-
-      // NotificationService().showNotificationAtTime(
-      //   id: value!.data.id_timer,
-      //   title: "Timer selesai",
-      //   body: "Timer untuk Socket",
-      //   scheduledDate: scheduledDateTime,
-      // );
-
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
-        value!.data.id_timer,
+        value!.data.timerId,
         getTimerNotification,
       );
+      AndroidAlarmManager.oneShotAt(
+        scheduledTime,
+        value.data.timerId + 100,
+        changeTimer,
+      );
+
+      timerProvider.addTimer(timer);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Timer berhasil ditambahkan'),
+        ),
+      );
+
+      context.pop();
     });
   }
 
@@ -223,4 +235,10 @@ getTimerNotification(int idTimer) {
     title: "Timer $idTimer selesai",
     body: "Timer untuk Socket $idTimer",
   );
+}
+
+changeTimer() {
+  print("change timer");
+  print('babi ${timerToChange}');
+  timerToChange!.changeTimerStatus(false);
 }

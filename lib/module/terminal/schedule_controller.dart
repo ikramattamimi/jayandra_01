@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
-import 'package:jayandra_01/module/terminal/schedule_repository.dart';
+import 'package:jayandra_01/module/schedule/schedule_repository.dart';
 
 class ScheduleController {
   final _scheduleRepository = ScheduleRepository();

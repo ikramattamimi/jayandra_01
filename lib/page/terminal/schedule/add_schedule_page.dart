@@ -302,7 +302,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
 
   addSchedule() async {
     ScheduleModel schedule = ScheduleModel(
-      id_socket: int.parse(selectedSocket),
+      sockeId: int.parse(selectedSocket),
       time: startTime,
       status: isSocketOn,
       days: daysIndo,

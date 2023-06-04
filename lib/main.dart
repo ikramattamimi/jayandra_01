@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/router/app_router.dart';
@@ -26,6 +27,9 @@ void main() {
       providers: [
         ChangeNotifierProvider<TimerProvider>(
           create: (context) => TimerProvider(),
+        ),
+        ChangeNotifierProvider<ScheduleProvider>(
+          create: (context) => ScheduleProvider(),
         ),
         ChangeNotifierProvider<UserModel>(
         create: (context) => UserModel(),

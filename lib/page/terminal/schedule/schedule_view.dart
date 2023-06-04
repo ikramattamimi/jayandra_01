@@ -114,7 +114,7 @@ class _ScheduleViewState extends State<ScheduleView> {
   }
 
   void getSocketName() {
-    socketName = _terminal.sockets!.where((socket) => socket.socketId == _schedule.id_socket).first.name!;
+    socketName = _terminal.sockets!.where((socket) => socket.socketId == _schedule.sockeId).first.name!;
     _schedule.status == true ? scheduleStatus = "Aktif" : scheduleStatus = "Nonaktif";
   }
 }

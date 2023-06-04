@@ -5,13 +5,20 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/terminal/timer_controller.dart';
+import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:provider/provider.dart';
 
 class EditTimerPage extends StatefulWidget {
-  const EditTimerPage({super.key, required this.terminalTimer});
+  const EditTimerPage({
+    super.key,
+    required this.terminalTimer,
+    this.notifyParent,
+  });
   final TerminalTimer terminalTimer;
+  final Function? notifyParent;
 
   @override
   State<EditTimerPage> createState() => _EditTimerPageState();
@@ -23,6 +30,8 @@ class _EditTimerPageState extends State<EditTimerPage> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
+    final timerProvider = Provider.of<TimerProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -125,7 +134,7 @@ class _EditTimerPageState extends State<EditTimerPage> {
                 ),
                 ListTile(
                   onTap: () {
-                    _deleteTimerDialogBuilder(context);
+                    _deleteTimerDialogBuilder(context, timerProvider);
                   },
                   contentPadding: EdgeInsets.zero,
                   title: Text(
@@ -207,12 +216,13 @@ class _EditTimerPageState extends State<EditTimerPage> {
   /// Hapus Timer
   ///
   /// Memanggil function [deleteTimer] dari [TimerController]
-  deleteTimer() async {
+  deleteTimer(TimerProvider timerProvider) async {
     await _timerController.deleteTimer(timer!.timerId!).then((value) => print(value!.message));
+    timerProvider.removeTimer(timer!.timerId!);
   }
 
   /// Menampilkan dialog konfirmasi hapus timer
-  Future<void> _deleteTimerDialogBuilder(BuildContext context) {
+  Future<void> _deleteTimerDialogBuilder(BuildContext context, TimerProvider timerProvider) {
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -233,7 +243,12 @@ class _EditTimerPageState extends State<EditTimerPage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      deleteTimer();
+                      deleteTimer(timerProvider);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Timer berhasil dihapus")),
+                      );
+                      context.pop();
+                      context.pop();
                     },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(

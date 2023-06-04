@@ -32,7 +32,7 @@ class ScheduleRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': schedule.id_socket.toString(),
+          'id_socket': schedule.sockeId.toString(),
           'status': schedule.status,
           'time': time,
           'note': schedule.note,
