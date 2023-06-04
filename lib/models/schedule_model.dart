@@ -9,6 +9,7 @@ class ScheduleModel extends ChangeNotifier {
     this.sockeId = 0,
     this.time,
     this.status = false,
+    required this.scheduleStatus,
     required this.note,
     required this.days,
   });
@@ -17,6 +18,7 @@ class ScheduleModel extends ChangeNotifier {
   final int? sockeId;
   final TimeOfDay? time;
   bool status;
+  bool scheduleStatus;
   final String note;
   final List<DayModel> days;
   int? terminalId;
@@ -38,6 +40,7 @@ class ScheduleModel extends ChangeNotifier {
       sockeId: json['id_socket'],
       time: time,
       status: json['status'],
+      scheduleStatus: json['statusonschedule'],
       days: days,
       note: json['note'],
     );

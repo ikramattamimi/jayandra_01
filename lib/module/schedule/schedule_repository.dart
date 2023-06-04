@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:jayandra_01/models/schedule_model.dart';
-// import 'package:jayandra_01/models/timer_model.dart';
+// import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
 
 class ScheduleRepository {
@@ -37,6 +37,23 @@ class ScheduleRepository {
           'time': time,
           'note': schedule.note,
           'day': days,
+        },
+      ),
+    );
+  }
+
+  
+  Future<http.Response> deleteSchedule(int scheduleId) async {
+    // int updateStatus = status == true ? 1 : 0;
+
+    return http.post(
+      Uri.parse('${NetworkAPI.ip}/deleteschedule'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(
+        {
+          'id_schedule': scheduleId.toString(),
         },
       ),
     );

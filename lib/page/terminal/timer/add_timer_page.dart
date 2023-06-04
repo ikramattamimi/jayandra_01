@@ -9,6 +9,7 @@ import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/utils/unique_int_generator.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:provider/provider.dart';
 
@@ -94,7 +95,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
                             setState(() {
                               isSwitched = value;
                               socketStatus = isSwitched ? "Aktif" : "Nonaktif";
-                              print(isSwitched);
+                              // print(isSwitched);
                             });
                           },
                           // activeTrackColor: Styles.accentColor,
@@ -129,7 +130,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
                   onTimePicked: (x) {
                     setState(() {
                       endTime = x;
-                      print("The picked time is: $x");
+                      // print("The picked time is: $x");
                     });
                   },
                 ),
@@ -179,18 +180,21 @@ class _AddTimerPageState extends State<AddTimerPage> {
 
     await _timerController.addTimer(timer).then((value) {
       timerToChange = timer;
-      print(timerToChange);
+      // print(timerToChange);
       var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
+      // var scheduledTime = DateTime.now().add(Duration(seconds: 5));
+      var socket = terminal!.sockets!.firstWhere((element) => element.socketId == int.parse(selectedValue));
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
         value!.data.timerId,
         getTimerNotification,
+        params: {'socketName': socket.name},
       );
-      AndroidAlarmManager.oneShotAt(
-        scheduledTime,
-        value.data.timerId + 100,
-        changeTimer,
-      );
+      // AndroidAlarmManager.oneShotAt(
+      //   scheduledTime,
+      //   value.data.timerId + 100,
+      //   changeTimer,
+      // );
 
       timerProvider.addTimer(timer);
 
@@ -229,16 +233,17 @@ class _AddTimerPageState extends State<AddTimerPage> {
   }
 }
 
-getTimerNotification(int idTimer) {
-  NotificationService().showNotification(
-    id: idTimer,
-    title: "Timer $idTimer selesai",
-    body: "Timer untuk Socket $idTimer",
+getTimerNotification(int idTimer, Map<String, dynamic> socket) {
+  UniqueIntGenerator generator = UniqueIntGenerator();
+  NotificationService().showAlarm(
+    id: generator.generateUniqueInt(),
+    title: "Timer selesai",
+    body: "Timer selesai untuk Socket ${socket['socketName']}. Segera nonaktifkan socket supaya tagihan tidak membengkak!",
   );
 }
 
-changeTimer() {
-  print("change timer");
-  print('babi ${timerToChange}');
-  timerToChange!.changeTimerStatus(false);
-}
+// changeTimer() {
+//   print("change timer");
+//   print('babi ${timerToChange}');
+//   timerToChange!.changeTimerStatus(false);
+// }

@@ -54,29 +54,29 @@ class ScheduleController {
     return scheduleObjectResponse;
   }
 
-  // Future<MyResponse?> deleteSchedule(int scheduleId) async {
-  //   // print('get terminal dipanggil');
-  //   // final prefs = await SharedPreferences.getInstance();
-  //   MyResponse scheduleObjectResponse = MyResponse();
+  Future<MyResponse?> deleteSchedule(int scheduleId) async {
+    // print('get terminal dipanggil');
+    // final prefs = await SharedPreferences.getInstance();
+    MyResponse scheduleObjectResponse = MyResponse();
 
-  //   // print('add schedule');
+    // print('add schedule');
 
-  //   // Get API data terminal
-  //   await _scheduleRepository.deleteSchedule(scheduleId).then((value) {
-  //     // print(value.statusCode);
+    // Get API data terminal
+    await _scheduleRepository.deleteSchedule(scheduleId).then((value) {
+      // print(value.statusCode);
 
-  //     if (value.statusCode == 200) {
-  //       // Parse String json ke Map
-  //       Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
+      if (value.statusCode == 200) {
+        // Parse String json ke Map
+        Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
 
-  //       // Response dengan response.data berupa List dari objek Terminal
-  //       scheduleObjectResponse = MyResponse.fromJson(scheduleMapData, ScheduleModel.fromJson);
-  //       scheduleObjectResponse.message = "Schedule berhasil dihapus";
-  //       return scheduleObjectResponse;
-  //     } else {
-  //       return MyResponse(code: 1, message: "Terjadi Masalah");
-  //     }
-  //   });
-  //   return scheduleObjectResponse;
-  // }
+        // Response dengan response.data berupa List dari objek Terminal
+        scheduleObjectResponse = MyResponse.fromJson(scheduleMapData, ScheduleModel.fromJson);
+        scheduleObjectResponse.message = "Schedule berhasil dihapus";
+        return scheduleObjectResponse;
+      } else {
+        return MyResponse(code: 1, message: "Terjadi Masalah");
+      }
+    });
+    return scheduleObjectResponse;
+  }
 }

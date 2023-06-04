@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -7,10 +8,14 @@ import 'package:jayandra_01/models/days_indonesia.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/terminal/schedule_controller.dart';
 import 'package:jayandra_01/page/terminal/schedule/day_view.dart';
 import 'package:jayandra_01/page/terminal/time_picker.dart';
+import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/utils/unique_int_generator.dart';
+import 'package:provider/provider.dart';
 
 class AddSchedulePage extends StatefulWidget {
   const AddSchedulePage({super.key, required this.terminal});
@@ -27,6 +32,8 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
+    final scheduleProvider = Provider.of<ScheduleProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -56,7 +63,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
         actions: [
           IconButton(
             onPressed: () {
-              addSchedule();
+              addSchedule(scheduleProvider);
             },
             icon: const Icon(Icons.check_rounded),
           ),
@@ -142,7 +149,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                     onTimePicked: (x) {
                       setState(() {
                         startTime = x;
-                        print("The picked time is: $x");
+                        // print("The picked time is: $x");
                       });
                     },
                   ),
@@ -300,15 +307,58 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
 
   /// Panggil API addSchedule
 
-  addSchedule() async {
+  addSchedule(ScheduleProvider scheduleProvider) async {
     ScheduleModel schedule = ScheduleModel(
       sockeId: int.parse(selectedSocket),
       time: startTime,
       status: isSocketOn,
+      scheduleStatus: isSocketOn,
       days: daysIndo,
       note: _catatanController.text,
     );
+
+    schedule.terminalId = terminal.id;
+
+    await _scheduleController.addSchedule(schedule).then((value) {
+      // scheduleToChange = schedule;
+      // print(scheduleToChange);
+      var scheduledTime = DateTime.now().add(Duration(hours: startTime.hour, minutes: startTime.minute));
+      // var scheduledTime = DateTime.now().add(Duration(seconds: 5));
+      var socket = terminal!.sockets!.firstWhere((element) => element.socketId == int.parse(selectedSocket));
+      AndroidAlarmManager.oneShotAt(
+        scheduledTime,
+        UniqueIntGenerator().generateUniqueInt(),
+        getScheduleNotification,
+        params: {'socketName': socket.name, 'status': schedule.scheduleStatus},
+      );
+      // AndroidAlarmManager.oneShotAt(
+      //   scheduledTime,
+      //   value.data.scheduleId + 100,
+      //   changeTimer,
+      // );
+
+      scheduleProvider.addSchedule(schedule);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Schedule berhasil ditambahkan'),
+        ),
+      );
+
+      context.pop();
+    });
+
     MyResponse? addScheduleResponse = await _scheduleController.addSchedule(schedule);
     print(addScheduleResponse);
   }
+}
+
+getScheduleNotification(int idTimer, Map<String, dynamic> socket) {
+  UniqueIntGenerator generator = UniqueIntGenerator();
+  var status = socket['status'] ? "aktif" : "nonaktif";
+  NotificationService().showAlarm(
+    id: generator.generateUniqueInt(),
+    title: "Jadwal untuk ${status}kan socket ${socket['socketName']}",
+    body: "Sudah saatnya untuk ${status}kan socket ${socket['socketName']}. Segera ${status}kan socket!",
+  );
 }

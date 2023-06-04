@@ -3,8 +3,11 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/module/schedule/schedule_provider.dart';
+import 'package:jayandra_01/module/terminal/schedule_controller.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/timeofday_converter.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleView extends StatefulWidget {
   const ScheduleView({super.key, required this.terminalSchedule});
@@ -21,11 +24,39 @@ class _ScheduleViewState extends State<ScheduleView> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
+    final scheduleProvider = Provider.of<ScheduleProvider>(context);
     return Card(
       elevation: 0,
       margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
       child: InkWell(
-        onTap: () => context.pushNamed('terminal_schedule_edit', extra: _terminalSchedule),
+        onLongPress: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                        _deleteScheduleDialogBuilder(context, scheduleProvider);
+                      },
+                      title: Text(
+                        "Hapus Schedule",
+                        style: TextStyle(
+                          color: Colors.red.shade400,
+                          fontSize: 14,
+                        ),
+                      ),
+                      trailing: Icon(
+                        Icons.delete_outline_rounded,
+                        color: Colors.red.shade400,
+                      ),
+                    ),
+                  ],
+                );
+              });
+        },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -49,7 +80,6 @@ class _ScheduleViewState extends State<ScheduleView> {
                     onChanged: (value) {
                       setState(() {
                         _schedule.status = value;
-                        // print(timer!.status);
                       });
                     },
                     activeColor: Styles.accentColor,
@@ -82,9 +112,10 @@ class _ScheduleViewState extends State<ScheduleView> {
   List<String> repeatDay = [];
   late String socketName;
   late String scheduleStatus;
+  var _scheduleController = ScheduleController();
 
   /// ==========================================================================
-  /// Local Variable
+  /// Local Function
   /// ==========================================================================
   ///
   @override
@@ -116,5 +147,72 @@ class _ScheduleViewState extends State<ScheduleView> {
   void getSocketName() {
     socketName = _terminal.sockets!.where((socket) => socket.socketId == _schedule.sockeId).first.name!;
     _schedule.status == true ? scheduleStatus = "Aktif" : scheduleStatus = "Nonaktif";
+  }
+
+  Future<void> _deleteScheduleDialogBuilder(BuildContext context, ScheduleProvider scheduleProvider) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(
+          'Hapus Schedule',
+          style: Styles.headingStyle1,
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin menghapus schedule?',
+          style: Styles.bodyTextBlack,
+        ),
+        actions: <Widget>[
+          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      deleteSchedule(scheduleProvider);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Schedule berhasil dihapus")),
+                      );
+                      context.pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: Colors.red.shade400,
+                        minimumSize: const Size(50, 50),
+                        padding: EdgeInsets.zero),
+                    child: Text(
+                      "Oke".toUpperCase(),
+                      style: Styles.buttonTextWhite,
+                    ),
+                  ),
+                  const Gap(8),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Batalkan'),
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(50, 50),
+                    ),
+                    child: Text(
+                      'Batal'.toUpperCase(),
+                      style: Styles.bodyTextGrey2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Hapus Schedule
+  ///
+  /// Memanggil function [deleteSchedule] dari [ScheduleController]
+  deleteSchedule(ScheduleProvider scheduleProvider) async {
+    await _scheduleController.deleteSchedule(_schedule.scheduleId!).then((value) => print(value!.message));
+    scheduleProvider.removeSchedule(_schedule.scheduleId!);
   }
 }
