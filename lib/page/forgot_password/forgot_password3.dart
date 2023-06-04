@@ -8,16 +8,15 @@ import 'package:jayandra_01/page/register/register_page_1.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
 
-class RegisterPage4 extends StatefulWidget {
-  const RegisterPage4({super.key, required this.email, required this.electricityClass});
+class ForgotPasswordPage3 extends StatefulWidget {
+  const ForgotPasswordPage3({super.key, required this.email});
   final String email;
-  final String electricityClass;
 
   @override
-  State<RegisterPage4> createState() => _RegisterPage4State();
+  State<ForgotPasswordPage3> createState() => _ForgotPasswordPage3State();
 }
 
-class _RegisterPage4State extends State<RegisterPage4> {
+class _ForgotPasswordPage3State extends State<ForgotPasswordPage3> {
   final _registerForm3Key = GlobalKey<FormState>();
   late String _email;
   late String _electricityClass;
@@ -28,7 +27,6 @@ class _RegisterPage4State extends State<RegisterPage4> {
     // TODO: implement initState
     super.initState();
     _email = widget.email;
-    _electricityClass = widget.electricityClass;
     print(_email);
     print(_electricityClass);
   }
@@ -36,8 +34,8 @@ class _RegisterPage4State extends State<RegisterPage4> {
   @override
   Widget build(BuildContext context) {
     return RegisterPage(
-      title: "Daftar",
-      subtitle: "Masukkan Nama dan Password",
+      title: "Lupa Password",
+      subtitle: "Masukkan Password Baru",
       form: Form(
         key: _registerForm3Key,
         child: Column(
@@ -94,17 +92,6 @@ class _RegisterPage4State extends State<RegisterPage4> {
 
   List<Widget> get _getRegisterFormWidget {
     return [
-      CustomTextFormField(
-        controller: _controller.nameController,
-        hintText: "Nama",
-        keyboardType: TextInputType.name,
-        obscureText: false,
-        prefixIcon: Icons.person_rounded,
-        validator: (value) {
-          if (!value!.isValidName) return 'Nama tidak valid';
-          return null;
-        },
-      ),
       const Gap(16),
       PasswordTextForm(
         formKey: _registerForm3Key,

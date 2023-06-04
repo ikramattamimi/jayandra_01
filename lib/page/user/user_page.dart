@@ -2,39 +2,36 @@ import 'package:carbon_icons/carbon_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/list_tile_view.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class UserPage extends StatefulWidget {
+  const UserPage({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<UserPage> createState() => _UserPageState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  String? userName = "";
+class _UserPageState extends State<UserPage> {
+  // String? userName = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserName();
-  }
-
-  void getUserName() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userName = prefs.getString('user_name');
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     // final size = AppLayout.getSize(context);
+    var userProvider = Provider.of<UserModel>(context);
+    var userName = userProvider.name;
+
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: ListView(

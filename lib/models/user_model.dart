@@ -16,7 +16,7 @@ class UserModel extends ChangeNotifier {
       name: json['name'],
       email: json['email'],
       password: (json['password'] != null) ? json['password'] : "",
-      electricityclass: (json['electricityclass'] != "") ? json['electricityClass'] : "",
+      electricityclass: (json['electricityclass'] != null) ? json['electricityclass'] : "",
       token: json['token'],
     );
   }
@@ -28,6 +28,16 @@ class UserModel extends ChangeNotifier {
     password = user.password;
     electricityclass = user.electricityclass;
     token = user.token;
+    notifyListeners();
+  }
+
+  void updateElectricityClass(String elecClass) {
+    electricityclass = elecClass;
+    notifyListeners();
+  }
+
+  void setUserName(String userName) {
+    name = userName;
     notifyListeners();
   }
 }

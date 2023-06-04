@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/circle_icon_container.dart';
 import 'package:jayandra_01/widget/white_container.dart';
+import 'package:provider/provider.dart';
 
 class ElectricityClassPage extends StatefulWidget {
   const ElectricityClassPage({super.key});
@@ -41,7 +43,7 @@ class _ElectricityClassPageState extends State<ElectricityClassPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    electricityClass = electricityClassData[1]['nama'].toString();
+    // electricityClass = ;
   }
 
   void selectRadio(value) {
@@ -53,6 +55,9 @@ class _ElectricityClassPageState extends State<ElectricityClassPage> {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<UserModel>(context);
+    electricityClass = user.electricityclass;
+    print(user.electricityclass);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Styles.secondaryColor,
@@ -90,53 +95,56 @@ class _ElectricityClassPageState extends State<ElectricityClassPage> {
       backgroundColor: Styles.primaryColor,
       body: ListView(
         children: [
-          WhiteContainer(
-            borderColor: Styles.primaryColor,
-            margin: 16,
-            padding: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(32),
-                Align(
-                  alignment: Alignment.center,
-                  child: CircleIconContainer(
-                    width: 80,
-                    height: 80,
-                    color: Styles.accentColor,
-                    icon: Icons.money,
-                    iconSize: 40,
-                    iconColor: Styles.secondaryColor,
+          Card(
+            elevation: 0,
+            margin: const EdgeInsets.all(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Gap(32),
+                  Align(
+                    alignment: Alignment.center,
+                    child: CircleIconContainer(
+                      width: 80,
+                      height: 80,
+                      color: Styles.accentColor,
+                      icon: Icons.money,
+                      iconSize: 40,
+                      iconColor: Styles.secondaryColor,
+                    ),
                   ),
-                ),
-                const Gap(32),
-                Text(
-                  description,
-                  style: Styles.bodyTextBlack2,
-                  textAlign: TextAlign.justify,
-                ),
-                const Gap(16),
-                Text(
-                  "Silahkan pilih golongan listrik anda:",
-                  style: Styles.bodyTextBlack2,
-                ),
-                const Gap(8),
-                Column(
-                  children: electricityClassData.map((items) {
-                    return RadioListTile(
-                      title: Text(
-                        items['nama'].toString(),
-                        style: Styles.bodyTextBlack2,
-                      ),
-                      value: items['nama'].toString(),
-                      groupValue: electricityClass,
-                      onChanged: (value) {
-                        selectRadio(value);
-                      },
-                    );
-                  }).toList(),
-                ),
-              ],
+                  const Gap(32),
+                  Text(
+                    description,
+                    style: Styles.bodyTextBlack2,
+                    textAlign: TextAlign.justify,
+                  ),
+                  const Gap(16),
+                  Text(
+                    "Silahkan pilih golongan listrik anda:",
+                    style: Styles.bodyTextBlack2,
+                  ),
+                  const Gap(8),
+                  Column(
+                    children: electricityClassData.map((items) {
+                      return RadioListTile(
+                        title: Text(
+                          items['nama'].toString(),
+                          style: Styles.bodyTextBlack2,
+                        ),
+                        value: items['nama'].toString(),
+                        groupValue: electricityClass,
+                        onChanged: (value) {
+                          selectRadio(value);
+                          
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
             ),
           )
         ],

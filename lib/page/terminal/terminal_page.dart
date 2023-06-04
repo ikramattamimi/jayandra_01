@@ -9,7 +9,6 @@ import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/page/terminal/socket_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
-import 'package:jayandra_01/widget/white_container.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +35,6 @@ class _TerminalPageState extends State<TerminalPage> {
 
     // initWidgets(userModel, terminalProvider);
     var myTerminal = terminalProvider.terminals.firstWhere((element) => element.id == widget.idTerminal);
-    var myPageTitle = myTerminal.name;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,

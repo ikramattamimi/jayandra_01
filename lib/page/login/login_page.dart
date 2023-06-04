@@ -88,7 +88,9 @@ class _LoginPageState extends State<LoginPage> {
                           Align(
                             alignment: Alignment.topRight,
                             child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  context.goNamed('forgot_password_page');
+                                },
                                 child: Text(
                                   "Lupa Password?",
                                   style: Styles.buttonTextBlue,

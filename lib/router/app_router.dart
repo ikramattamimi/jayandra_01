@@ -6,11 +6,12 @@ import 'package:jayandra_01/page/add_device/add_device_page.dart';
 import 'package:jayandra_01/page/add_device/adding_device.dart';
 import 'package:jayandra_01/page/add_device/confirm_pairing.dart';
 import 'package:jayandra_01/page/add_device/done_add_device.dart';
+import 'package:jayandra_01/page/forgot_password/forgot_password.dart';
 import 'package:jayandra_01/page/golongan_listrik/electricity_class_page.dart';
 import 'package:jayandra_01/page/golongan_listrik/electricity_class_register_page.dart';
 import 'package:jayandra_01/page/login/landing_page.dart';
 import 'package:jayandra_01/page/login/login_page.dart';
-import 'package:jayandra_01/page/profile/edit_profile_page.dart';
+import 'package:jayandra_01/page/user/edit_profile_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
 import 'package:jayandra_01/page/register/register_page_2.dart';
 import 'package:jayandra_01/page/register/register_page_3.dart';
@@ -72,6 +73,18 @@ class AppRouter {
             path: "electricity_class_register_page",
             name: "electricity_class_register_page",
             builder: (BuildContext context, GoRouterState state) => const ElectricityClassRegisterPage(),
+          ),
+
+          // FORGOT PASSWORD PAGE ROUTE
+          GoRoute(
+            path: "forgot_password_page",
+            name: "forgot_password_page",
+            builder: (BuildContext context, GoRouterState state) => const ForgotPassword1(),
+          ),
+          GoRoute(
+            path: "forgot_password_page2",
+            name: "forgot_password_page2",
+            builder: (BuildContext context, GoRouterState state) => const ForgotPassword1(),
           ),
         ],
       ),

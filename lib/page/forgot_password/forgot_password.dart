@@ -3,19 +3,20 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/module/register/cek_email_controller.dart';
+import 'package:jayandra_01/page/forgot_password/forgot_password2.dart';
 import 'package:jayandra_01/page/login/login_page.dart';
 import 'package:jayandra_01/page/register/register_page.dart';
 import 'package:jayandra_01/page/register/register_page_2.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/custom_elevated_button.dart';
 
-class RegisterPage1 extends StatelessWidget {
-  const RegisterPage1({super.key});
+class ForgotPassword1 extends StatelessWidget {
+  const ForgotPassword1({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const RegisterPage(
-      title: "Daftar",
+      title: "Lupa Password",
       subtitle: "Masukkan email Anda untuk melanjutkan",
       form: RegisterForm(),
     );
@@ -66,7 +67,7 @@ class _RegisterFormState extends State<RegisterForm> {
         if (response.code == 1) {
           // context.pushNamed("register_page_2");
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return RegisterPage2(email: _controller.emailController.text);
+            return ForgotPasswordPage2(email: _controller.emailController.text);
           }));
         } else {}
       });

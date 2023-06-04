@@ -51,6 +51,7 @@ class _RegisterPage3State extends State<RegisterPage3> {
   @override
   Widget build(BuildContext context) {
     return RegisterPage(
+      title: "Daftar",
       subtitle: "Masukkan Golongan Listrik Anda",
       form: Form(
         key: _registerForm3Key,

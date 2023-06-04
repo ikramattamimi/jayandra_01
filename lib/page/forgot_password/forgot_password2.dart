@@ -2,28 +2,29 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:jayandra_01/page/forgot_password/forgot_password3.dart';
 import 'package:jayandra_01/page/register/register_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
 import 'package:jayandra_01/page/register/register_page_3.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class RegisterPage2 extends StatefulWidget {
-  const RegisterPage2({super.key, required this.email});
+class ForgotPasswordPage2 extends StatefulWidget {
+  const ForgotPasswordPage2({super.key, required this.email});
   final String email;
 
   @override
-  State<RegisterPage2> createState() => _RegisterPage2State();
+  State<ForgotPasswordPage2> createState() => _ForgotPasswordPage2State();
 }
 
-class _RegisterPage2State extends State<RegisterPage2> {
+class _ForgotPasswordPage2State extends State<ForgotPasswordPage2> {
   final _registerForm2Key = GlobalKey<FormState>();
   late String _email;
 
   @override
   Widget build(BuildContext context) {
     return RegisterPage(
-      title: "Daftar",
+      title: "Lupa Password",
       subtitle: "Masukkan Kode OTP yang sudah dikirimkan ke email",
       form: Form(
         key: _registerForm2Key,
@@ -174,7 +175,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
             );
             Future.delayed(const Duration(seconds: 1), () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return RegisterPage3(email: _email);
+                return ForgotPasswordPage3(email: _email);
               }));
             });
           }

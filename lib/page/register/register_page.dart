@@ -8,10 +8,11 @@ import 'package:jayandra_01/widget/circle_icon_container.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key, required this.subtitle, required this.form, this.description});
+  const RegisterPage({super.key, required this.subtitle, required this.form, this.description, required this.title});
   final String subtitle;
   final String? description;
   final Widget form;
+  final String title;
 
   List<Widget> get _getRegisterWidget {
     return [
@@ -25,7 +26,7 @@ class RegisterPage extends StatelessWidget {
       ),
       const Gap(24),
       Text(
-        "Daftar",
+        title,
         style: Styles.headingStyleWhite1,
       ),
       const Gap(10),
