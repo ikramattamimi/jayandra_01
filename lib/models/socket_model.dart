@@ -1,7 +1,7 @@
 class SocketModel {
   final int? socketId;
   final int? terminalId;
-  final String? name;
+  String? name;
   bool? status;
 
   SocketModel({this.socketId = 0, this.terminalId = 0, this.name = "", this.status = false});
@@ -17,5 +17,9 @@ class SocketModel {
 
   void updateSocketStatus(bool isSocketOn) {
     status = isSocketOn;
+  }
+
+  void updateSocketName(String socketName) {
+    name = socketName;
   }
 }

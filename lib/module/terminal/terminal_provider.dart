@@ -47,4 +47,19 @@ class TerminalProvider with ChangeNotifier {
   static TerminalProvider of(BuildContext context, {bool listen = true}) {
     return Provider.of<TerminalProvider>(context, listen: listen);
   }
+
+  void updateSocketName(String socketName, int socketId, int terminalId) async {
+    var terminal = _terminals.firstWhere((element) => element.id == terminalId);
+    var socket = terminal.sockets!.firstWhere((element) => element.socketId == socketId);
+    socket.updateSocketName(socketName);
+    await _terminalController.updateSocketName(socket);
+    notifyListeners();
+  }
+
+  void updateTerminalName(String terminalName, int terminalId) async {
+    var terminal = _terminals.firstWhere((element) => element.id == terminalId);
+    terminal.setTerminalName(terminalName);
+    notifyListeners();
+    await _terminalController.updateTerminalName(terminal);
+  }
 }

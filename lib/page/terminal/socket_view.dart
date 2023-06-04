@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +28,7 @@ class SocketView extends StatefulWidget {
 class _SocketState extends State<SocketView> {
   // late SocketModel socket;
   final TerminalController _terminalController = TerminalController();
+  final TextEditingController _updateNameController = TextEditingController();
 
   @override
   void initState() {
@@ -83,7 +86,78 @@ class _SocketState extends State<SocketView> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: Text(
+                  'Ganti nama socket',
+                  style: Styles.headingStyle1,
+                ),
+                content: Text(
+                  'Masukkan nama socket yang baru',
+                  style: Styles.bodyTextBlack,
+                ),
+                actions: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          CustomTextFormField(
+                            controller: _updateNameController,
+                            prefixIcon: MdiIcons.powerSocketDe,
+                            hintText: mySocket.name!,
+                            obscureText: false,
+                            keyboardType: TextInputType.name,
+                            // onSaved:
+                          ),
+                          const Gap(16),
+                          ElevatedButton(
+                            onPressed: () {
+                              // deleteTimer(timerProvider);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Nama socket diganti")),
+                              );
+                              terminalProvider.updateSocketName(
+                                _updateNameController.text,
+                                mySocket.socketId!,
+                                mySocket.terminalId!,
+                              );
+                              context.pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Styles.accentColor,
+                                minimumSize: const Size(50, 50),
+                                padding: EdgeInsets.zero),
+                            child: Text(
+                              "simpan".toUpperCase(),
+                              style: Styles.buttonTextWhite,
+                            ),
+                          ),
+                          const Gap(8),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Batalkan'),
+                            style: TextButton.styleFrom(
+                              minimumSize: const Size(50, 50),
+                            ),
+                            child: Text(
+                              'Batal'.toUpperCase(),
+                              style: Styles.bodyTextGrey2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
           icon: const Icon(
             Icons.edit,
             size: 16,

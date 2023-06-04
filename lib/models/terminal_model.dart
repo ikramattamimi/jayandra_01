@@ -3,7 +3,7 @@ import 'package:jayandra_01/models/socket_model.dart';
 
 class TerminalModel extends ChangeNotifier {
   final int id;
-  final String name;
+  String name;
   final List<SocketModel>? sockets;
   bool isTerminalActive;
   int totalActiveSocket;
@@ -76,5 +76,9 @@ class TerminalModel extends ChangeNotifier {
       }
     }
     totalActiveSocket = total;
+  }
+
+  void setTerminalName(String terminalName) {
+    name = terminalName;
   }
 }

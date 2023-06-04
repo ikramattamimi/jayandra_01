@@ -50,16 +50,28 @@ class TerminalController {
     Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
 
     MyResponse updateSocketResponse = MyResponse.fromJson(socketMapData, SocketModel.fromJson);
-    // print(updateSocketResponse.data.status);
-    // SocketModel updatedSocket = updateSocketResponse.data;
-    /////
-
-    // final prefs = await SharedPreferences.getInstance();
-    // int? userId = prefs.getInt('user_id');
-    // prefs.remove('terminal');
-    // getTerminal();
 
     return updateSocketResponse;
+  }
+
+  Future<MyResponse?> updateSocketName(SocketModel socket) async {
+    http.Response responseSocket;
+    responseSocket = await _terminalRepositroy.updateSocketName(socket);
+
+    // Parse String jsonke Map
+    Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
+    MyResponse updateSocketResponse = MyResponse.fromJson(socketMapData, SocketModel.fromJson);
+    return updateSocketResponse;
+  }
+
+  Future<MyResponse?> updateTerminalName(TerminalModel terminal) async {
+    http.Response responseTerminal;
+    responseTerminal = await _terminalRepositroy.updateTerminalName(terminal);
+
+    // Parse String jsonke Map
+    Map<String, dynamic> terminalMapData = jsonDecode(responseTerminal.body);
+    MyResponse updateTerminalResponse = MyResponse.fromJson(terminalMapData, TerminalModel.fromJson);
+    return updateTerminalResponse;
   }
 
   Future<TerminalResponse?> changeAllSocketStatus(int idTerminal, bool status) async {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jayandra_01/models/socket_model.dart';
+import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
 
 class TerminalRepository {
@@ -24,6 +25,37 @@ class TerminalRepository {
           'id_socket': socket.socketId,
           'id_terminal': socket.terminalId,
           'status': socket.status,
+        },
+      ),
+    );
+  }
+
+  Future<http.Response> updateSocketName(SocketModel socket) async {
+    return http.post(
+      Uri.parse('${NetworkAPI.ip}/updateSocketName/'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(
+        {
+          'id_socket': socket.socketId,
+          'id_terminal': socket.terminalId,
+          'name': socket.name,
+        },
+      ),
+    );
+  }
+
+  Future<http.Response> updateTerminalName(TerminalModel terminal) async {
+    return http.post(
+      Uri.parse('${NetworkAPI.ip}/updateTerminalName/'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(
+        {
+          'id_terminal': terminal.id,
+          'name': terminal.name,
         },
       ),
     );
