@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
-import 'package:jayandra_01/view/add_device/add_device_page.dart';
-import 'package:jayandra_01/view/add_device/adding_device.dart';
-import 'package:jayandra_01/view/add_device/confirm_pairing.dart';
-import 'package:jayandra_01/view/add_device/done_add_device.dart';
+import 'package:jayandra_01/view/pairing/pairing_view.dart';
+import 'package:jayandra_01/view/pairing/pairing_proccess_view.dart';
+import 'package:jayandra_01/view/pairing/confirm_pairing_view.dart';
+import 'package:jayandra_01/view/pairing/pairing_done_view.dart';
 import 'package:jayandra_01/view/forgot_password/forgot_pw_email.view.dart';
 import 'package:jayandra_01/view/golongan_listrik/electricity_class_view.dart';
 import 'package:jayandra_01/view/golongan_listrik/electricity_class_register_view.dart';
@@ -159,22 +159,22 @@ class AppRouter {
           GoRoute(
             path: "add_device",
             name: "add_device",
-            builder: (BuildContext context, GoRouterState state) => const AddDevicePage(),
+            builder: (BuildContext context, GoRouterState state) => const PairingView(),
           ),
           GoRoute(
             path: "confirm_pairing",
             name: "confirm_pairing",
-            builder: (BuildContext context, GoRouterState state) => const ConfirmPairingPage(),
+            builder: (BuildContext context, GoRouterState state) => const ConfirmPairingView(),
           ),
           GoRoute(
             path: "adding_device",
             name: "adding_device",
-            builder: (BuildContext context, GoRouterState state) => const AddingDevicePage(),
+            builder: (BuildContext context, GoRouterState state) => const PairingProccessView(),
           ),
           GoRoute(
             path: "done_add_device",
             name: "done_add_device",
-            builder: (BuildContext context, GoRouterState state) => const DoneAddDevice(),
+            builder: (BuildContext context, GoRouterState state) => const PairingDoneView(),
           ),
         ],
       ),

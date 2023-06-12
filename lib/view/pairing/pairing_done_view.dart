@@ -5,14 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
 
-class DoneAddDevice extends StatefulWidget {
-  const DoneAddDevice({super.key});
+class PairingDoneView extends StatefulWidget {
+  const PairingDoneView({super.key});
 
   @override
-  State<DoneAddDevice> createState() => _DoneAddDeviceState();
+  State<PairingDoneView> createState() => _PairingDoneViewState();
 }
 
-class _DoneAddDeviceState extends State<DoneAddDevice> {
+class _PairingDoneViewState extends State<PairingDoneView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

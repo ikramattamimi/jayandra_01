@@ -7,14 +7,14 @@ import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
 
-class AddDevicePage extends StatefulWidget {
-  const AddDevicePage({super.key});
+class PairingView extends StatefulWidget {
+  const PairingView({super.key});
 
   @override
-  State<AddDevicePage> createState() => _AddDevicePageState();
+  State<PairingView> createState() => _PairingViewState();
 }
 
-class _AddDevicePageState extends State<AddDevicePage> {
+class _PairingViewState extends State<PairingView> {
   final _formKey = GlobalKey<FormState>();
 
   @override

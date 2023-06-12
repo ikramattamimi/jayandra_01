@@ -5,14 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
 
-class ConfirmPairingPage extends StatefulWidget {
-  const ConfirmPairingPage({super.key});
+class ConfirmPairingView extends StatefulWidget {
+  const ConfirmPairingView({super.key});
 
   @override
-  State<ConfirmPairingPage> createState() => _ConfirmPairingPageState();
+  State<ConfirmPairingView> createState() => _ConfirmPairingViewState();
 }
 
-class _ConfirmPairingPageState extends State<ConfirmPairingPage> {
+class _ConfirmPairingViewState extends State<ConfirmPairingView> {
   final pairingSteps = [
     "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui officia possimus",
     "assumenda voluptates quae, rem distinctio nihil aspernatur",
