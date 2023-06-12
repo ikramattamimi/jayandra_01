@@ -94,7 +94,7 @@ class AppRouter {
       GoRoute(
         path: "/",
         name: "main_page",
-        builder: (BuildContext context, GoRouterState state) => MainScreen(),
+        builder: (BuildContext context, GoRouterState state) => const MainScreen(),
         routes: <GoRoute>[
           GoRoute(
             path: "edit_profile",
@@ -120,7 +120,11 @@ class AppRouter {
               // powerstrip: state.extra as PowerstripModel,
             ),
           ),
-          GoRoute(path: "budgeting", name: "budgeting_page", builder: (BuildContext context, GoRouterState state) => BudgetingView()),
+          GoRoute(
+            path: "budgeting",
+            name: "budgeting_page",
+            builder: (BuildContext context, GoRouterState state) => const BudgetingView(),
+          ),
           GoRoute(
             path: "schedule",
             name: "powerstrip_schedule",

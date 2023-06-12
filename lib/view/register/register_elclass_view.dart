@@ -42,10 +42,8 @@ class _RegisterPage3State extends State<RegisterPage3> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _email = widget.email;
-    print(_email);
   }
 
   @override
@@ -63,20 +61,9 @@ class _RegisterPage3State extends State<RegisterPage3> {
     );
   }
 
-  void _submitForm() {
-    final form = _registerForm3Key.currentState;
-    if (form != null) {
-      if (form.validate()) {
-        form.save();
-        // perform login with _email and _password
-      }
-    }
-  }
-
   void selectRadio(value) {
     setState(() {
       electricityClass = value.toString();
-      print(electricityClass);
     });
   }
 

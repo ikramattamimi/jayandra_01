@@ -20,7 +20,6 @@ class _CustomRadioState extends State<CustomRadio> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     groupValue = widget.groupValue;
   }

@@ -30,7 +30,6 @@ class ScheduleModel extends ChangeNotifier {
     final time = TimeOfDay(hour: hour, minute: minute);
 
     List<DayModel> days = DaysIndonesia.getDay();
-    // print(json[time]);
     for (var element in json['Scheduling_day ']) {
       days.where((day) => day.id == element['id_days'] - 1).first.isSelected = true;
     }

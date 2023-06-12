@@ -12,7 +12,6 @@ class TimerController {
 
     // Get API data timer
     await _timerRepository.getTimer(powerstripId).then((value) {
-      print(value.statusCode);
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);
@@ -29,16 +28,9 @@ class TimerController {
   }
 
   Future<MyResponse?> addTimer(TimerModel timer) async {
-    // print('get powerstrip dipanggil');
-    // final prefs = await SharedPreferences.getInstance();
     MyResponse timerObjectResponse = MyResponse();
-
-    // print('add timer');
-
     // Get API data powerstrip
     await _timerRepository.addTimer(timer).then((value) {
-      // print(value.statusCode);
-
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);
@@ -55,16 +47,9 @@ class TimerController {
   }
 
   Future<MyResponse?> deleteTimer(int timerId) async {
-    // print('get powerstrip dipanggil');
-    // final prefs = await SharedPreferences.getInstance();
     MyResponse timerObjectResponse = MyResponse();
-
-    // print('add timer');
-
     // Get API data powerstrip
     await _timerRepository.deleteTimer(timerId).then((value) {
-      // print(value.statusCode);
-
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);

@@ -93,10 +93,8 @@ class _EditTimerViewState extends State<EditTimerView> {
                             setState(() {
                               isTimerActive = value;
                               timerStatus = isTimerActive ? "Aktif" : "Nonaktif";
-                              print(isTimerActive);
                             });
                           },
-                          // activeTrackColor: Styles.accentColor,
                           activeColor: Styles.accentColor,
                         ),
                       ),
@@ -128,7 +126,6 @@ class _EditTimerViewState extends State<EditTimerView> {
                   onTimePicked: (x) {
                     setState(() {
                       socketOffTime = x;
-                      print("The picked time is: $x");
                     });
                   },
                 ),
@@ -210,14 +207,13 @@ class _EditTimerViewState extends State<EditTimerView> {
       status: isTimerActive,
     );
     await _timerController.addTimer(timer);
-    // print(addTimerResponse);
   }
 
   /// Hapus Timer
   ///
   /// Memanggil function [deleteTimer] dari [TimerController]
   deleteTimer(TimerProvider timerProvider) async {
-    await _timerController.deleteTimer(timer!.timerId!).then((value) => print(value!.message));
+    await _timerController.deleteTimer(timer!.timerId!);
     timerProvider.removeTimer(timer!.timerId!);
   }
 
@@ -237,7 +233,7 @@ class _EditTimerViewState extends State<EditTimerView> {
         actions: <Widget>[
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

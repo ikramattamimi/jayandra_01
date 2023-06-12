@@ -8,6 +8,7 @@ import 'package:jayandra_01/module/timer/timer_repository.dart';
 import 'package:provider/provider.dart';
 
 class TimerProvider with ChangeNotifier {
+  // ignore: prefer_final_fields
   List<TimerModel> _timers = [];
 
   List<TimerModel> get timers => _timers;
@@ -24,8 +25,6 @@ class TimerProvider with ChangeNotifier {
 
   void addTimer(TimerModel timer) {
     _timers.add(timer);
-    print("timer ditambah ke provider");
-    print(_timers.length);
     notifyListeners();
   }
 

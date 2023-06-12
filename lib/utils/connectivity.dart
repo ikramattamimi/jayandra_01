@@ -22,15 +22,12 @@ class ConnectivityStatus {
     // });
   }
 
+  // ignore: unused_element
   Future<void> _tryConnection() async {
     try {
       await InternetAddress.lookup('www.woolha2.com');
-
-      // setState(() {
-      // });
-    } on SocketException catch (e) {
-      // setState(() {
-      // });
+    } on SocketException catch (err) {
+      Logger().e(err);
     }
   }
 }

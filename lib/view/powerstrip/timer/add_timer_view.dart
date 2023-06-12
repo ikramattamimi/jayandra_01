@@ -96,10 +96,8 @@ class _AddTimerPageState extends State<AddTimerPage> {
                             setState(() {
                               isSwitched = value;
                               socketStatus = isSwitched ? "Aktif" : "Nonaktif";
-                              // print(isSwitched);
                             });
                           },
-                          // activeTrackColor: Styles.accentColor,
                           activeColor: Styles.accentColor,
                         ),
                       ),
@@ -131,7 +129,6 @@ class _AddTimerPageState extends State<AddTimerPage> {
                   onTimePicked: (x) {
                     setState(() {
                       endTime = x;
-                      // print("The picked time is: $x");
                     });
                   },
                 ),
@@ -154,7 +151,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
   var socketStatus = "Aktif";
   PowerstripModel? powerstrip;
   final _timerController = TimerController();
-  TimeOfDay endTime = TimeOfDay(hour: 1, minute: 0);
+  TimeOfDay endTime = const TimeOfDay(hour: 0, minute: 1);
 
   /// ==========================================================================
   /// Local Function
@@ -178,9 +175,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
 
     await _timerController.addTimer(timer).then((value) {
       timerToChange = timer;
-      // print(timerToChange);
       var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
-      // var scheduledTime = DateTime.now().add(Duration(seconds: 5));
       var socket = powerstrip!.sockets!.firstWhere((element) => element.socketId == int.parse(selectedValue));
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
@@ -234,11 +229,6 @@ class _AddTimerPageState extends State<AddTimerPage> {
 }
 
 getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
-  TimerModel timer = TimerModel(
-    socketId: socket['socketId'],
-    status: socket['status'],
-    powerstripId: socket['powerstripId'],
-  );
   await Workmanager().registerOneOffTask(
     "timer.powerstrip${socket['powerstripId']}.socket${socket['socketName']}",
     "changeSocketStatusTimer",
@@ -261,9 +251,3 @@ getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
     body: "Timer selesai untuk Socket ${socket['socketName']}. Segera nonaktifkan socket supaya tagihan tidak membengkak!",
   );
 }
-
-// changeTimer() {
-//   print("change timer");
-//   print('babi ${timerToChange}');
-//   timerToChange!.changeTimerStatus(false);
-// }

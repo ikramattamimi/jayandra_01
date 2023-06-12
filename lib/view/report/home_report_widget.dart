@@ -34,7 +34,7 @@ class _HomeReportWidgetState extends State<HomeReportWidget> {
                 )
               ],
             ),
-            CustomDropDown(list: ['ikram', 'irpan'])
+            const CustomDropDown(list: ['ikram', 'irpan'])
           ],
         ),
         const Gap(10),

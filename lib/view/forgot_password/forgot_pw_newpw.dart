@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:jayandra_01/models/my_response.dart';
@@ -22,11 +24,8 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _email = widget.email;
-    print(_email);
-    print(_electricityClass);
   }
 
   @override
@@ -42,16 +41,6 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
         ),
       ),
     );
-  }
-
-  void _submitForm() {
-    final form = _registerForm3Key.currentState;
-    if (form != null) {
-      if (form.validate()) {
-        form.save();
-        // perform login with _email and _password
-      }
-    }
   }
 
   void _register() async {

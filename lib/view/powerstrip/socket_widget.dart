@@ -32,7 +32,6 @@ class _SocketState extends State<SocketWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // socket = widget.socket;
   }
@@ -101,7 +100,7 @@ class _SocketState extends State<SocketWidget> {
                 actions: <Widget>[
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [

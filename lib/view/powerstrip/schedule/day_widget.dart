@@ -30,11 +30,7 @@ class _DayWidgetState extends State<DayWidget> {
           )),
       child: TextButton(
         onPressed: () {
-          // setState(() {
-          // isSelected = !isSelected;
           selectDay();
-          // });
-          // print('pressed ${day.isSelected}');
         },
         style: TextButton.styleFrom(
           padding: EdgeInsets.zero,
@@ -70,8 +66,6 @@ class _DayWidgetState extends State<DayWidget> {
     setState(() {
       day.isSelected = !day.isSelected;
       widget.notifyParent(widget.day);
-
-      // print(isSelected);
     });
   }
 }

@@ -21,7 +21,6 @@ class _UserViewState extends State<UserView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -62,7 +61,7 @@ class _UserViewState extends State<UserView> {
                       color: Styles.accentColor,
                     ),
                     title: Text(
-                      "$userName",
+                      userName,
                       style: Styles.title,
                     ),
                     trailing: Text(
@@ -125,6 +124,7 @@ class _UserViewState extends State<UserView> {
                                         onPressed: () async {
                                           final prefs = await SharedPreferences.getInstance();
                                           prefs.clear();
+                                          // ignore: use_build_context_synchronously
                                           context.pushNamed("landing_page");
                                         },
                                         style: ElevatedButton.styleFrom(

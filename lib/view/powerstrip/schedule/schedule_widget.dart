@@ -92,7 +92,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                 style: Styles.bodyTextGrey2,
               ),
               Text(
-                '${socketName} ${scheduleStatus}',
+                '$socketName $scheduleStatus',
                 style: Styles.bodyTextGrey2,
               ),
             ],
@@ -112,7 +112,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   List<String> repeatDay = [];
   late String socketName;
   late String scheduleStatus;
-  var _scheduleController = ScheduleController();
+  final _scheduleController = ScheduleController();
 
   /// ==========================================================================
   /// Local Function
@@ -120,7 +120,6 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   ///
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _powerstripSchedule = widget.powerstripSchedule;
     _powerstrip = _powerstripSchedule.powerstrip;
@@ -132,7 +131,6 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   void getRepeatDay() {
     repeatDay = [];
     var repeatAmount = _schedule.days.where((element) => element.isSelected == true).length;
-    // print(repeatAmount);
     if (repeatAmount == 7) {
       repeatDay.add("Setiap hari");
       return;
@@ -164,7 +162,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
         actions: <Widget>[
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -212,7 +210,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   ///
   /// Memanggil function [deleteSchedule] dari [ScheduleController]
   deleteSchedule(ScheduleProvider scheduleProvider) async {
-    await _scheduleController.deleteSchedule(_schedule.scheduleId!).then((value) => print(value!.message));
+    await _scheduleController.deleteSchedule(_schedule.scheduleId!);
     scheduleProvider.removeSchedule(_schedule.scheduleId!);
   }
 }

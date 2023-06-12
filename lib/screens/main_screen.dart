@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MainScreen extends StatelessWidget {
   // final User user;
   // MainScreen({super.key, required this.user});
-  MainScreen({super.key});
+  const MainScreen({super.key});
   // final UserModel user;
 
   @override
@@ -33,7 +33,7 @@ class MainScreen extends StatelessWidget {
         primarySwatch: Colors.red,
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
-      home: BottomBar(),
+      home: const BottomBar(),
     );
   }
 }
@@ -54,7 +54,7 @@ class _BottomBarState extends State<BottomBar> {
   List<Widget> _widgetoptions = <Widget>[
     // DashboardPage(user: user1),
     const DashboardView(),
-    ReportView(),
+    const ReportView(),
     const UserView(),
   ];
 
@@ -69,7 +69,7 @@ class _BottomBarState extends State<BottomBar> {
     _widgetoptions = <Widget>[
       // DashboardPage(user: user1),
       const DashboardView(),
-      ReportView(),
+      const ReportView(),
       const UserView(),
     ];
   }

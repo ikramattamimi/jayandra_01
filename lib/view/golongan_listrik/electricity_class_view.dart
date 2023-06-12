@@ -40,7 +40,6 @@ class _ElectricityClassViewState extends State<ElectricityClassView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // electricityClass = ;
   }
@@ -48,7 +47,6 @@ class _ElectricityClassViewState extends State<ElectricityClassView> {
   void selectRadio(value) {
     setState(() {
       electricityClass = value.toString();
-      print(electricityClass);
     });
   }
 
@@ -56,7 +54,6 @@ class _ElectricityClassViewState extends State<ElectricityClassView> {
   Widget build(BuildContext context) {
     var user = Provider.of<UserModel>(context);
     electricityClass = user.electricityclass;
-    print(user.electricityclass);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Styles.secondaryColor,

@@ -15,6 +15,7 @@ import 'package:jayandra_01/custom_widget/custom_elevated_button.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 /// Widget ini menampilkan halaman Login
@@ -110,7 +111,9 @@ class _LoginViewState extends State<LoginView> {
                                     onPressed: () async {
                                       try {
                                         _login(userModel, powerstripProvider);
-                                      } catch (e) {}
+                                      } catch (err) {
+                                        Logger().e(err);
+                                      }
                                     },
                                   ),
                                 )
@@ -203,12 +206,7 @@ class _LoginViewState extends State<LoginView> {
       Future.delayed(const Duration(seconds: 1), () {
         // Jika status autentikasi sukses dengan kode 0
         if (loginResponse.code == 0) {
-          // User user = loginResponse.data;
-          // User user1 = User(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
-          // context.pushNamed('main_page', extra: user);
           UserModel user = loginResponse.data;
-          // print("sukses");
-          // print(loginResponse.data);
           userModel.updateUser(user);
           powerstripProvider.initializeData(userModel.id);
           context.pushNamed('main_page', extra: user);
@@ -216,22 +214,6 @@ class _LoginViewState extends State<LoginView> {
       });
     }
   }
-
-  /// Get data powerstrip yang terhubung dengan akun user
-  ///
-  /// PS:
-  /// Sementara ketika login data powerstrip yang pernah terhubung dengan akun
-  /// user akan otomatis tampil di dashboard.
-  /// Next data powerstrip baru akan muncul ketika powerstrip sudah bisa ditambahkan
-  /// melalui aplikasi.
-  // void _getPowerstrip(int id) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   try {
-  //     await _powerstripController.getPowerstrip();
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 }
 
 /// Widget ini menampilkan [TextFormField] untuk field password.
@@ -262,7 +244,6 @@ class _PasswordTextFormState extends State<PasswordTextForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _hintText = widget.hintText;
     _formKey = widget.formKey;

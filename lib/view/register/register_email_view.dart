@@ -58,6 +58,7 @@ class _RegisterFormState extends State<RegisterForm> {
       });
 
       // Menampilkan pesan dari controller
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(response.message)),
       );
@@ -112,20 +113,6 @@ class _RegisterFormState extends State<RegisterForm> {
         ],
       ),
     );
-  }
-
-  void _submitForm() {
-    final form = _registerFormKey.currentState;
-    if (form != null) {
-      if (form.validate()) {
-        form.save();
-        // perform login with _email and _password
-      }
-    }
-  }
-
-  List<Widget> get _getRegisterFormWidget {
-    return [];
   }
 }
 

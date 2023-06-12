@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:workmanager/workmanager.dart';
 
+// ignore: unused_element
 final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() {
@@ -53,6 +54,7 @@ void main() {
   );
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   static const String title = "Jayandra";

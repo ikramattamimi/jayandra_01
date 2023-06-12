@@ -75,12 +75,8 @@ class PowerstripController {
   }
 
   Future<PowerstripResponse?> changeAllSocketStatus(int idPowerstrip, bool status) async {
-    // print('get powerstrip dipanggil');
     final prefs = await SharedPreferences.getInstance();
     PowerstripResponse? powerstripObjectResponse;
-
-    print('update all socket');
-
     // Get API data powerstrip
     await _powerstripRepositroy.changeAllSocketStatus(idPowerstrip, status).then((value) async {
       prefs.remove('powerstrip');

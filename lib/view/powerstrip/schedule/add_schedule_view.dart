@@ -5,7 +5,6 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/day_model.dart';
 import 'package:jayandra_01/models/days_indonesia.dart';
-import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
@@ -149,7 +148,6 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                     onTimePicked: (x) {
                       setState(() {
                         startTime = x;
-                        // print("The picked time is: $x");
                       });
                     },
                   ),
@@ -223,10 +221,10 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   int jumlahrepeatDay = 0;
   String days = '';
 
-  var _catatanController = TextEditingController();
+  final _catatanController = TextEditingController();
   String selectedSocket = "";
   late PowerstripModel powerstrip;
-  var _scheduleController = ScheduleController();
+  final _scheduleController = ScheduleController();
 
   /// ==========================================================================
   /// Local Function
@@ -253,7 +251,6 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   void addScheduleDay(DayModel day) {
     setState(() {
       var repeatAmount = daysIndo.where((element) => element.isSelected == true).length;
-      print(repeatAmount);
       if (day.isSelected) {
         daysIndo[day.id].isSelected = true;
       } else {
@@ -267,7 +264,6 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   void getRepeatDay() {
     repeatDay = [];
     var repeatAmount = daysIndo.where((element) => element.isSelected == true).length;
-    // print(repeatAmount);
     if (repeatAmount == 7) {
       repeatDay.add("Setiap hari");
       return;
@@ -306,7 +302,6 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   }
 
   /// Panggil API addSchedule
-
   addSchedule(ScheduleProvider scheduleProvider) async {
     ScheduleModel schedule = ScheduleModel(
       sockeId: int.parse(selectedSocket),
@@ -320,22 +315,14 @@ class _AddScheduleViewState extends State<AddScheduleView> {
     schedule.powerstripId = powerstrip.id;
 
     await _scheduleController.addSchedule(schedule).then((value) {
-      // scheduleToChange = schedule;
-      // print(scheduleToChange);
-      // var scheduledTime = DateTime.now().add(DateTime.now().difference(DateTime(0, 0, 0, startTime.hour, startTime.minute, 0, 0, 0)));
-      var scheduledTime = DateTime.now().add(Duration(seconds: 5));
-      var socket = powerstrip!.sockets!.firstWhere((element) => element.socketId == int.parse(selectedSocket));
+      var scheduledTime = DateTime.now().add(const Duration(seconds: 5));
+      var socket = powerstrip.sockets!.firstWhere((element) => element.socketId == int.parse(selectedSocket));
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
         UniqueIntGenerator().generateUniqueInt(),
         getScheduleNotification,
         params: {'socketName': socket.name, 'status': schedule.scheduleStatus},
       );
-      // AndroidAlarmManager.oneShotAt(
-      //   scheduledTime,
-      //   value.data.scheduleId + 100,
-      //   changeTimer,
-      // );
 
       scheduleProvider.addSchedule(schedule);
 
@@ -347,9 +334,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
 
       context.pop();
     });
-
-    MyResponse? addScheduleResponse = await _scheduleController.addSchedule(schedule);
-    print(addScheduleResponse);
+    await _scheduleController.addSchedule(schedule);
   }
 }
 

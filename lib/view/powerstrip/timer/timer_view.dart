@@ -73,7 +73,6 @@ class _TimerViewState extends State<TimerView> {
         itemCount: timersfromprovider.length,
         itemBuilder: (context, index) {
           final timerModel = timersfromprovider.elementAt(index);
-          print(timersfromprovider.length);
           return TimerWidget(powerstripTimer: PowerstripTimer(powerstrip: powerstrip, timer: timerModel));
         },
       ),
@@ -99,7 +98,6 @@ class _TimerViewState extends State<TimerView> {
   /// State Init
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     powerstrip = widget.powerstrip;
     getTimer();
@@ -120,7 +118,6 @@ class _TimerViewState extends State<TimerView> {
 
   /// Get Timer widget by data from [getTimer]
   Widget getTimerWidget(TimerModel timer) {
-    // print('get timer widget');
     var powerstripTimer = PowerstripTimer(powerstrip: powerstrip, timer: timer);
     return TimerWidget(
       powerstripTimer: powerstripTimer,

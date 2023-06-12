@@ -39,7 +39,6 @@ class _ElectricityClassRegisterViewState extends State<ElectricityClassRegisterV
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     electricityClass = electricityClassData[1]['nama'].toString();
   }
@@ -47,7 +46,6 @@ class _ElectricityClassRegisterViewState extends State<ElectricityClassRegisterV
   void selectRadio(value) {
     setState(() {
       electricityClass = value.toString();
-      print(electricityClass);
     });
   }
 

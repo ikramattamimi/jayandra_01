@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/powestrip_model.dart';
@@ -60,15 +59,10 @@ class _ScheduleViewState extends State<ScheduleView> {
           ],
         ),
         backgroundColor: Styles.primaryColor,
-        // body: ListView(
-        //   children: _schedules == null ? [] : _schedules!.map((schedule) => getScheduleWidget(schedule)).toList()
-        //     ..add(const Gap(16)),
-        // ),
         body: ListView.builder(
           itemCount: schedulesfromprovider.length,
           itemBuilder: (context, index) {
             final scheduleModel = schedulesfromprovider.elementAt(index);
-            print(schedulesfromprovider.length);
             return ScheduleWidget(powerstripSchedule: PowerstripSchedule(powerstrip: powerstrip, schedule: scheduleModel));
           },
         ));
@@ -89,7 +83,6 @@ class _ScheduleViewState extends State<ScheduleView> {
   /// State Init
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     powerstrip = widget.powerstrip;
     // getSchedule();
@@ -98,16 +91,12 @@ class _ScheduleViewState extends State<ScheduleView> {
   /// get Schedule
   getSchedule() async {
     await _scheduleController.getSchedule(powerstrip.id).then((value) {
-      setState(() {
-        // _schedules = value!.data!;
-        // print(_schedules);
-      });
+      setState(() {});
     });
   }
 
   /// Get Schedule Widget
   Widget getScheduleWidget(ScheduleModel schedule) {
-    // print('get schedule widget');
     var powerstripSchedule = PowerstripSchedule(powerstrip: powerstrip, schedule: schedule);
     return ScheduleWidget(
       powerstripSchedule: powerstripSchedule,

@@ -30,9 +30,6 @@ class LoginController {
         await prefs.setString('email', myResponse.data?.email ?? "");
         await prefs.setString('electricityclass', myResponse.data?.electricityclass ?? "");
         await prefs.setInt('user_id', myResponse.data?.id ?? 0);
-
-        // String? name = prefs.getString('user_name');
-        // print(name);
       }
 
       myResponse.message = "Login Berhasil";

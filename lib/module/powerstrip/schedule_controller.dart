@@ -12,7 +12,6 @@ class ScheduleController {
 
     // Get API data schedule
     await _scheduleRepository.getSchedule(powerstripId).then((value) {
-      print(value.statusCode);
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
@@ -29,16 +28,11 @@ class ScheduleController {
   }
 
   Future<MyResponse?> addSchedule(ScheduleModel schedule) async {
-    // print('get powerstrip dipanggil');
     // final prefs = await SharedPreferences.getInstance();
     MyResponse scheduleObjectResponse = MyResponse();
 
-    print('add schedule');
-
     // Get API data powerstrip
     await _scheduleRepository.addSchedule(schedule).then((value) {
-      // print(value.statusCode);
-
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
@@ -55,16 +49,10 @@ class ScheduleController {
   }
 
   Future<MyResponse?> deleteSchedule(int scheduleId) async {
-    // print('get powerstrip dipanggil');
-    // final prefs = await SharedPreferences.getInstance();
     MyResponse scheduleObjectResponse = MyResponse();
-
-    // print('add schedule');
 
     // Get API data powerstrip
     await _scheduleRepository.deleteSchedule(scheduleId).then((value) {
-      // print(value.statusCode);
-
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);

@@ -24,7 +24,7 @@ class NotificationService {
         channelDescription: 'SSsSSS',
         importance: Importance.max,
         priority: Priority.max,
-        sound: RawResourceAndroidNotificationSound('bell'),
+        sound: const RawResourceAndroidNotificationSound('bell'),
         playSound: true,
         ticker: 'ticker',
         additionalFlags: isAlarm ? Int32List.fromList(<int>[4]) : null,

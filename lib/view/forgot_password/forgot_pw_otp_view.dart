@@ -35,16 +35,6 @@ class _ForgotPasswordOTPViewState extends State<ForgotPasswordOTPView> {
     );
   }
 
-  void _submitForm() {
-    final form = _registerForm2Key.currentState;
-    if (form != null) {
-      if (form.validate()) {
-        form.save();
-        // perform login with _email and _password
-      }
-    }
-  }
-
   TextEditingController textEditingController = TextEditingController();
   // ..text = "123456";
 
@@ -61,7 +51,6 @@ class _ForgotPasswordOTPViewState extends State<ForgotPasswordOTPView> {
     errorController = StreamController<ErrorAnimationType>();
     startTimer();
     _email = widget.email;
-    print(_email);
   }
 
   @override
@@ -71,6 +60,7 @@ class _ForgotPasswordOTPViewState extends State<ForgotPasswordOTPView> {
     super.dispose();
   }
 
+  // ignore: unused_field
   late Timer _timer;
   int _start = 30;
   late String _resendTimer;

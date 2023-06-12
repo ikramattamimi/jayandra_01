@@ -58,7 +58,6 @@ class _DashboardViewState extends State<DashboardView> {
                           padding: EdgeInsets.zero,
                           onPressed: () async {
                             await Workmanager().cancelAll();
-                            print('Cancel all tasks completed');
                           },
                           icon: Icon(
                             Icons.notifications_rounded,
@@ -109,7 +108,6 @@ class _DashboardViewState extends State<DashboardView> {
     if (powerstrips != []) {
       _powerstripWidgets = [];
       for (var powerstrip in powerstrips) {
-        // print(powerstrip.totalActiveSocket);
         _powerstripWidgets!.add(
           PowerstripView(
             powerstripId: powerstrip.id,
@@ -132,7 +130,6 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUserName();
     _isPowerstripNull();
@@ -210,46 +207,8 @@ class _DashboardViewState extends State<DashboardView> {
       ];
     }
   }
-
-  /// Mengambil data powerstrip
-  ///
-  /// Jika data powerstrip berhasil didapat ketika login data akan
-  /// diambil dari [SharedPreferences].
-  ///
-  /// Sebaliknya, data powerstrip akan diambil dengan melakukan pemanggilan
-  /// API getPowerstrip pada [LoginController]
-  // void _getPowerstrip() async {
-  //   try {
-  //     _powerstripObjectResponse = await _controller.getPowerstrip().then((value) {
-  //       setState(() {
-  //         if (value!.data != null) {
-  //           _powerstrips = value.data;
-  //         } else {
-  //           _powerstrips = null;
-  //           _powerstripWidgets = [
-  //             SizedBox(
-  //               height: 50,
-  //               width: MediaQuery.of(context).size.width,
-  //               child: Center(
-  //                 child: Text(
-  //                   "Belum ada perangkat",
-  //                   style: Styles.bodyTextBlack,
-  //                 ),
-  //               ),
-  //             ),
-  //           ];
-  //         }
-  //         _getPowerstripWidget();
-  //       });
-  //       return null;
-  //     });
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 }
 
 void getNotification() {
-  print("Get Notification");
   NotificationService().showNotification(title: "Halo", body: "Bjirr");
 }

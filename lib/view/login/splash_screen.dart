@@ -21,7 +21,6 @@ class SplashScreen extends StatefulWidget {
 class _LandingPageState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // _myContext = context;
     // final userModel = Provider.of<UserModel>(_myContext, listen: false);

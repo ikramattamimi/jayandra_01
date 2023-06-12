@@ -14,18 +14,6 @@ void callbackDispatcher() async {
 
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
-      case "simpleTask":
-        // try {
-        print("==========================================="); //simpleTask will be emitted here.
-        logger.i("Native called background task: "); //simpleTask will be emitted here.
-        // } catch (err) {
-        //   logger.e(err.toString()); // Logger flutter package, prints error on the debug console
-        //   throw Exception(err);
-        // }
-        break;
-      case "anjay":
-        logger.d("message");
-        break;
       case "changeSocketStatusTimer":
         logger.i("Panggil setSocketStatus");
         logger.i(inputData);

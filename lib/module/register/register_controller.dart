@@ -23,7 +23,6 @@ class RegisterController {
       electricityclass: electricityClassValue,
     );
     http.Response result = await _repository.register(user);
-    print(result.body);
 
     if (result.statusCode == 200) {
       Map<String, dynamic> myBody = jsonDecode(result.body);

@@ -33,7 +33,7 @@ class _BudgetingViewState extends State<BudgetingView> {
         ),
       ),
       body: ListView(
-        children: [
+        children: const[
           Card(),
         ],
       ),

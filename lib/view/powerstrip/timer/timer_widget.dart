@@ -28,7 +28,6 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     powerstripTimer = widget.powerstripTimer;
     timer = powerstripTimer!.timer;
@@ -136,7 +135,7 @@ class _TimerWidgetState extends State<TimerWidget> {
         actions: <Widget>[
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -184,7 +183,7 @@ class _TimerWidgetState extends State<TimerWidget> {
   ///
   /// Memanggil function [deleteTimer] dari [TimerController]
   deleteTimer(TimerProvider timerProvider) async {
-    await _timerController.deleteTimer(timer!.timerId!).then((value) => print(value!.message));
+    await _timerController.deleteTimer(timer!.timerId!);
     timerProvider.removeTimer(timer!.timerId!);
   }
 }

@@ -5,7 +5,7 @@ import 'package:jayandra_01/utils/app_styles.dart';
 
 class BarChartWidget extends StatelessWidget {
   // const BarChartView({super.key});
-  BarChartWidget({super.key, required this.barData});
+  const BarChartWidget({super.key, required this.barData});
 
   final List<ChartItemModel> barData;
 

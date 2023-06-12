@@ -62,7 +62,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                     actions: <Widget>[
                       Center(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -147,7 +147,7 @@ class _PowerstripViewState extends State<PowerstripView> {
       ),
       backgroundColor: Styles.primaryColor,
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,

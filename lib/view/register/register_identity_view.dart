@@ -25,12 +25,9 @@ class _RegisterIdentityViewState extends State<RegisterIdentityView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _email = widget.email;
     _electricityClass = widget.electricityClass;
-    print(_email);
-    print(_electricityClass);
   }
 
   @override
@@ -46,16 +43,6 @@ class _RegisterIdentityViewState extends State<RegisterIdentityView> {
         ),
       ),
     );
-  }
-
-  void _submitForm() {
-    final form = _registerForm3Key.currentState;
-    if (form != null) {
-      if (form.validate()) {
-        form.save();
-        // perform login with _email and _password
-      }
-    }
   }
 
   void _register() async {
@@ -77,6 +64,7 @@ class _RegisterIdentityViewState extends State<RegisterIdentityView> {
       });
 
       // Menampilkan pesan dari controller
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(response.message)),
       );

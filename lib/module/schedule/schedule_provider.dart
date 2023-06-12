@@ -8,6 +8,7 @@ import 'package:jayandra_01/module/schedule/schedule_repository.dart';
 import 'package:provider/provider.dart';
 
 class ScheduleProvider with ChangeNotifier {
+  // ignore: prefer_final_fields
   List<ScheduleModel> _schedules = [];
 
   List<ScheduleModel> get schedules => _schedules;
@@ -20,8 +21,6 @@ class ScheduleProvider with ChangeNotifier {
 
   void addSchedule(ScheduleModel schedule) {
     _schedules.add(schedule);
-    print("schedule ditambah ke provider");
-    print(_schedules.length);
     notifyListeners();
   }
 

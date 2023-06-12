@@ -29,7 +29,6 @@ class _PowerstripViewState extends State<PowerstripView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     // _toggleStatus = widget.powerstrip.isPowerstripActive;
     // _totalActiveSocket = widget.powerstrip.totalActiveSocket;
@@ -66,7 +65,6 @@ class _PowerstripViewState extends State<PowerstripView> {
 
     return GestureDetector(
       onTap: () {
-        print("Perangkat ditekan");
         context.pushNamed('powerstrip', extra: myPowerstrip.id);
       },
       child: SizedBox(

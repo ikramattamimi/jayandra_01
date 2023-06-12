@@ -57,7 +57,7 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                                 Expanded(
                                   child: TabBarView(
                                     controller: _tabController,
-                                    children: [
+                                    children: const [
                                       HomeReportWidget(),
                                       PowerstripReportWidget(),
                                       SocketReportWidget(),
@@ -87,7 +87,6 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
   }
