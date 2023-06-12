@@ -11,6 +11,8 @@ import 'package:jayandra_01/page/golongan_listrik/electricity_class_page.dart';
 import 'package:jayandra_01/page/golongan_listrik/electricity_class_register_page.dart';
 import 'package:jayandra_01/page/login/landing_page.dart';
 import 'package:jayandra_01/page/login/login_page.dart';
+import 'package:jayandra_01/page/report/budgeting/budgeting_page.dart';
+import 'package:jayandra_01/page/report/report_page.dart';
 import 'package:jayandra_01/page/user/edit_profile_page.dart';
 import 'package:jayandra_01/page/register/register_page_1.dart';
 import 'package:jayandra_01/page/register/register_page_2.dart';
@@ -118,6 +120,11 @@ class AppRouter {
               idTerminal: state.extra as int,
               // terminal: state.extra as TerminalModel,
             ),
+          ),
+          GoRoute(
+            path: "budgeting",
+            name: "budgeting_page",
+            builder: (BuildContext context, GoRouterState state) => BudgetingPage()
           ),
           GoRoute(
             path: "schedule",

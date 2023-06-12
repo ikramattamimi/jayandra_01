@@ -8,6 +8,8 @@ import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/timeofday_converter.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:jayandra_01/background-task/bgtask.dart';
 
 class TimerView extends StatefulWidget {
   const TimerView({super.key, required this.terminalTimer});
@@ -98,6 +100,8 @@ class _TimerViewState extends State<TimerView> {
                           setState(() {
                             timer!.status = value;
                             timerProvider.changeTimerStatus(timer!.timerId!, timer!.status);
+
+                            timer!.status ? null : cancel("changeSocketStatusTimer");
                           });
                         },
                         activeColor: Styles.accentColor,

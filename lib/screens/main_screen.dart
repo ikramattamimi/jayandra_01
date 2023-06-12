@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/page/dashboard/dashboard_page.dart';
 import 'package:jayandra_01/page/user/user_page.dart';
-import 'package:jayandra_01/page/report/report_screen.dart';
+import 'package:jayandra_01/page/report/report_page.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,9 +33,7 @@ class MainScreen extends StatelessWidget {
         primarySwatch: Colors.red,
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
-      home: BottomBar(
-          // user: user1,
-          ),
+      home: BottomBar(),
     );
   }
 }
@@ -56,7 +54,7 @@ class _BottomBarState extends State<BottomBar> {
   List<Widget> _widgetoptions = <Widget>[
     // DashboardPage(user: user1),
     const DashboardPage(),
-    const ReportScreen(),
+    ReportPage(),
     const UserPage(),
   ];
 
@@ -71,7 +69,7 @@ class _BottomBarState extends State<BottomBar> {
     _widgetoptions = <Widget>[
       // DashboardPage(user: user1),
       const DashboardPage(),
-      const ReportScreen(),
+      ReportPage(),
       const UserPage(),
     ];
   }

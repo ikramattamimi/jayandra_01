@@ -322,8 +322,8 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
     await _scheduleController.addSchedule(schedule).then((value) {
       // scheduleToChange = schedule;
       // print(scheduleToChange);
-      var scheduledTime = DateTime.now().add(Duration(hours: startTime.hour, minutes: startTime.minute));
-      // var scheduledTime = DateTime.now().add(Duration(seconds: 5));
+      // var scheduledTime = DateTime.now().add(DateTime.now().difference(DateTime(0, 0, 0, startTime.hour, startTime.minute, 0, 0, 0)));
+      var scheduledTime = DateTime.now().add(Duration(seconds: 5));
       var socket = terminal!.sockets!.firstWhere((element) => element.socketId == int.parse(selectedSocket));
       AndroidAlarmManager.oneShotAt(
         scheduledTime,

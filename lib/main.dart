@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jayandra_01/background-task/bgtask.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/terminal/terminal_provider.dart';
@@ -13,6 +14,8 @@ import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 
 final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -22,6 +25,14 @@ void main() {
   NotificationService().initNotification();
   AlarmManagerService().initAlarmManager();
   tz.initializeTimeZones();
+
+  Workmanager().initialize(
+    callbackDispatcher, // The top level function, aka callbackDispatcher
+    isInDebugMode: true, // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+  );
+  // Workmanager().registerOneOffTask("bebas", "simpleTask");
+  // Workmanager().registerPeriodicTask
+
   runApp(
     MultiProvider(
       providers: [
@@ -32,12 +43,11 @@ void main() {
           create: (context) => ScheduleProvider(),
         ),
         ChangeNotifierProvider<UserModel>(
-        create: (context) => UserModel(),
+          create: (context) => UserModel(),
         ),
         ChangeNotifierProvider<TerminalProvider>(
-        create: (context) => TerminalProvider(),
+          create: (context) => TerminalProvider(),
         ),
-        
       ],
       child: MyApp(),
     ),
@@ -46,9 +56,9 @@ void main() {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-
   static const String title = "Jayandra";
   final AppRouter _appRouter = AppRouter();
+
   late GoRouter _router;
 
   // This widget is the root of your application.

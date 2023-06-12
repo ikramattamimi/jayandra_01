@@ -12,6 +12,7 @@ import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/unique_int_generator.dart';
 import 'package:jayandra_01/widget/white_container.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
 
 // import 'package:timezone/timezone.dart' as tz;
 TimerModel? timerToChange;
@@ -163,9 +164,6 @@ class _AddTimerPageState extends State<AddTimerPage> {
     super.initState();
     terminal = widget.terminal;
     selectedValue = widget.terminal.sockets![0].socketId.toString();
-    // print(terminal!.name);
-    // var scheduledTime = DateTime.now().add(Duration(hours: 0, minutes: 2));
-    // print(scheduledTime);
   }
 
   /// Simpan timer ke database
@@ -186,15 +184,15 @@ class _AddTimerPageState extends State<AddTimerPage> {
       var socket = terminal!.sockets!.firstWhere((element) => element.socketId == int.parse(selectedValue));
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
-        value!.data.timerId,
+        value!.data.timerId ?? 12,
         getTimerNotification,
-        params: {'socketName': socket.name},
+        params: {
+          'socketName': socket.name,
+          'socketId': socket.socketId,
+          'terminalId': socket.terminalId,
+          'status': socket.status,
+        },
       );
-      // AndroidAlarmManager.oneShotAt(
-      //   scheduledTime,
-      //   value.data.timerId + 100,
-      //   changeTimer,
-      // );
 
       timerProvider.addTimer(timer);
 
@@ -206,6 +204,8 @@ class _AddTimerPageState extends State<AddTimerPage> {
 
       context.pop();
     });
+
+    // Workmanager().cancelByUniqueName(uniqueName)
   }
 
   /// Getter nama socket untuk dropdown
@@ -233,7 +233,27 @@ class _AddTimerPageState extends State<AddTimerPage> {
   }
 }
 
-getTimerNotification(int idTimer, Map<String, dynamic> socket) {
+getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
+  TimerModel timer = TimerModel(
+    socketId: socket['socketId'],
+    status: socket['status'],
+    terminalId: socket['terminalId'],
+  );
+  await Workmanager().registerOneOffTask(
+    "timer.terminal${socket['terminalId']}.socket${socket['socketName']}",
+    "changeSocketStatusTimer",
+    inputData: {
+      'socketId': socket['socketId'],
+      'terminalId': socket['terminalId'],
+      'status': false,
+    },
+    // initialDelay: Duration(seconds: 5),
+    existingWorkPolicy: ExistingWorkPolicy.replace,
+    constraints: Constraints(networkType: NetworkType.connected),
+    backoffPolicy: BackoffPolicy.linear,
+    backoffPolicyDelay: const Duration(seconds: 10),
+  );
+
   UniqueIntGenerator generator = UniqueIntGenerator();
   NotificationService().showAlarm(
     id: generator.generateUniqueInt(),

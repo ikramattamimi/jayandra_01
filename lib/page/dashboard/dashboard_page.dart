@@ -12,11 +12,13 @@ import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/page/report/report_view.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/utils/connectivity.dart';
 import 'package:jayandra_01/widget/animated_container.dart';
 import 'package:jayandra_01/widget/terminal_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:workmanager/workmanager.dart';
 
 final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -59,26 +61,9 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: () {
-                            // final now = DateTime.now();
-                            // final scheduledDate = tz.TZDateTime.from(
-                            //   now.add(const Duration(seconds: 5)), // Set the notification for tomorrow
-                            //   tz.local,
-                            // );
-                            // final time = Time(10, 0, 0); // Set the time for the notification (e.g., 10:00 AM)
-                            // final schedule = DailyTimeIntervalSchedule(
-                            //   startTime: TimeOfDay.fromDateTime(time).toDuration(),
-                            //   endTime: TimeOfDay.fromDateTime(time).toDuration(),
-                            //   interval: const Duration(days: 1), // Repeat daily
-                            // );
-                            AndroidAlarmManager.oneShotAt(
-                                DateTime.now().add(
-                                  Duration(minutes: 1),
-                                ),
-                                1,
-                                getNotification,
-                                wakeup: true);
-                            // NotificationService().showNotificationAtTime(title: "Halo", body: "Notif", scheduledDate: scheduledDate);
+                          onPressed: () async {
+                            await Workmanager().cancelAll();
+                            print('Cancel all tasks completed');
                           },
                           icon: Icon(
                             Icons.notifications_rounded,
@@ -156,6 +141,7 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     getUserName();
     _isTerminalNull();
+    ConnectivityStatus.checkConnectivityState();
 
     BuildContext myContext = context;
 

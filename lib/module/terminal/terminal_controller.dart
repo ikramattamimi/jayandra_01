@@ -42,9 +42,9 @@ class TerminalController {
     // return terminalObjectResponse;
   }
 
-  Future<MyResponse?> updateSocket(SocketModel socket) async {
+  Future<MyResponse?> setSocketStatus(SocketModel socket) async {
     http.Response responseSocket;
-    responseSocket = await _terminalRepositroy.updateSocket(socket);
+    responseSocket = await _terminalRepositroy.setSocketStatus(socket.socketId!, socket.terminalId!, socket.status!);
 
     // Parse String jsonke Map
     Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);

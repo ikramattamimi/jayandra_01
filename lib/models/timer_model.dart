@@ -8,7 +8,7 @@ class TimerModel extends ChangeNotifier {
   final TimeOfDay? time;
   bool status;
 
-  TimerModel({this.timerId = 0, this.socketId = 0, this.time, this.status = false});
+  TimerModel({this.timerId = 0, this.socketId = 0, this.time, this.status = false, this.terminalId});
 
   factory TimerModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');

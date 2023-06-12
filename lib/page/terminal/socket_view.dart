@@ -5,6 +5,7 @@ import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
+import 'package:logger/logger.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +64,7 @@ class _SocketState extends State<SocketView> {
                 terminal.updateOneSocketStatus(mySocket.socketId!, mySocket.status!);
                 widget.changeParentState(terminal);
               });
-              _terminalController.updateSocket(mySocket);
+              _terminalController.setSocketStatus(mySocket);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Message'),

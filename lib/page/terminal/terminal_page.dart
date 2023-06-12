@@ -7,6 +7,7 @@ import 'package:jayandra_01/models/terminal_model.dart';
 import 'package:jayandra_01/module/terminal/terminal_controller.dart';
 import 'package:jayandra_01/module/terminal/terminal_provider.dart';
 import 'package:jayandra_01/page/terminal/socket_view.dart';
+import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/widget/custom_text_form_field.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -145,86 +146,82 @@ class _TerminalPageState extends State<TerminalPage> {
         ),
       ),
       backgroundColor: Styles.primaryColor,
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  flex: 5,
-                  child: Card(
-                    elevation: 0,
-                    child: Column(
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () => setTerminal(myTerminal),
-                          icon: Icon(
-                            Icons.power_settings_new_rounded,
-                            color: myTerminal.isTerminalActive ? Styles.accentColor : Styles.accentColor2,
-                            size: 32,
-                          ),
-                        ),
-                        const Gap(16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: getSockets(myTerminal.sockets!),
-                        ),
-                      ],
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              flex: 5,
+              child: Card(
+                elevation: 0,
+                child: Column(
+                  children: [
+                    IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => setTerminal(myTerminal),
+                      icon: Icon(
+                        Icons.power_settings_new_rounded,
+                        color: myTerminal.isTerminalActive ? Styles.accentColor : Styles.accentColor2,
+                        size: 32,
+                      ),
+                    ),
+                    const Gap(16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: getSockets(myTerminal.sockets!),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Column(
+                children: [
+                  const Gap(5),
+                  IconButton(
+                    padding: const EdgeInsets.all(0),
+                    onPressed: () {
+                      context.pushNamed('terminal_schedule', extra: terminal);
+                    },
+                    icon: Icon(
+                      Icons.schedule_rounded,
+                      color: Styles.accentColor,
+                      size: 32,
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Column(
-                    children: [
-                      const Gap(5),
-                      IconButton(
-                        padding: const EdgeInsets.all(0),
-                        onPressed: () {
-                          context.pushNamed('terminal_schedule', extra: terminal);
-                        },
-                        icon: Icon(
-                          Icons.schedule_rounded,
-                          color: Styles.accentColor,
-                          size: 32,
-                        ),
-                      ),
-                      Text(
-                        "Jadwal",
-                        style: Styles.bodyTextBlack3,
-                      ),
-                    ],
+                  Text(
+                    "Jadwal",
+                    style: Styles.bodyTextBlack3,
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Column(
-                    children: [
-                      const Gap(5),
-                      IconButton(
-                        padding: const EdgeInsets.all(0),
-                        onPressed: () => context.pushNamed("terminal_timer", extra: terminal),
-                        icon: Icon(
-                          Icons.timer,
-                          color: Styles.accentColor,
-                          size: 32,
-                        ),
-                      ),
-                      Text(
-                        "Timer",
-                        style: Styles.bodyTextBlack3,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            Flexible(
+              flex: 1,
+              child: Column(
+                children: [
+                  const Gap(5),
+                  IconButton(
+                    padding: const EdgeInsets.all(0),
+                    onPressed: () => context.pushNamed("terminal_timer", extra: terminal),
+                    icon: Icon(
+                      Icons.timer,
+                      color: Styles.accentColor,
+                      size: 32,
+                    ),
+                  ),
+                  Text(
+                    "Timer",
+                    style: Styles.bodyTextBlack3,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -289,8 +286,8 @@ class _TerminalPageState extends State<TerminalPage> {
     List<Widget> socketWidgets = [];
     for (var element in mySockets) {
       socketWidgets.add(
-        SizedBox(
-          height: 165,
+        Container(
+          constraints: BoxConstraints(minHeight: AppLayout.getSize(context).height / 5.5),
           child: SocketView(
             socketId: element.socketId!,
             terminalId: element.terminalId!,

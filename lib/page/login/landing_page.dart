@@ -106,20 +106,20 @@ class LandingPage extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              "Pantau dan Kendalikan",
-              style: Styles.headingStyleWhite2,
-            ),
-            const Gap(8),
-            Text(
-              "Pantau penggunaan listrik dan kendalikan terminal dari Jayandra Powerstrip",
-              style: TextStyle(
-                fontWeight: FontWeight.w200,
-                color: Styles.secondaryColor,
-                fontSize: 14,
-              ),
-            ),
-            const Gap(32),
+            // Text(
+            //   "Pantau dan Kendalikan",
+            //   style: Styles.headingStyleWhite2,
+            // ),
+            // const Gap(8),
+            // Text(
+            //   "Pantau penggunaan listrik dan kendalikan terminal dari Jayandra Powerstrip",
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.w200,
+            //     color: Styles.secondaryColor,
+            //     fontSize: 14,
+            //   ),
+            // ),
+            // const Gap(32),
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
