@@ -1,4 +1,4 @@
-import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/powestrip_model.dart';
 
 class MyResponse<T> {
   int code;
@@ -28,12 +28,12 @@ class MyArrayResponse {
   factory MyArrayResponse.fromJson(Map<String, dynamic> json, Function fromJsonModel) {
     List objectList = [];
 
-    // List terminal dari response API
+    // List powerstrip dari response API
     final responseObjectList = json['data'];
 
-    // Jika list terminal tidak kosong
+    // Jika list powerstrip tidak kosong
     if (responseObjectList != null) {
-      // Pembuatan objek terminal
+      // Pembuatan objek powerstrip
       for (var responseObject in responseObjectList) {
         objectList.add(fromJsonModel(responseObject));
       }
@@ -48,31 +48,31 @@ class MyArrayResponse {
   }
 }
 
-class TerminalResponse {
+class PowerstripResponse {
   int code;
   String message;
-  List<TerminalModel>? data;
+  List<PowerstripModel>? data;
 
-  TerminalResponse({this.code = 0, this.message = "", this.data});
+  PowerstripResponse({this.code = 0, this.message = "", this.data});
 
-  factory TerminalResponse.fromJsonArray(Map<String, dynamic> json, Function fromJsonModel) {
-    List<TerminalModel> terminals = [];
+  factory PowerstripResponse.fromJsonArray(Map<String, dynamic> json, Function fromJsonModel) {
+    List<PowerstripModel> powerstrips = [];
 
-    // List terminal dari response API
-    final terminalList = json['data'];
+    // List powerstrip dari response API
+    final powerstripList = json['data'];
 
-    // Jika list terminal tidak kosong
-    if (terminalList != null) {
-      // Pembuatan objek terminal
-      for (var terminal in terminalList) {
-        terminals.add(fromJsonModel(terminal));
+    // Jika list powerstrip tidak kosong
+    if (powerstripList != null) {
+      // Pembuatan objek powerstrip
+      for (var powerstrip in powerstripList) {
+        powerstrips.add(fromJsonModel(powerstrip));
       }
     }
-    return TerminalResponse(
+    return PowerstripResponse(
       // code: (json['code'] != null) ? json['code'] : 0,
       code: json['code'],
       message: json['message'],
-      data: (json['data'] != null) ? terminals : null,
+      data: (json['data'] != null) ? powerstrips : null,
     );
   }
 }

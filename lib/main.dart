@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:jayandra_01/background-task/bgtask.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
-import 'package:jayandra_01/module/terminal/terminal_provider.dart';
+import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/router/app_router.dart';
 import 'package:jayandra_01/services/alarm_manager_service.dart';
@@ -14,7 +14,6 @@ import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
 final _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -45,8 +44,8 @@ void main() {
         ChangeNotifierProvider<UserModel>(
           create: (context) => UserModel(),
         ),
-        ChangeNotifierProvider<TerminalProvider>(
-          create: (context) => TerminalProvider(),
+        ChangeNotifierProvider<PowerstripProvider>(
+          create: (context) => PowerstripProvider(),
         ),
       ],
       child: MyApp(),

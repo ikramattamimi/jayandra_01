@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/day_model.dart';
 import 'package:jayandra_01/models/days_indonesia.dart';
-import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/powestrip_model.dart';
 
 class ScheduleModel extends ChangeNotifier {
   ScheduleModel({
@@ -21,7 +21,7 @@ class ScheduleModel extends ChangeNotifier {
   bool scheduleStatus;
   final String note;
   final List<DayModel> days;
-  int? terminalId;
+  int? powerstripId;
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');
@@ -52,9 +52,9 @@ class ScheduleModel extends ChangeNotifier {
   }
 }
 
-class TerminalSchedule {
-  TerminalModel terminal;
+class PowerstripSchedule {
+  PowerstripModel powerstrip;
   ScheduleModel schedule;
 
-  TerminalSchedule({required this.terminal, required this.schedule});
+  PowerstripSchedule({required this.powerstrip, required this.schedule});
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/my_response.dart';
-import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_repository.dart';
 import 'package:provider/provider.dart';
@@ -12,9 +12,9 @@ class ScheduleProvider with ChangeNotifier {
 
   List<ScheduleModel> get schedules => _schedules;
 
-  late TerminalModel _terminal;
+  late PowerstripModel _powerstrip;
 
-  TerminalModel get terminal => _terminal;
+  PowerstripModel get powerstrip => _powerstrip;
 
   final _scheduleRepository = ScheduleRepository();
 
@@ -32,8 +32,8 @@ class ScheduleProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  set setTerminal(TerminalModel terminal) {
-    _terminal = terminal;
+  set setPowerstrip(PowerstripModel powerstrip) {
+    _powerstrip = powerstrip;
     notifyListeners();
   }
 
@@ -48,21 +48,21 @@ class ScheduleProvider with ChangeNotifier {
 
     // Logika pemanggilan API untuk mendapatkan data schedule
     // Get API data schedule
-    await _scheduleRepository.getSchedule(_terminal.id).then((value) {
+    await _scheduleRepository.getSchedule(_powerstrip.id).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
 
-        // Response dengan response.data berupa List dari objek Terminal
+        // Response dengan response.data berupa List dari objek Powerstrip
         scheduleObjectResponse = MyArrayResponse.fromJson(scheduleMapData, ScheduleModel.fromJson);
-        scheduleObjectResponse.message = "Data terminal berhasil dimuat";
+        scheduleObjectResponse.message = "Data powerstrip berhasil dimuat";
         // return scheduleObjectResponse.data;
       }
     });
 
     List<ScheduleModel> scheduleModels = [];
     for (ScheduleModel scheduleData in scheduleObjectResponse.data!) {
-      scheduleData.terminalId = _terminal.id;
+      scheduleData.powerstripId = _powerstrip.id;
       scheduleModels.add(scheduleData);
     }
 

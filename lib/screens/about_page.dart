@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/widget/circle_icon_container.dart';
+import 'package:jayandra_01/custom_widget/circle_icon_container.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});

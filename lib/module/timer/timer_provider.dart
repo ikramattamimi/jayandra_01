@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/my_response.dart';
-import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/timer/timer_repository.dart';
 import 'package:provider/provider.dart';
@@ -12,9 +12,9 @@ class TimerProvider with ChangeNotifier {
 
   List<TimerModel> get timers => _timers;
 
-  late TerminalModel _terminal;
+  late PowerstripModel _powerstrip;
 
-  TerminalModel get terminal => _terminal;
+  PowerstripModel get powerstrip => _powerstrip;
 
   final _timerRepository = TimerRepository();
 
@@ -36,8 +36,8 @@ class TimerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  set setTerminal(TerminalModel terminal) {
-    _terminal = terminal;
+  set setPowerstrip(PowerstripModel powerstrip) {
+    _powerstrip = powerstrip;
     notifyListeners();
   }
 
@@ -52,14 +52,14 @@ class TimerProvider with ChangeNotifier {
 
     // Logika pemanggilan API untuk mendapatkan data timer
     // Get API data timer
-    await _timerRepository.getTimer(_terminal.id).then((value) {
+    await _timerRepository.getTimer(_powerstrip.id).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);
 
-        // Response dengan response.data berupa List dari objek Terminal
+        // Response dengan response.data berupa List dari objek Powerstrip
         timerObjectResponse = MyArrayResponse.fromJson(timerMapData, TimerModel.fromJson);
-        timerObjectResponse.message = "Data terminal berhasil dimuat";
+        timerObjectResponse.message = "Data powerstrip berhasil dimuat";
         // return timerObjectResponse.data;
       }
     });
@@ -75,7 +75,7 @@ class TimerProvider with ChangeNotifier {
       // final id = timerData['id'];
       // final time = timerData['time'];
       // final timerModel = TimerModel(id_timer: id, time: time);
-      timerData.terminalId = _terminal.id;
+      timerData.powerstripId = _powerstrip.id;
       timerModels.add(timerData);
     }
 

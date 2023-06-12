@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/powestrip_model.dart';
 
 class TimerModel extends ChangeNotifier {
   final int? timerId;
   final int? socketId;
-  int? terminalId;
+  int? powerstripId;
   final TimeOfDay? time;
   bool status;
 
-  TimerModel({this.timerId = 0, this.socketId = 0, this.time, this.status = false, this.terminalId});
+  TimerModel({this.timerId = 0, this.socketId = 0, this.time, this.status = false, this.powerstripId});
 
   factory TimerModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');
@@ -30,9 +30,9 @@ class TimerModel extends ChangeNotifier {
   }
 }
 
-class TerminalTimer {
-  TerminalModel terminal;
+class PowerstripTimer {
+  PowerstripModel powerstrip;
   TimerModel timer;
 
-  TerminalTimer({required this.terminal, required this.timer});
+  PowerstripTimer({required this.powerstrip, required this.timer});
 }

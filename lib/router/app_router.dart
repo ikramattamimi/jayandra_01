@@ -1,28 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/terminal_model.dart';
+import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
-import 'package:jayandra_01/page/add_device/add_device_page.dart';
-import 'package:jayandra_01/page/add_device/adding_device.dart';
-import 'package:jayandra_01/page/add_device/confirm_pairing.dart';
-import 'package:jayandra_01/page/add_device/done_add_device.dart';
-import 'package:jayandra_01/page/forgot_password/forgot_password.dart';
-import 'package:jayandra_01/page/golongan_listrik/electricity_class_page.dart';
-import 'package:jayandra_01/page/golongan_listrik/electricity_class_register_page.dart';
-import 'package:jayandra_01/page/login/landing_page.dart';
-import 'package:jayandra_01/page/login/login_page.dart';
-import 'package:jayandra_01/page/report/budgeting/budgeting_page.dart';
-import 'package:jayandra_01/page/report/report_page.dart';
-import 'package:jayandra_01/page/user/edit_profile_page.dart';
-import 'package:jayandra_01/page/register/register_page_1.dart';
-import 'package:jayandra_01/page/register/register_page_2.dart';
-import 'package:jayandra_01/page/register/register_page_3.dart';
-import 'package:jayandra_01/page/terminal/schedule/add_schedule_page.dart';
-import 'package:jayandra_01/page/terminal/timer/add_timer_page.dart';
-import 'package:jayandra_01/page/terminal/timer/edit_timer_page.dart';
-import 'package:jayandra_01/page/terminal/schedule/schedule_page.dart';
-import 'package:jayandra_01/page/terminal/terminal_page.dart';
-import 'package:jayandra_01/page/terminal/timer/timer_page.dart';
+import 'package:jayandra_01/view/add_device/add_device_page.dart';
+import 'package:jayandra_01/view/add_device/adding_device.dart';
+import 'package:jayandra_01/view/add_device/confirm_pairing.dart';
+import 'package:jayandra_01/view/add_device/done_add_device.dart';
+import 'package:jayandra_01/view/forgot_password/forgot_pw_email.view.dart';
+import 'package:jayandra_01/view/golongan_listrik/electricity_class_view.dart';
+import 'package:jayandra_01/view/golongan_listrik/electricity_class_register_view.dart';
+import 'package:jayandra_01/view/login/splash_screen.dart';
+import 'package:jayandra_01/view/login/login_view.dart';
+import 'package:jayandra_01/view/report/budgeting/budgeting_view.dart';
+import 'package:jayandra_01/view/user/edit_profile_view.dart';
+import 'package:jayandra_01/view/register/register_email_view.dart';
+import 'package:jayandra_01/view/register/register_otp_view.dart';
+import 'package:jayandra_01/view/register/register_elclass_view.dart';
+import 'package:jayandra_01/view/powerstrip/schedule/add_schedule_view.dart';
+import 'package:jayandra_01/view/powerstrip/timer/add_timer_view.dart';
+import 'package:jayandra_01/view/powerstrip/timer/edit_timer_view.dart';
+import 'package:jayandra_01/view/powerstrip/schedule/schedule_view.dart';
+import 'package:jayandra_01/view/powerstrip/powerstrip_view.dart';
+import 'package:jayandra_01/view/powerstrip/timer/timer_view.dart';
 import 'package:jayandra_01/screens/about_page.dart';
 import 'package:jayandra_01/screens/main_screen.dart';
 
@@ -48,19 +47,19 @@ class AppRouter {
           GoRoute(
             path: "login_page",
             name: "login_page",
-            builder: (BuildContext context, GoRouterState state) => const LoginPage(),
+            builder: (BuildContext context, GoRouterState state) => const LoginView(),
           ),
 
           // REGISTER PAGE ROUTE
           GoRoute(
             path: "register_page",
             name: "register_page",
-            builder: (BuildContext context, GoRouterState state) => const RegisterPage1(),
+            builder: (BuildContext context, GoRouterState state) => const RegisterEmailView(),
           ),
           GoRoute(
             path: "register_page_2",
             name: "register_page_2",
-            builder: (BuildContext context, GoRouterState state) => const RegisterPage2(
+            builder: (BuildContext context, GoRouterState state) => const RegisterOTPView(
               email: "ikram@gmail.com",
             ),
           ),
@@ -74,19 +73,19 @@ class AppRouter {
           GoRoute(
             path: "electricity_class_register_page",
             name: "electricity_class_register_page",
-            builder: (BuildContext context, GoRouterState state) => const ElectricityClassRegisterPage(),
+            builder: (BuildContext context, GoRouterState state) => const ElectricityClassRegisterView(),
           ),
 
           // FORGOT PASSWORD PAGE ROUTE
           GoRoute(
             path: "forgot_password_page",
             name: "forgot_password_page",
-            builder: (BuildContext context, GoRouterState state) => const ForgotPassword1(),
+            builder: (BuildContext context, GoRouterState state) => const ForgotPasswordEmailView(),
           ),
           GoRoute(
             path: "forgot_password_page2",
             name: "forgot_password_page2",
-            builder: (BuildContext context, GoRouterState state) => const ForgotPassword1(),
+            builder: (BuildContext context, GoRouterState state) => const ForgotPasswordEmailView(),
           ),
         ],
       ),
@@ -100,7 +99,7 @@ class AppRouter {
           GoRoute(
             path: "edit_profile",
             name: "edit_profile",
-            builder: (BuildContext context, GoRouterState state) => const EditProfilePage(),
+            builder: (BuildContext context, GoRouterState state) => const EditProfileView(),
           ),
           GoRoute(
             path: "about",
@@ -110,49 +109,49 @@ class AppRouter {
           GoRoute(
             path: "electricity_class",
             name: "electricity_class_page",
-            builder: (BuildContext context, GoRouterState state) => const ElectricityClassPage(),
+            builder: (BuildContext context, GoRouterState state) => const ElectricityClassView(),
           ),
           // TERMINAL PAGE ROUTE
           GoRoute(
-            path: "terminal",
-            name: "terminal",
-            builder: (BuildContext context, GoRouterState state) => TerminalPage(
-              idTerminal: state.extra as int,
-              // terminal: state.extra as TerminalModel,
+            path: "powerstrip",
+            name: "powerstrip",
+            builder: (BuildContext context, GoRouterState state) => PowerstripView(
+              idPowerstrip: state.extra as int,
+              // powerstrip: state.extra as PowerstripModel,
+            ),
+          ),
+          GoRoute(path: "budgeting", name: "budgeting_page", builder: (BuildContext context, GoRouterState state) => BudgetingView()),
+          GoRoute(
+            path: "schedule",
+            name: "powerstrip_schedule",
+            builder: (BuildContext context, GoRouterState state) => ScheduleView(
+              powerstrip: state.extra as PowerstripModel,
             ),
           ),
           GoRoute(
-            path: "budgeting",
-            name: "budgeting_page",
-            builder: (BuildContext context, GoRouterState state) => BudgetingPage()
-          ),
-          GoRoute(
-            path: "schedule",
-            name: "terminal_schedule",
-            builder: (BuildContext context, GoRouterState state) => SchedulePage(terminal: state.extra as TerminalModel,),
-          ),
-          GoRoute(
             path: "add_schedule",
-            name: "terminal_schedule_add",
-            builder: (BuildContext context, GoRouterState state) => AddSchedulePage(terminal: state.extra as TerminalModel,),
+            name: "powerstrip_schedule_add",
+            builder: (BuildContext context, GoRouterState state) => AddScheduleView(
+              powerstrip: state.extra as PowerstripModel,
+            ),
           ),
           GoRoute(
             path: "timer",
-            name: "terminal_timer",
-            builder: (BuildContext context, GoRouterState state) => TimerPage(
-              terminal: state.extra as TerminalModel,
+            name: "powerstrip_timer",
+            builder: (BuildContext context, GoRouterState state) => TimerView(
+              powerstrip: state.extra as PowerstripModel,
             ),
           ),
           GoRoute(
             path: "add_timer",
-            name: "terminal_timer_add",
-            builder: (BuildContext context, GoRouterState state) => AddTimerPage(terminal: state.extra as TerminalModel),
+            name: "powerstrip_timer_add",
+            builder: (BuildContext context, GoRouterState state) => AddTimerPage(powerstrip: state.extra as PowerstripModel),
           ),
           GoRoute(
             path: "edit_timer",
-            name: "terminal_timer_edit",
-            builder: (BuildContext context, GoRouterState state) => EditTimerPage(
-              terminalTimer: state.extra as TerminalTimer,
+            name: "powerstrip_timer_edit",
+            builder: (BuildContext context, GoRouterState state) => EditTimerView(
+              powerstripTimer: state.extra as PowerstripTimer,
             ),
           ),
 

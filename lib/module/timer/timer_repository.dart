@@ -5,9 +5,9 @@ import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
 
 class TimerRepository {
-  Future<http.Response> getTimer(int terminalId) async {
+  Future<http.Response> getTimer(int powerstripId) async {
     return http.get(
-      // Uri.parse('${NetworkAPI.ip}/getTimer/$terminalId'),
+      // Uri.parse('${NetworkAPI.ip}/getTimer/$powerstripId'),
       Uri.parse('${NetworkAPI.ip}/getTimer/1'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
