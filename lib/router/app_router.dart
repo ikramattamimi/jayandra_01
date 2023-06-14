@@ -11,6 +11,7 @@ import 'package:jayandra_01/view/golongan_listrik/electricity_class_view.dart';
 import 'package:jayandra_01/view/golongan_listrik/electricity_class_register_view.dart';
 import 'package:jayandra_01/view/login/splash_screen.dart';
 import 'package:jayandra_01/view/login/login_view.dart';
+import 'package:jayandra_01/view/powerstrip/home_view/home_view.dart';
 import 'package:jayandra_01/view/report/budgeting/budgeting_view.dart';
 import 'package:jayandra_01/view/user/edit_profile_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
@@ -113,10 +114,15 @@ class AppRouter {
           ),
           // TERMINAL PAGE ROUTE
           GoRoute(
+            path: "home",
+            name: "home_view",
+            builder: (BuildContext context, GoRouterState state) => const HomeView(),
+          ),
+          GoRoute(
             path: "powerstrip",
             name: "powerstrip",
             builder: (BuildContext context, GoRouterState state) => PowerstripView(
-              idPowerstrip: state.extra as int,
+              powerstripId: state.extra as int,
               // powerstrip: state.extra as PowerstripModel,
             ),
           ),

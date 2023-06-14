@@ -1,6 +1,7 @@
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/view/login/login_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -56,6 +57,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<UserModel>(context);
+    _nameController.text = user.name;
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -95,6 +97,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
               textStyle: Styles.buttonTextWhite,
               onPressed: () {
                 user.setUserName(_nameController.text);
+                context.pop();
               },
             )
           ],

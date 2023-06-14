@@ -67,9 +67,6 @@ class _LandingPageState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final userModel = Provider.of<UserModel>(context);
-    // final powerstripProvider = Provider.of<PowerstripProvider>(context);
-
     return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),

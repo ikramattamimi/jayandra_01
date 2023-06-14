@@ -5,7 +5,7 @@ import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
 import 'package:logger/logger.dart';
 
-class PowerstripRepository {
+class PowerstripAPIService {
   Future<http.Response> getPowerstrip(int userId) async {
     return http.get(
       Uri.parse('${NetworkAPI.ip}/getpowerstrip/$userId'),
@@ -25,7 +25,7 @@ class PowerstripRepository {
       body: jsonEncode(
         {
           'id_socket': socketId,
-          'id_powerstrip': powerstripId,
+          'id_terminal': powerstripId,
           'status': status,
         },
       ),
@@ -41,7 +41,7 @@ class PowerstripRepository {
       body: jsonEncode(
         {
           'id_socket': socket.socketId,
-          'id_powerstrip': socket.powerstripId,
+          'id_terminal': socket.powerstripId,
           'name': socket.name,
         },
       ),
@@ -50,13 +50,13 @@ class PowerstripRepository {
 
   Future<http.Response> updatePowerstripName(PowerstripModel powerstrip) async {
     return http.post(
-      Uri.parse('${NetworkAPI.ip}/updatePowerstripName/'),
+      Uri.parse('${NetworkAPI.ip}/updateTerminalName/'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
       body: jsonEncode(
         {
-          'id_powerstrip': powerstrip.id,
+          'id_terminal': powerstrip.id.toString(),
           'name': powerstrip.name,
         },
       ),

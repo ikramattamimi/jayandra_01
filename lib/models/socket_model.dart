@@ -9,7 +9,7 @@ class SocketModel {
   factory SocketModel.fromJson(Map<String, dynamic> json) {
     return SocketModel(
       socketId: json['id_socket'],
-      powerstripId: json['id_powerstrip'],
+      powerstripId: json['id_terminal'],
       name: json['name'],
       status: json['status'],
     );

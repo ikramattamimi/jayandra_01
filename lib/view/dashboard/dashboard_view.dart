@@ -1,17 +1,18 @@
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
+import 'package:jayandra_01/utils/app_layout.dart';
+import 'package:jayandra_01/view/powerstrip/home_view/home_widget.dart';
 import 'package:jayandra_01/view/report/report_widget.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/connectivity.dart';
-import 'package:jayandra_01/custom_widget/powerstrip_view.dart';
+import 'package:jayandra_01/view/powerstrip/powerstrip_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +30,29 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   @override
+  void initState() {
+    super.initState();
+    getUserName();
+    _isPowerstripNull();
+    ConnectivityStatus.checkConnectivityState();
+
+    BuildContext myContext = context;
+
+    // For get powerstrip
+    final userModel = Provider.of<UserModel>(myContext, listen: false);
+    final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
+    final timerProvider = Provider.of<TimerProvider>(myContext, listen: false);
+    final scheduleProvider = Provider.of<ScheduleProvider>(myContext, listen: false);
+    initModels(userModel, powerstripProvider, timerProvider, scheduleProvider);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userModel = Provider.of<UserModel>(context);
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
 
-    // initWidgets(userModel, powerstripProvider);
     var powerstrips = powerstripProvider.powerstrips;
+
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: ListView(
@@ -86,64 +104,35 @@ class _DashboardViewState extends State<DashboardView> {
           ),
           const Gap(24),
           Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: Text(
-              "Perangkat Anda",
-              style: Styles.headingStyle2,
-              textAlign: TextAlign.start,
+            padding: const EdgeInsets.only(left: 16.0, right: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Perangkat Anda",
+                  style: Styles.headingStyle2,
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  "Selengkapnya",
+                  style: Styles.buttonTextBlue,
+                ),
+              ],
             ),
           ),
           const Gap(24),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Row(children: _getPowerstripWidget(powerstrips)),
+            // child: Row(children: _getPowerstripWidget(powerstrips)),
+            child: Row(children: getHomeWidgets()),
           ),
-          // AnimatedCard(),
         ],
       ),
     );
   }
 
-  List<Widget> _getPowerstripWidget(List<PowerstripModel> powerstrips) {
-    if (powerstrips != []) {
-      _powerstripWidgets = [];
-      for (var powerstrip in powerstrips) {
-        _powerstripWidgets!.add(
-          PowerstripView(
-            powerstripId: powerstrip.id,
-            // powerstripIcon: Icons.bed,
-            // powerstrip: powerstrip,
-          ),
-        );
-      }
-    }
-    return _powerstripWidgets!;
-  }
-
   String? userName;
-  // final _controller = PowerstripController();
-  // List<PowerstripModel>? _powerstrips = [];
   List<Widget>? _powerstripWidgets = [];
-
-  /// Response pemanggilan API yang sudah dalam bentuk objek [PowerstripResponse]
-  // late PowerstripResponse? _powerstripObjectResponse;
-
-  @override
-  void initState() {
-    super.initState();
-    getUserName();
-    _isPowerstripNull();
-    ConnectivityStatus.checkConnectivityState();
-
-    BuildContext myContext = context;
-
-    // For get powerstrip
-    final userModel = Provider.of<UserModel>(myContext, listen: false);
-    final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
-    final timerProvider = Provider.of<TimerProvider>(myContext, listen: false);
-    final scheduleProvider = Provider.of<ScheduleProvider>(myContext, listen: false);
-    initModels(userModel, powerstripProvider, timerProvider, scheduleProvider);
-  }
 
   void initModels(UserModel userModel, PowerstripProvider powerstripProvider, TimerProvider timerProvider, ScheduleProvider scheduleProvider) async {
     final prefs = await SharedPreferences.getInstance();
@@ -188,16 +177,10 @@ class _DashboardViewState extends State<DashboardView> {
         SizedBox(
           height: 140,
           width: 170,
-          child: Container(
+          child: Card(
             margin: const EdgeInsets.only(
               left: 16,
               bottom: 16,
-            ),
-            decoration: BoxDecoration(
-              color: Styles.secondaryColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(5),
-              ),
             ),
             child: Center(
               child: CircularProgressIndicator(color: Styles.accentColor),
@@ -207,8 +190,77 @@ class _DashboardViewState extends State<DashboardView> {
       ];
     }
   }
-}
 
-void getNotification() {
-  NotificationService().showNotification(title: "Halo", body: "Bjirr");
+  List<Widget> _getPowerstripWidget(List<PowerstripModel> powerstrips) {
+    if (powerstrips != []) {
+      _powerstripWidgets = [];
+      for (var powerstrip in powerstrips) {
+        _powerstripWidgets!.add(
+          PowerstripWidget(
+            powerstripId: powerstrip.id,
+          ),
+        );
+      }
+      final screenSize = AppLayout.getSize(context);
+
+      _powerstripWidgets!.add(
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 16,
+            bottom: 16,
+          ),
+          child: InkWell(
+            onTap: () {},
+            child: SizedBox(
+              height: screenSize.height / 4.9,
+              width: screenSize.width / 2.2,
+              child: Card(
+                elevation: 0,
+                child: Center(
+                  child: Icon(
+                    Icons.add_circle_rounded,
+                    size: 60,
+                    color: Styles.textColor2,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return _powerstripWidgets!;
+  }
+
+  List<Widget> getHomeWidgets() {
+    List<Widget> homes = [];
+    final screenSize = AppLayout.getSize(context);
+    homes.add(const HomeWidget());
+    homes.add(
+      Padding(
+        padding: const EdgeInsets.only(
+          left: 16,
+          bottom: 16,
+        ),
+        child: InkWell(
+          onTap: () {},
+          child: SizedBox(
+            width: screenSize.width / 2.5,
+            height: screenSize.height / 5.5,
+            child: Card(
+              elevation: 0,
+              child: Center(
+                child: Icon(
+                  Icons.add_circle_rounded,
+                  size: 60,
+                  color: Styles.textColor2,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    return homes;
+  }
 }

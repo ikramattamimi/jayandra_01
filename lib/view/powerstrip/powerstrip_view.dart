@@ -16,11 +16,11 @@ import 'package:provider/provider.dart';
 class PowerstripView extends StatefulWidget {
   const PowerstripView({
     super.key,
-    required this.idPowerstrip,
+    required this.powerstripId,
     // required this.powerstrip,
   });
   // final PowerstripModel powerstrip;
-  final int idPowerstrip;
+  final int powerstripId;
 
   @override
   State<PowerstripView> createState() => _PowerstripViewState();
@@ -35,189 +35,38 @@ class _PowerstripViewState extends State<PowerstripView> {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
 
     // initWidgets(userModel, powerstripProvider);
-    var myPowerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.idPowerstrip);
+    var myPowerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.powerstripId);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.5,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              myPowerstrip.name,
-              style: Styles.pageTitle,
-            ),
-            IconButton(
-              onPressed: () {
-                showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: Text(
-                      'Ganti nama powerstrip',
-                      style: Styles.headingStyle1,
-                    ),
-                    content: Text(
-                      'Masukkan nama powerstrip yang baru',
-                      style: Styles.bodyTextBlack,
-                    ),
-                    actions: <Widget>[
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              CustomTextFormField(
-                                controller: _updateNameController,
-                                prefixIcon: MdiIcons.powerSocketDe,
-                                hintText: powerstrip!.name,
-                                obscureText: false,
-                                keyboardType: TextInputType.name,
-                                // onSaved:
-                              ),
-                              const Gap(16),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // deleteTimer(timerProvider);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text("Nama socket diganti")),
-                                  );
-                                  powerstripProvider.updatePowerstripName(
-                                    _updateNameController.text,
-                                    powerstrip!.id,
-                                  );
-                                  context.pop();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    backgroundColor: Styles.accentColor,
-                                    minimumSize: const Size(50, 50),
-                                    padding: EdgeInsets.zero),
-                                child: Text(
-                                  "simpan".toUpperCase(),
-                                  style: Styles.buttonTextWhite,
-                                ),
-                              ),
-                              const Gap(8),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'Batalkan'),
-                                style: TextButton.styleFrom(
-                                  minimumSize: const Size(50, 50),
-                                ),
-                                child: Text(
-                                  'Batal'.toUpperCase(),
-                                  style: Styles.bodyTextGrey2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.edit,
-                size: 16,
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Styles.secondaryColor,
-        centerTitle: true,
-        foregroundColor: Styles.textColor,
-        leading: IconButton(
-          onPressed: () {
-            context.pop();
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(
-                statusBarColor: Styles.primaryColor,
-                statusBarIconBrightness: Brightness.light,
-                statusBarBrightness: Brightness.light,
-              ),
-            );
-          },
-          icon: const Icon(
-            Icons.keyboard_arrow_left_rounded,
-            size: 30,
-          ),
-        ),
-      ),
       backgroundColor: Styles.primaryColor,
       body: Container(
         padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Flexible(
-              flex: 5,
-              child: Card(
-                elevation: 0,
-                child: Column(
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () => setPowerstrip(myPowerstrip),
-                      icon: Icon(
-                        Icons.power_settings_new_rounded,
-                        color: myPowerstrip.isPowerstripActive ? Styles.accentColor : Styles.accentColor2,
-                        size: 32,
-                      ),
-                    ),
-                    const Gap(16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: getSockets(myPowerstrip.sockets!),
-                    ),
-                  ],
-                ),
-              ),
+            // const Gap(24),
+            Text(
+              "Informasi Powerstrip",
+              style: Styles.headingStyle2,
             ),
-            Flexible(
-              flex: 1,
-              child: Column(
-                children: [
-                  const Gap(5),
-                  IconButton(
-                    padding: const EdgeInsets.all(0),
-                    onPressed: () {
-                      context.pushNamed('powerstrip_schedule', extra: powerstrip);
-                    },
-                    icon: Icon(
-                      Icons.schedule_rounded,
-                      color: Styles.accentColor,
-                      size: 32,
-                    ),
-                  ),
-                  Text(
-                    "Jadwal",
-                    style: Styles.bodyTextBlack3,
-                  ),
-                ],
-              ),
+            const Gap(5),
+            getPowerstripInfoWidget(powerstripProvider, myPowerstrip),
+            const Gap(16),
+            Text(
+              "Informasi Socket",
+              style: Styles.headingStyle2,
             ),
-            Flexible(
-              flex: 1,
-              child: Column(
-                children: [
-                  const Gap(5),
-                  IconButton(
-                    padding: const EdgeInsets.all(0),
-                    onPressed: () => context.pushNamed("powerstrip_timer", extra: powerstrip),
-                    icon: Icon(
-                      Icons.timer,
-                      color: Styles.accentColor,
-                      size: 32,
-                    ),
-                  ),
-                  Text(
-                    "Timer",
-                    style: Styles.bodyTextBlack3,
-                  ),
-                ],
+            const Gap(5),
+            SizedBox(
+              height: AppLayout.getSize(context).height * 2 / 3,
+              child: GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                shrinkWrap: true,
+                childAspectRatio: 1.3,
+                physics: const NeverScrollableScrollPhysics(),
+                children: getSockets(myPowerstrip.sockets!),
               ),
             ),
           ],
@@ -236,6 +85,7 @@ class _PowerstripViewState extends State<PowerstripView> {
 
   List<SocketModel>? socketss;
   PowerstripModel? powerstrip;
+  late String _activeSocket;
 
   /// ==========================================================================
   /// Local Function
@@ -243,17 +93,125 @@ class _PowerstripViewState extends State<PowerstripView> {
   @override
   void initState() {
     super.initState();
-    getPowerstripState();
-
     BuildContext myContext = context;
     final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
-    powerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.idPowerstrip);
+    powerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.powerstripId);
     // pageTitle = widget.powerstrip.name;
+    getPowerstripState(powerstrip!.isPowerstripActive, powerstrip!.totalActiveSocket);
   }
 
-  void getPowerstripState() {
-    // powerstrip = widget.powerstrip;
-    // socketss = powerstrip?.sockets;
+  void getPowerstripState(bool isPowerstripOn, int totalActiveSocket) {
+    if (isPowerstripOn == true) {
+      _activeSocket = "$totalActiveSocket Socket Nyala";
+    } else {
+      _activeSocket = "Mati";
+    }
+  }
+
+  Widget getPowerstripInfoWidget(PowerstripProvider powerstripProvider, PowerstripModel myPowerstrip) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    setPowerstrip(myPowerstrip);
+                    getPowerstripState(
+                      myPowerstrip.isPowerstripActive,
+                      myPowerstrip.totalActiveSocket,
+                    );
+                  },
+                  icon: Icon(
+                    Icons.power_settings_new_rounded,
+                    color: myPowerstrip.isPowerstripActive ? Styles.accentColor : Styles.accentColor2,
+                    size: 32,
+                  ),
+                ),
+                const VerticalDivider(
+                  width: 20,
+                  thickness: 1,
+                  indent: 20,
+                  endIndent: 0,
+                  color: Colors.grey,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          myPowerstrip.name,
+                          style: Styles.title,
+                        ),
+                        const Gap(20),
+                        InkWell(
+                          onTap: () => showUpdatePowerstripNameDialog(
+                            powerstripProvider,
+                            myPowerstrip,
+                          ),
+                          child: const Icon(
+                            Icons.edit,
+                            size: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      _activeSocket,
+                      style: Styles.bodyTextGrey3,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        context.pushNamed('powerstrip_schedule', extra: powerstrip);
+                      },
+                      child: Icon(
+                        Icons.schedule_rounded,
+                        color: Styles.accentColor,
+                        size: 20,
+                      ),
+                    ),
+                    Text(
+                      "Jadwal",
+                      style: Styles.bodyTextBlack3,
+                    ),
+                  ],
+                ),
+                const Gap(10),
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () => context.pushNamed("powerstrip_timer", extra: powerstrip),
+                      child: Icon(
+                        Icons.timer,
+                        color: Styles.accentColor,
+                        size: 20,
+                      ),
+                    ),
+                    Text(
+                      "Timer",
+                      style: Styles.bodyTextBlack3,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   updatePowerstripStatusByOneSocketChange(PowerstripModel powerstrip) {
@@ -287,7 +245,7 @@ class _PowerstripViewState extends State<PowerstripView> {
     for (var element in mySockets) {
       socketWidgets.add(
         Container(
-          constraints: BoxConstraints(minHeight: AppLayout.getSize(context).height / 5.5),
+          constraints: BoxConstraints(minHeight: AppLayout.getSize(context).height / 6.5),
           child: SocketWidget(
             socketId: element.socketId!,
             powerstripId: element.powerstripId!,
@@ -297,5 +255,77 @@ class _PowerstripViewState extends State<PowerstripView> {
       );
     }
     return socketWidgets;
+  }
+
+  showUpdatePowerstripNameDialog(PowerstripProvider powerstripProvider, PowerstripModel myPowerstrip) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(
+          'Ganti nama powerstrip',
+          style: Styles.headingStyle1,
+        ),
+        content: Text(
+          'Masukkan nama powerstrip yang baru',
+          style: Styles.bodyTextBlack,
+        ),
+        actions: <Widget>[
+          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  CustomTextFormField(
+                    controller: _updateNameController,
+                    prefixIcon: Icons.electrical_services_rounded,
+                    hintText: myPowerstrip.name,
+                    obscureText: false,
+                    keyboardType: TextInputType.name,
+                    // onSaved:
+                  ),
+                  const Gap(16),
+                  ElevatedButton(
+                    onPressed: () {
+                      // deleteTimer(timerProvider);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Nama socket diganti")),
+                      );
+                      powerstripProvider.updatePowerstripName(
+                        _updateNameController.text,
+                        myPowerstrip.id,
+                      );
+                      context.pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: Styles.accentColor,
+                        minimumSize: const Size(50, 50),
+                        padding: EdgeInsets.zero),
+                    child: Text(
+                      "simpan".toUpperCase(),
+                      style: Styles.buttonTextWhite,
+                    ),
+                  ),
+                  const Gap(8),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Batalkan'),
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(50, 50),
+                    ),
+                    child: Text(
+                      'Batal'.toUpperCase(),
+                      style: Styles.bodyTextGrey2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

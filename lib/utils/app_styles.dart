@@ -74,50 +74,50 @@ class Styles {
   static TextStyle headingStyle1 = TextStyle(
     fontSize: 20,
     color: textColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0.15,
   );
   static TextStyle headingStyle2 = TextStyle(
     fontSize: 18,
     color: textColor,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
   );
   static TextStyle headingStyle3 = TextStyle(
     fontSize: 16,
     color: textColor,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
   );
   static TextStyle headingStyle4 = TextStyle(
     fontSize: 14,
     color: textColor,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
   );
   static TextStyle headingStyleWhite1 = TextStyle(
     fontSize: 20,
     color: secondaryColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0.15,
   );
   static TextStyle headingStyleWhite2 = TextStyle(
     fontSize: 18,
     color: secondaryColor,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
   );
   static TextStyle headingStyleWhite3 = TextStyle(
     fontSize: 16,
     color: secondaryColor,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
   );
 
   static TextStyle title = TextStyle(
     fontSize: 14,
     color: textColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
   );
   static TextStyle title2 = TextStyle(
     fontSize: 12,
     color: textColor,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
   );
   static TextStyle buttonTextBlue = TextStyle(
     fontSize: 14,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jayandra_01/module/powerstrip/powerstrip_repository.dart';
+import 'package:jayandra_01/module/powerstrip/powerstrip_api_service.dart';
 import 'package:logger/logger.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -10,7 +10,7 @@ void callbackDispatcher() async {
     printer: PrettyPrinter(),
   );
 
-  var powerstripRepository = PowerstripRepository();
+  var powerstripRepository = PowerstripAPIService();
 
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
