@@ -1,17 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:jayandra_01/models/my_response.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/register/register_controller.dart';
-import 'package:jayandra_01/view/login/login_view.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterIdentityView extends StatefulWidget {
-  const RegisterIdentityView({super.key, required this.email, required this.electricityClass});
+  const RegisterIdentityView({super.key, required this.email});
   final String email;
-  final String electricityClass;
 
   @override
   State<RegisterIdentityView> createState() => _RegisterIdentityViewState();
@@ -20,14 +23,13 @@ class RegisterIdentityView extends StatefulWidget {
 class _RegisterIdentityViewState extends State<RegisterIdentityView> {
   final _registerForm3Key = GlobalKey<FormState>();
   late String _email;
-  late String _electricityClass;
   final _controller = RegisterController();
+  String password = "";
 
   @override
   void initState() {
     super.initState();
     _email = widget.email;
-    _electricityClass = widget.electricityClass;
   }
 
   @override
@@ -53,30 +55,46 @@ class _RegisterIdentityViewState extends State<RegisterIdentityView> {
       });
 
       _controller.emailValue = _email;
-      _controller.electricityClassValue = _electricityClass;
 
-      // Memproses API cek email
-      MyResponse response = await _controller.register();
+      try {
+        // Memproses API cek email
+        final registerResponse = await Future.any([
+          _controller.register(),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
 
-      // Menyembunyikan animasi loading
-      setState(() {
-        _controller.isLoading = false;
-      });
+        // Menyembunyikan animasi loading
+        setState(() {
+          _controller.isLoading = false;
+        });
 
-      // Menampilkan pesan dari controller
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.message)),
-      );
+        // Menampilkan pesan dari controller
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(registerResponse.message)),
+        );
 
-      Future.delayed(const Duration(seconds: 2), () {
-        if (response.code == 0) {
-          // context.pushNamed("register_page_2");
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const LoginView();
-          }));
-        } else {}
-      });
+        if (registerResponse.code == 0) {
+          UserModel user = registerResponse.data;
+
+          final prefs = await SharedPreferences.getInstance();
+
+          // simpan status user sudah login
+          await prefs.setBool('isUserLoggedIn', true);
+          await prefs.setString('user_name', user.name);
+          await prefs.setString('email', user.email);
+          await prefs.setInt('user_id', user.userId);
+
+          Future.delayed(const Duration(seconds: 2), () {
+            context.goNamed("main_page");
+          });
+        }
+      } catch (err) {
+        Logger().e(err);
+      }
     }
   }
 
@@ -102,6 +120,8 @@ class _RegisterIdentityViewState extends State<RegisterIdentityView> {
       PasswordTextForm(
         hintText: "Konfirmasi Password",
         formKey: _registerForm3Key,
+        controller: _controller.repeatPasswordController,
+        confirmPassword: password,
       ),
       const Gap(20),
       NextButton(

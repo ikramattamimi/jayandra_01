@@ -82,14 +82,6 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    // final userModel = Provider.of<UserModel>(context);
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Styles.primaryColor,
-        statusBarIconBrightness: Brightness.dark,
-        // statusBarBrightness: Brightness.light,
-      ),
-    );
     return Scaffold(
       body: Center(
         child: _widgetoptions[_selectedIndex],

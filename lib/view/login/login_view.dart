@@ -1,9 +1,10 @@
 // ignore_for_file: body_might_complete_normally_nullable, unused_field, use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/user/login_controller.dart';
@@ -14,9 +15,9 @@ import 'package:jayandra_01/custom_widget/circle_icon_container.dart';
 import 'package:jayandra_01/custom_widget/custom_elevated_button.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
-import 'package:jayandra_01/utils/form_regex.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Widget ini menampilkan halaman Login
 class LoginView extends StatefulWidget {
@@ -186,118 +187,60 @@ class _LoginViewState extends State<LoginView> {
         _loginController.isLoading = true;
       });
 
-      // Memproses API
-      MyResponse loginResponse = await _loginController.login();
-      // id = loginResponse.data.id;
-      // _getPowerstrip(id);
+      try {
+        // Memproses API
+        final loginResponse = await Future.any([
+          _loginController.login(),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
 
-      // Menyembunyikan animasi loading
-      setState(() {
-        _loginController.isLoading = false;
-      });
+        // Menyembunyikan animasi loading
+        setState(() {
+          _loginController.isLoading = false;
+        });
 
-      // Menampilkan pesan status autentikasi
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(loginResponse.message)),
-      );
+        // Menampilkan pesan status autentikasi
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(loginResponse.message)),
+        );
 
-      // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
-      // membaca pesan status autentikasi
-      Future.delayed(const Duration(seconds: 1), () {
         // Jika status autentikasi sukses dengan kode 0
         if (loginResponse.code == 0) {
           UserModel user = loginResponse.data;
-          userModel.updateUser(user);
-          powerstripProvider.initializeData(userModel.id);
-          context.pushNamed('main_page', extra: user);
-        } else {}
-      });
-    }
-  }
-}
+          // userModel.updateUser(user);
+          powerstripProvider.initializeData(userModel.userId);
 
-/// Widget ini menampilkan [TextFormField] untuk field password.
-///
-/// Dilengkapi dengan toggle untuk menampilkan dan menyembunyikan
-/// teks password.
-class PasswordTextForm extends StatefulWidget {
-  const PasswordTextForm({
-    super.key,
-    this.hintText = "Password",
-    required this.formKey,
-    this.controller,
-  });
-  final String hintText;
-  final GlobalKey<FormState> formKey;
-  final TextEditingController? controller;
+          final prefs = await SharedPreferences.getInstance();
 
-  @override
-  State<PasswordTextForm> createState() => _PasswordTextFormState();
-}
+          // simpan status user sudah login
+          await prefs.setBool('isUserLoggedIn', true);
+          await prefs.setString('user_name', user.name);
+          await prefs.setString('email', user.email);
+          await prefs.setInt('user_id', user.userId);
 
-class _PasswordTextFormState extends State<PasswordTextForm> {
-  /// Apakah teks password disembunyikan.
-  bool _isPasswordHidden = true;
-
-  late String _hintText;
-  late GlobalKey<FormState> _formKey;
-
-  @override
-  void initState() {
-    super.initState();
-    _hintText = widget.hintText;
-    _formKey = widget.formKey;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomTextFormField(
-      controller: widget.controller,
-      hintText: _hintText,
-      keyboardType: TextInputType.visiblePassword,
-      obscureText: _isPasswordHidden,
-      prefixIcon: Icons.lock,
-      suffixIcon: IconButton(
-        icon: Icon(_isPasswordHidden ? Icons.visibility : Icons.visibility_off),
-        onPressed: () {
-          setState(() {
-            _isPasswordHidden = !_isPasswordHidden;
+          // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
+          // membaca pesan status autentikasi
+          Future.delayed(const Duration(seconds: 1), () {
+            context.pushNamed('main_page', extra: user);
           });
-        },
-      ),
-      validator: (value) {
-        if (!value!.isValidPassword) {
-          return 'Password harus terdiri dari 8 karakter dan mengandung huruf besar, huruf kecil, dan angka.';
-        } else {
-          widget.formKey.currentState?.save();
         }
-      },
-    );
-  }
-}
+      } catch (err) {
+        // Menyembunyikan animasi loading
+        setState(() {
+          _loginController.isLoading = false;
+        });
 
-class EmailTextForm extends StatelessWidget {
-  const EmailTextForm({super.key, this.onSaved, required this.formKey, this.controller});
-  final void Function(String?)? onSaved;
-  final GlobalKey<FormState> formKey;
-  final TextEditingController? controller;
+        // Menampilkan pesan dari controller
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(err.toString())),
+        );
 
-  @override
-  Widget build(BuildContext context) {
-    return CustomTextFormField(
-      controller: controller,
-      hintText: "Email",
-      keyboardType: TextInputType.emailAddress,
-      obscureText: false,
-      prefixIcon: Icons.mail_rounded,
-      validator: (value) {
-        if (!value!.isValidEmail) {
-          return 'Alamat email tidak valid';
-        } else {
-          formKey.currentState?.save();
-        }
-      },
-      onSaved: onSaved,
-    );
+        Logger(printer: PrettyPrinter()).e(err);
+      }
+    }
   }
 }

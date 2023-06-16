@@ -107,7 +107,7 @@ class _RegisterPage3State extends State<RegisterPage3> {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return RegisterIdentityView(
                   email: _email,
-                  electricityClass: electricityClass.toString(),
+                  // electricityClass: electricityClass.toString(),
                 );
               }));
             });

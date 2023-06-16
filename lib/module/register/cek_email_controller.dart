@@ -16,13 +16,7 @@ class CekEmailController {
     http.Response result = await _repository.cekEmail(emailController.text);
 
     if (result.statusCode == 200) {
-      Map<String, dynamic> myBody = jsonDecode(result.body);
-      MyResponse<UserModel> myResponse = MyResponse.fromJson(myBody, UserModel.fromJson);
-
-      if (myResponse.code == 0) {
-        myResponse.message = "Email sudah terdaftar";
-      }
-      return myResponse;
+      return MyResponse(code: 0, message: "Email Sudah Terdaftar");
     } else {
       return MyResponse(code: 1, message: "Mengirim Kode OTP ke Email");
     }

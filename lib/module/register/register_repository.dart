@@ -14,7 +14,6 @@ class RegisterRepository {
         'email': user.email,
         'name': user.name,
         'password': user.password,
-        'electricityClass': user.electricityclass,
       }),
     );
   }

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/circle_icon_container.dart';
-import 'package:provider/provider.dart';
 
 class ElectricityClassView extends StatefulWidget {
   const ElectricityClassView({super.key});
@@ -52,15 +50,6 @@ class _ElectricityClassViewState extends State<ElectricityClassView> {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<UserModel>(context);
-    electricityClass = user.electricityclass;
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Styles.secondaryColor,
-        // statusBarIconBrightness: Brightness.dark,
-        // statusBarBrightness: Brightness.light,
-      ),
-    );
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -74,13 +63,6 @@ class _ElectricityClassViewState extends State<ElectricityClassView> {
         leading: IconButton(
           onPressed: () {
             context.pop();
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(
-                statusBarColor: Styles.primaryColor,
-                statusBarIconBrightness: Brightness.light,
-                statusBarBrightness: Brightness.light,
-              ),
-            );
           },
           icon: const Icon(
             Icons.keyboard_arrow_left_rounded,

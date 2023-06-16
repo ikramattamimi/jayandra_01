@@ -40,6 +40,7 @@ class PowerstripController {
         return PowerstripResponse(code: 1, message: "Terjadi Masalah");
       }
     } catch (e) {}
+    return null;
 
     // return powerstripObjectResponse;
   }
@@ -69,6 +70,7 @@ class PowerstripController {
   Future<MyResponse?> updatePowerstripName(PowerstripModel powerstrip) async {
     http.Response responsePowerstrip;
     responsePowerstrip = await _powerstripRepositroy.updatePowerstripName(powerstrip);
+    return null;
 
     // Parse String jsonke Map
     // Map<String, dynamic> powerstripMapData = jsonDecode(responsePowerstrip.body);

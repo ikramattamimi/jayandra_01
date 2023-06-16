@@ -8,10 +8,11 @@ import 'package:jayandra_01/view/pairing/confirm_pairing_view.dart';
 import 'package:jayandra_01/view/pairing/pairing_done_view.dart';
 import 'package:jayandra_01/view/forgot_password/forgot_pw_email.view.dart';
 import 'package:jayandra_01/view/golongan_listrik/electricity_class_view.dart';
-import 'package:jayandra_01/view/golongan_listrik/electricity_class_register_view.dart';
 import 'package:jayandra_01/view/login/splash_screen.dart';
 import 'package:jayandra_01/view/login/login_view.dart';
+import 'package:jayandra_01/view/powerstrip/home_view/add_home_view.dart';
 import 'package:jayandra_01/view/powerstrip/home_view/home_view.dart';
+import 'package:jayandra_01/view/register/register_identity_view.dart';
 import 'package:jayandra_01/view/report/budgeting/budgeting_view.dart';
 import 'package:jayandra_01/view/user/edit_profile_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
@@ -58,24 +59,25 @@ class AppRouter {
             builder: (BuildContext context, GoRouterState state) => const RegisterEmailView(),
           ),
           GoRoute(
-            path: "register_page_2",
-            name: "register_page_2",
-            builder: (BuildContext context, GoRouterState state) => const RegisterOTPView(
-              email: "ikram@gmail.com",
-            ),
-          ),
+              path: "register_page_2",
+              name: "register_page_2",
+              builder: (BuildContext context, GoRouterState state) {
+                final email = state.queryParams['email']!;
+                return RegisterOTPView(email: email);
+              }),
           GoRoute(
             path: "register_page_3",
             name: "register_page_3",
-            builder: (BuildContext context, GoRouterState state) => const RegisterPage3(
-              email: '',
-            ),
+            builder: (BuildContext context, GoRouterState state) {
+              final email = state.queryParams['email']!;
+              return RegisterIdentityView(email: email);
+            },
           ),
-          GoRoute(
-            path: "electricity_class_register_page",
-            name: "electricity_class_register_page",
-            builder: (BuildContext context, GoRouterState state) => const ElectricityClassRegisterView(),
-          ),
+          // GoRoute(
+          //   path: "electricity_class_register_page",
+          //   name: "electricity_class_register_page",
+          //   builder: (BuildContext context, GoRouterState state) => const ElectricityClassRegisterView(),
+          // ),
 
           // FORGOT PASSWORD PAGE ROUTE
           GoRoute(
@@ -166,6 +168,11 @@ class AppRouter {
           ),
 
           // ADD DEVICE PAGE ROUTE
+          GoRoute(
+            path: "add_home",
+            name: "add_home",
+            builder: (BuildContext context, GoRouterState state) => const AddHomeView(),
+          ),
           GoRoute(
             path: "add_device",
             name: "add_device",

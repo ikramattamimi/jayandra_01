@@ -13,14 +13,13 @@ class RegisterController {
   var emailValue = '';
   var nameController = TextEditingController();
   var passwordController = TextEditingController();
-  String electricityClassValue = "";
+  var repeatPasswordController = TextEditingController();
 
   Future<MyResponse> register() async {
     UserModel user = UserModel(
       name: nameController.text,
       password: passwordController.text,
       email: emailValue,
-      electricityclass: electricityClassValue,
     );
     http.Response result = await _repository.register(user);
 

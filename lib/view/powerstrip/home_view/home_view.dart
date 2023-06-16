@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/powestrip_model.dart';
-import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
-import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/custom_widget/circle_icon_container.dart';
 import 'package:jayandra_01/view/powerstrip/powerstrip_view.dart';
-import 'package:jayandra_01/view/powerstrip/powerstrip_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -39,7 +33,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
     var powerstrips = powerstripProvider.powerstrips;
 
-    final myPowerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == 1);
+    final myPowerstrip = powerstrips.isEmpty ? PowerstripModel() : powerstrips.firstWhere((element) => element.id == 1);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -72,7 +66,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
               indicatorColor: Styles.accentColor,
               unselectedLabelColor: Styles.accentColor2,
               tabs: [
-                Tab(text: powerstrips[0].name),
+                Tab(text: myPowerstrip.name),
                 const Tab(text: 'Kamar'),
                 const Tab(text: 'Ruang Keluarga'),
               ],

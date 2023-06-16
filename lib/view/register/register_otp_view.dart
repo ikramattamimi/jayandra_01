@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
 import 'package:jayandra_01/view/register/register_elclass_view.dart';
@@ -69,9 +70,8 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
   void startTimer() {
     const oneSec = Duration(seconds: 1);
     _resendTimer = '($_start' 'd)';
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      if (mounted) {
         if (_start == 0) {
           setState(() {
             timer.cancel();
@@ -84,8 +84,8 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
             _resendTimer = '($_start' 'd)';
           });
         }
-      },
-    );
+      }
+    });
   }
 
   resendOTP() {
@@ -163,9 +163,12 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
               const SnackBar(content: Text('Mengecek Kode OTP')),
             );
             Future.delayed(const Duration(seconds: 1), () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return RegisterPage3(email: _email);
-              }));
+              context.pushNamed(
+                "register_page_3",
+                queryParams: {
+                  "email": _email,
+                },
+              );
             });
           }
         },

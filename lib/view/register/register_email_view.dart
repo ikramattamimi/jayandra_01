@@ -1,13 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/module/register/cek_email_controller.dart';
-import 'package:jayandra_01/view/login/login_view.dart';
+import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
-import 'package:jayandra_01/view/register/register_otp_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/custom_elevated_button.dart';
+import 'package:logger/logger.dart';
 
 class RegisterEmailView extends StatelessWidget {
   const RegisterEmailView({super.key});
@@ -49,28 +50,50 @@ class _RegisterFormState extends State<RegisterForm> {
         _controller.isLoading = true;
       });
 
-      // Memproses API cek email
-      MyResponse response = await _controller.cekEmail();
+      try {
+        // Memproses API cek email
+        final response = await Future.any([
+          _controller.cekEmail(),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
 
-      // Menyembunyikan animasi loading
-      setState(() {
-        _controller.isLoading = false;
-      });
-
-      // Menampilkan pesan dari controller
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.message)),
-      );
-
-      Future.delayed(const Duration(seconds: 2), () {
+        // Menyembunyikan animasi loading
+        setState(() {
+          _controller.isLoading = false;
+        });
         if (response.code == 1) {
-          // context.pushNamed("register_page_2");
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return RegisterOTPView(email: _controller.emailController.text);
-          }));
-        } else {}
-      });
+          Future.delayed(const Duration(seconds: 2), () {
+            context.pushNamed(
+              "register_page_2",
+              queryParams: {
+                "email": _controller.emailController.text,
+              },
+            );
+          });
+        } else {
+          // Menampilkan pesan dari controller
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response.message)),
+          );
+        }
+      } catch (err) {
+        // Menyembunyikan animasi loading
+        setState(() {
+          _controller.isLoading = false;
+        });
+
+        // Menampilkan pesan dari controller
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(err.toString())),
+        );
+
+        Logger().e(err);
+      }
     }
   }
 

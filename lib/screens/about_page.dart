@@ -11,14 +11,6 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final size = AppLayout.getSize(context);
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Styles.secondaryColor,
-        // statusBarIconBrightness: Brightness.dark,
-        // statusBarBrightness: Brightness.light,
-      ),
-    );
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -32,13 +24,6 @@ class AboutPage extends StatelessWidget {
         leading: IconButton(
           onPressed: () {
             context.pop();
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(
-                statusBarColor: Styles.primaryColor,
-                statusBarIconBrightness: Brightness.light,
-                statusBarBrightness: Brightness.light,
-              ),
-            );
           },
           icon: const Icon(
             Icons.keyboard_arrow_left_rounded,

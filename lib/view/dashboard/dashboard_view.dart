@@ -9,7 +9,6 @@ import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/view/powerstrip/home_view/home_widget.dart';
 import 'package:jayandra_01/view/report/report_widget.dart';
-import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/connectivity.dart';
 import 'package:jayandra_01/view/powerstrip/powerstrip_widget.dart';
@@ -138,16 +137,15 @@ class _DashboardViewState extends State<DashboardView> {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('isUserLoggedIn') ?? false) {
       UserModel user = UserModel(
-        id: prefs.getInt('user_id')!,
+        userId: prefs.getInt('user_id')!,
         name: prefs.getString('user_name')!,
         email: prefs.getString('email')!,
-        electricityclass: prefs.getString('electricityclass')!,
       );
       if (userModel.email == "") {
         userModel.updateUser(user);
       }
       if (powerstripProvider.powerstrips.isEmpty) {
-        powerstripProvider.initializeData(user.id).then((value) {
+        powerstripProvider.initializeData(user.userId).then((value) {
           // For get timer
           for (var powerstrip in powerstripProvider.powerstrips) {
             timerProvider.setPowerstrip = powerstrip;
@@ -243,7 +241,9 @@ class _DashboardViewState extends State<DashboardView> {
           bottom: 16,
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            context.goNamed("add_home");
+          },
           child: SizedBox(
             width: screenSize.width / 2.5,
             height: screenSize.height / 5.5,

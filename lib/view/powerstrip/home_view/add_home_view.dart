@@ -7,14 +7,14 @@ import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
 
-class PairingView extends StatefulWidget {
-  const PairingView({super.key});
+class AddHomeView extends StatefulWidget {
+  const AddHomeView({super.key});
 
   @override
-  State<PairingView> createState() => _PairingViewState();
+  State<AddHomeView> createState() => _AddHomeViewState();
 }
 
-class _PairingViewState extends State<PairingView> {
+class _AddHomeViewState extends State<AddHomeView> {
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -49,15 +49,13 @@ class _PairingViewState extends State<PairingView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Pilih Jaringan Wifi dan Inputkan Password",
-                  style: Styles.headingStyle4,
-                  textAlign: TextAlign.center,
+                  "Tambah Rumah",
+                  style: Styles.headingStyle3,
                 ),
                 const Gap(12),
                 Text(
-                  "Jaringan wifi yang digunakan adalah wifi yang sudah tersambung dengan smartphone",
+                  "Rumah digunakan Untuk Mengelompokkan Powerstrip",
                   style: Styles.bodyTextGrey3,
-                  textAlign: TextAlign.center,
                 ),
                 const Gap(32),
                 SizedBox(
@@ -72,19 +70,19 @@ class _PairingViewState extends State<PairingView> {
                         const Gap(32),
                         Form(
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomTextFormField(
-                                hintText: "Wifi",
-                                obscureText: false,
-                                keyboardType: TextInputType.name,
-                                prefixIcon: Icons.wifi_rounded,
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.compare_arrows_rounded),
-                                  onPressed: () {},
-                                ),
+                              const Gap(12),
+                              Text(
+                                "Nama Rumah",
+                                style: Styles.title,
                               ),
-                              const Gap(16),
-                              PasswordTextForm(formKey: _formKey),
+                              const Gap(12),
+                              CustomTextFormField(
+                                hintText: "Nama rumah",
+                                keyboardType: TextInputType.name,
+                                prefixIcon: Icons.home_rounded,
+                              ),
                               const Gap(24),
                               ElevatedButton(
                                 onPressed: () {
@@ -94,7 +92,7 @@ class _PairingViewState extends State<PairingView> {
                                   minimumSize: const Size(30, 42),
                                 ),
                                 child: Text(
-                                  "Selanjutnya",
+                                  "Selesai",
                                   style: Styles.bodyTextWhite3,
                                 ),
                               ),

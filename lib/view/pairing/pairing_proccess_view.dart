@@ -24,13 +24,6 @@ class _PairingProccessViewState extends State<PairingProccessView> {
           leading: IconButton(
             onPressed: () {
               context.pop();
-              SystemChrome.setSystemUIOverlayStyle(
-                SystemUiOverlayStyle(
-                  statusBarColor: Styles.primaryColor,
-                  statusBarIconBrightness: Brightness.light,
-                  statusBarBrightness: Brightness.light,
-                ),
-              );
             },
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,

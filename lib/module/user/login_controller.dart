@@ -20,20 +20,7 @@ class LoginController {
     if (result.statusCode == 200) {
       Map<String, dynamic> myBody = jsonDecode(result.body);
       MyResponse<UserModel> myResponse = MyResponse.fromJson(myBody, UserModel.fromJson);
-
-      if (myResponse.code == 0) {
-        final prefs = await SharedPreferences.getInstance();
-
-        // simpan status user sudah login
-        await prefs.setBool('isUserLoggedIn', true);
-        await prefs.setString('user_name', myResponse.data?.name ?? "");
-        await prefs.setString('email', myResponse.data?.email ?? "");
-        await prefs.setString('electricityclass', myResponse.data?.electricityclass ?? "");
-        await prefs.setInt('user_id', myResponse.data?.id ?? 0);
-      }
-
       myResponse.message = "Login Berhasil";
-
       return myResponse;
     } else {
       return MyResponse(code: 1, message: "Username atau Password Salah");

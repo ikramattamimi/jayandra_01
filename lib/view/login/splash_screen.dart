@@ -53,15 +53,14 @@ class _LandingPageState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('isUserLoggedIn') ?? false) {
       UserModel user = UserModel(
-        id: prefs.getInt('user_id')!,
+        userId: prefs.getInt('user_id')!,
         name: prefs.getString('user_name')!,
         email: prefs.getString('email')!,
-        electricityclass: prefs.getString('electricityclass')!,
       );
 
       userModel.updateUser(user);
 
-      powerstripProvider.initializeData(user.id);
+      powerstripProvider.initializeData(user.userId);
     }
   }
 

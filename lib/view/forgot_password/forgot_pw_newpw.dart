@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/module/register/register_controller.dart';
 import 'package:jayandra_01/view/login/login_view.dart';
@@ -19,7 +20,6 @@ class ForgotPasswordNewPwView extends StatefulWidget {
 class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
   final _registerForm3Key = GlobalKey<FormState>();
   late String _email;
-  late String _electricityClass;
   final _controller = RegisterController();
 
   @override
@@ -51,7 +51,6 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
       });
 
       _controller.emailValue = _email;
-      _controller.electricityClassValue = _electricityClass;
 
       // Memproses API cek email
       MyResponse response = await _controller.register();

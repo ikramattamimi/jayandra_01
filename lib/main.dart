@@ -65,12 +65,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Styles.primaryColor,
-        statusBarBrightness: Brightness.dark,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle(
+    //     statusBarColor: Styles.primaryColor,
+    //     statusBarBrightness: Brightness.dark,
+    //   ),
+    // );
 
     _router = _appRouter.getRouter();
     return MaterialApp.router(

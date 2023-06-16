@@ -36,13 +36,6 @@ class _ScheduleViewState extends State<ScheduleView> {
           leading: IconButton(
             onPressed: () {
               Navigator.of(context).pop();
-              SystemChrome.setSystemUIOverlayStyle(
-                SystemUiOverlayStyle(
-                  statusBarColor: Styles.primaryColor,
-                  statusBarIconBrightness: Brightness.light,
-                  statusBarBrightness: Brightness.light,
-                ),
-              );
             },
             icon: const Icon(
               Icons.keyboard_arrow_left_rounded,
