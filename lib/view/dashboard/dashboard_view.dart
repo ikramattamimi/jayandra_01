@@ -1,8 +1,10 @@
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/home_model.dart';
 import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
@@ -42,7 +44,8 @@ class _DashboardViewState extends State<DashboardView> {
     final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
     final timerProvider = Provider.of<TimerProvider>(myContext, listen: false);
     final scheduleProvider = Provider.of<ScheduleProvider>(myContext, listen: false);
-    initModels(userModel, powerstripProvider, timerProvider, scheduleProvider);
+    final homeProvider = Provider.of<HomeProvider>(myContext, listen: false);
+    initModels(userModel, powerstripProvider, timerProvider, scheduleProvider, homeProvider);
   }
 
   @override
@@ -51,6 +54,8 @@ class _DashboardViewState extends State<DashboardView> {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
 
     var powerstrips = powerstripProvider.powerstrips;
+    final homeProvider = Provider.of<HomeProvider>(context);
+    var homes = homeProvider.homes;
 
     return Scaffold(
       backgroundColor: Styles.primaryColor,
@@ -123,7 +128,7 @@ class _DashboardViewState extends State<DashboardView> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             // child: Row(children: _getPowerstripWidget(powerstrips)),
-            child: Row(children: getHomeWidgets()),
+            child: Row(children: getHomeWidgets(homes)),
           ),
         ],
       ),
@@ -133,7 +138,13 @@ class _DashboardViewState extends State<DashboardView> {
   String? userName;
   List<Widget>? _powerstripWidgets = [];
 
-  void initModels(UserModel userModel, PowerstripProvider powerstripProvider, TimerProvider timerProvider, ScheduleProvider scheduleProvider) async {
+  void initModels(
+    UserModel userModel,
+    PowerstripProvider powerstripProvider,
+    TimerProvider timerProvider,
+    ScheduleProvider scheduleProvider,
+    HomeProvider homeProvider,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('isUserLoggedIn') ?? false) {
       UserModel user = UserModel(
@@ -143,6 +154,9 @@ class _DashboardViewState extends State<DashboardView> {
       );
       if (userModel.email == "") {
         userModel.updateUser(user);
+      }
+      if (homeProvider.homes.isEmpty) {
+        homeProvider.initializeData(user.userId);
       }
       if (powerstripProvider.powerstrips.isEmpty) {
         powerstripProvider.initializeData(user.userId).then((value) {
@@ -230,11 +244,17 @@ class _DashboardViewState extends State<DashboardView> {
     return _powerstripWidgets!;
   }
 
-  List<Widget> getHomeWidgets() {
-    List<Widget> homes = [];
+  List<Widget> getHomeWidgets(List<HomeModel> homes) {
+    List<Widget> homeWidgets = [];
     final screenSize = AppLayout.getSize(context);
-    homes.add(const HomeWidget());
-    homes.add(
+    // homes.add(const HomeWidget());
+
+    for (var home in homes) {
+      homeWidgets.add(HomeWidget(
+        homeModel: home,
+      ));
+    }
+    homeWidgets.add(
       Padding(
         padding: const EdgeInsets.only(
           left: 16,
@@ -261,6 +281,6 @@ class _DashboardViewState extends State<DashboardView> {
         ),
       ),
     );
-    return homes;
+    return homeWidgets;
   }
 }

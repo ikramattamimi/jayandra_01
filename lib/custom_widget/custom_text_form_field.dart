@@ -18,22 +18,25 @@ class CustomTextFormField extends StatelessWidget {
     this.formKey,
     this.initialValue,
     this.onChanged,
+    this.enabled,
   });
   final TextEditingController? controller;
   final String hintText;
   final bool obscureText;
   final TextInputType keyboardType;
   final IconData? prefixIcon;
-  final IconButton? suffixIcon;
+  final Widget? suffixIcon;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
   final void Function(String?)? onChanged;
   GlobalKey<FormState>? formKey;
   final String? initialValue;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled ?? true,
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
@@ -41,6 +44,18 @@ class CustomTextFormField extends StatelessWidget {
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         suffixIcon: suffixIcon,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Styles.textColor2,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Styles.textColor2,
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(

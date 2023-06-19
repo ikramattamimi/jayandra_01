@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
+import 'package:jayandra_01/view/golongan_listrik/electricity_class_addhome_view.dart';
 import 'package:jayandra_01/view/pairing/pairing_view.dart';
 import 'package:jayandra_01/view/pairing/pairing_proccess_view.dart';
 import 'package:jayandra_01/view/pairing/confirm_pairing_view.dart';
@@ -113,6 +114,14 @@ class AppRouter {
             path: "electricity_class",
             name: "electricity_class_page",
             builder: (BuildContext context, GoRouterState state) => const ElectricityClassView(),
+          ),
+          GoRoute(
+            path: "electricity_class_add_home",
+            name: "electricity_class_add_home",
+            builder: (BuildContext context, GoRouterState state) => ElectricityClassAddHomeView(
+              notifyParent: state.extra as Function,
+              selectedValue: state.queryParams['selectedElClass'] as String,
+            ),
           ),
           // TERMINAL PAGE ROUTE
           GoRoute(

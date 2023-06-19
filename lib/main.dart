@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jayandra_01/background-task/bgtask.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
@@ -47,6 +48,9 @@ void main() {
         ),
         ChangeNotifierProvider<PowerstripProvider>(
           create: (context) => PowerstripProvider(),
+        ),
+        ChangeNotifierProvider<HomeProvider>(
+          create: (context) => HomeProvider(),
         ),
       ],
       child: MyApp(),

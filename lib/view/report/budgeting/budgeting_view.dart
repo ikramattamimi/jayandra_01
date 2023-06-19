@@ -64,7 +64,11 @@ class _BudgetingViewState extends State<BudgetingView> {
                   ),
                   const Gap(32),
                   Text(
-                    "Budgeting adalah fitur perencanaan pembatasan biaya yang bisa digunakana oleh perangkat Jayandra Powerstrip. Anda akan mendapatkan notifikasi ketika penggunaan sudah mencapai batas-batas tertentu secara berkala.",
+                    "Budgeting adalah fitur perencanaan pembatasan biaya. "
+                    "Anda akan mendapatkan notifikasi ketika penggunaan listrik "
+                    "Jayandra Powerstrip sudah mencapai batas-batas tertentu "
+                    "secara berkala. Perangkat Jayandra Powerstrip masih tetap "
+                    "bisa menggunakan listrik walaupun batas penggunaan sudah tercapai.",
                     style: Styles.bodyTextBlack2,
                     textAlign: TextAlign.justify,
                   ),
@@ -75,9 +79,9 @@ class _BudgetingViewState extends State<BudgetingView> {
                   // ),
                   // const Gap(20),
                   CustomTextFormField(
-                    hintText: "Tentukan target batas biaya (rupiah)",
+                    hintText: "Tentukan target batas biaya",
                     keyboardType: TextInputType.number,
-                    initialValue: "300000",
+                    // initialValue: "300000",
                   ),
                   const Gap(8),
                 ],

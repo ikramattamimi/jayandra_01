@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/home_model.dart';
 import 'package:jayandra_01/models/powestrip_model.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -7,7 +8,9 @@ import 'package:jayandra_01/utils/app_styles.dart';
 class HomeWidget extends StatefulWidget {
   const HomeWidget({
     super.key,
+    required this.homeModel,
   });
+  final HomeModel homeModel;
 
   @override
   State<HomeWidget> createState() => _HomeWidgetState();
@@ -16,6 +19,13 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
   String powerstripStatus = "1 Powerstrip Aktif";
   late PowerstripModel powerstrip;
+  late HomeModel homeModel;
+
+  @override
+  void initState() {
+    super.initState();
+    homeModel = widget.homeModel;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +59,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Rumah 1",
+                        homeModel.homeName,
                         style: Styles.title,
                       ),
                       Text(

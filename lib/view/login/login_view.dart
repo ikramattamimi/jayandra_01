@@ -167,9 +167,6 @@ class _LoginViewState extends State<LoginView> {
   /// Apakah password disembunyikan dalam input [PasswordTextForm]
   final bool _isPasswordHidden = false;
 
-  var emailController = TextEditingController();
-  var passwordController = TextEditingController();
-
   /// ==========================================================================
   /// Local Function
   /// ==========================================================================
