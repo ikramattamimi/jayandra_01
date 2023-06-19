@@ -140,7 +140,10 @@ class AppRouter {
           GoRoute(
             path: "budgeting",
             name: "budgeting_page",
-            builder: (BuildContext context, GoRouterState state) => const BudgetingView(),
+            builder: (BuildContext context, GoRouterState state) => BudgetingView(
+              notifyParent: state.extra as Function,
+              budgetingText: state.queryParams['budgetText'] as String,
+            ),
           ),
           GoRoute(
             path: "schedule",

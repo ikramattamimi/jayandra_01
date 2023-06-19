@@ -6,7 +6,9 @@ import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
 class BudgetingView extends StatefulWidget {
-  const BudgetingView({super.key});
+  const BudgetingView({super.key, required this.notifyParent, required this.budgetingText});
+  final Function notifyParent;
+  final String budgetingText;
 
   @override
   State<BudgetingView> createState() => _BudgetingViewState();
@@ -36,7 +38,10 @@ class _BudgetingViewState extends State<BudgetingView> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.pop();
+              widget.notifyParent(budgetController.text);
+            },
             icon: const Icon(Icons.check_rounded),
           ),
         ],
@@ -79,6 +84,8 @@ class _BudgetingViewState extends State<BudgetingView> {
                   // ),
                   // const Gap(20),
                   CustomTextFormField(
+                    controller: budgetController,
+                    prefixIcon: Icons.money,
                     hintText: "Tentukan target batas biaya",
                     keyboardType: TextInputType.number,
                     // initialValue: "300000",
@@ -91,5 +98,13 @@ class _BudgetingViewState extends State<BudgetingView> {
         ],
       ),
     );
+  }
+
+  var budgetController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    budgetController.text = widget.budgetingText;
   }
 }

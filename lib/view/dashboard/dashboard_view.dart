@@ -21,8 +21,6 @@ import 'package:workmanager/workmanager.dart';
 
 /// Widget ini menampilkan halaman Dashboard
 class DashboardView extends StatefulWidget {
-  // final User user;
-  // const DashboardPage({super.key, required this.user});
   const DashboardView({super.key});
 
   @override
@@ -31,29 +29,9 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   @override
-  void initState() {
-    super.initState();
-    getUserName();
-    _isPowerstripNull();
-    ConnectivityStatus.checkConnectivityState();
-
-    BuildContext myContext = context;
-
-    // For get powerstrip
-    final userModel = Provider.of<UserModel>(myContext, listen: false);
-    final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
-    final timerProvider = Provider.of<TimerProvider>(myContext, listen: false);
-    final scheduleProvider = Provider.of<ScheduleProvider>(myContext, listen: false);
-    final homeProvider = Provider.of<HomeProvider>(myContext, listen: false);
-    initModels(userModel, powerstripProvider, timerProvider, scheduleProvider, homeProvider);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final userModel = Provider.of<UserModel>(context);
-    final powerstripProvider = Provider.of<PowerstripProvider>(context);
 
-    var powerstrips = powerstripProvider.powerstrips;
     final homeProvider = Provider.of<HomeProvider>(context);
     var homes = homeProvider.homes;
 
@@ -138,6 +116,23 @@ class _DashboardViewState extends State<DashboardView> {
   String? userName;
   List<Widget>? _powerstripWidgets = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _isPowerstripNull();
+    ConnectivityStatus.checkConnectivityState();
+
+    // BuildContext myContext = context;
+
+    // For get powerstrip
+    // final userModel = Provider.of<UserModel>(myContext, listen: false);
+    // final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
+    // final timerProvider = Provider.of<TimerProvider>(myContext, listen: false);
+    // final scheduleProvider = Provider.of<ScheduleProvider>(myContext, listen: false);
+    // final homeProvider = Provider.of<HomeProvider>(myContext, listen: false);
+    // initModels(userModel, powerstripProvider, timerProvider, scheduleProvider, homeProvider);
+  }
+
   void initModels(
     UserModel userModel,
     PowerstripProvider powerstripProvider,
@@ -172,13 +167,6 @@ class _DashboardViewState extends State<DashboardView> {
       }
       // return powerstripProvider.powerstrips;
     }
-  }
-
-  void getUserName() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userName = prefs.getString('user_name');
-    });
   }
 
   void _isPowerstripNull() async {

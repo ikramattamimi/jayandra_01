@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class HomeModel extends ChangeNotifier {
   String email;
@@ -18,12 +17,12 @@ class HomeModel extends ChangeNotifier {
   });
 
   factory HomeModel.fromJson(Map<String, dynamic> json) {
-    return HomeModel(
+  return HomeModel(
       // email: json[''],
       // userId: json['id_user'],
       className: json['class_name'],
       homeName: json['home_name'],
-      budget: double.parse(json['budget'].toString()),
+      budget: json['budget'] != 0 ? double.parse(json['budget'].toString()) : 0,
     );
   }
 }

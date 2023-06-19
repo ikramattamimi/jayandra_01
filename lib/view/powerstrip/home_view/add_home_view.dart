@@ -31,6 +31,12 @@ class _AddHomeViewState extends State<AddHomeView> {
     });
   }
 
+  void setBudget(String budget) {
+    setState(() {
+      homeController.budgetingController.text = budget;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var homeProvider = Provider.of<HomeProvider>(context);
@@ -49,156 +55,141 @@ class _AddHomeViewState extends State<AddHomeView> {
             style: Styles.bodyTextGrey3,
           ),
         ),
-        // title: Text(
-        //   "Tambah Powerstrip",
-        //   style: Styles.bodyTextBlack,
-        // ),
       ),
       backgroundColor: Styles.primaryColor,
       body: ListView(
         children: [
-          Container(
-            margin: const EdgeInsets.all(16),
-            // padding: EdgeInsets.all(16),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Tambah Rumah",
-                    style: Styles.headingStyle3,
-                  ),
-                  const Gap(12),
-                  Text(
-                    "Rumah digunakan Untuk Mengelompokkan Powerstrip",
-                    style: Styles.bodyTextGrey3,
-                  ),
-                  const Gap(32),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            const Gap(20),
-                            Image.asset("assets/images/router.png"),
-                            const Gap(32),
-                            Form(
-                              key: addHomeFormKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Gap(12),
-                                  CustomTextFormField(
-                                    hintText: "Nama rumah",
-                                    formKey: addHomeFormKey,
-                                    controller: homeController.homeNameController,
-                                    keyboardType: TextInputType.name,
-                                    prefixIcon: Icons.home_rounded,
-                                    validator: (String? value) {
-                                      if (!value!.isValidName) {
-                                        return "Nama harus diisi";
-                                      } else {
-                                        addHomeFormKey.currentState!.save();
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                  const Gap(16),
-                                  InkWell(
-                                    onTap: () => context.pushNamed("electricity_class_add_home", extra: setElClass, queryParams: {
-                                      'selectedElClass': homeController.elClassController.text,
-                                    }),
-                                    child: AbsorbPointer(
-                                      absorbing: true,
-                                      child: CustomTextFormField(
-                                        formKey: addHomeFormKey,
-                                        controller: homeController.elClassController,
-                                        hintText: "Golongan Listrik",
-                                        prefixIcon: Icons.money,
-                                        suffixIcon: const Icon(
-                                          Icons.arrow_forward_ios_rounded,
-                                          size: 20,
-                                        ),
-                                        validator: (String? value) {
-                                          if (value!.isEmpty) {
-                                            return "Golongan listrik harus diisi";
-                                          } else {
-                                            addHomeFormKey.currentState!.save();
-                                            return null;
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  const Gap(16),
-                                  InkWell(
-                                    onTap: () => context.pushNamed("budgeting_page"),
-                                    child: CustomTextFormField(
-                                      enabled: false,
-                                      formKey: addHomeFormKey,
-                                      controller: homeController.budgetingController,
-                                      hintText: "Budget",
-                                      prefixIcon: Icons.money,
-                                      suffixIcon: const Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        size: 20,
-                                      ),
-                                    ),
-                                  ),
-                                  const Gap(24),
-                                  (!homeController.isLoading)
-                                      ? SizedBox(
-                                          width: MediaQuery.of(context).size.width,
-                                          child: CustomElevatedButton(
-                                            backgroundColor: Styles.accentColor,
-                                            borderColor: Styles.secondaryColor,
-                                            text: "tambah",
-                                            textStyle: Styles.buttonTextWhite,
-                                            onPressed: () async {
-                                              try {
-                                                addHome(homeProvider);
-                                              } catch (err) {
-                                                Logger().e(err);
-                                              }
-                                            },
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          height: 32,
-                                          width: 32,
-                                          child: CircularProgressIndicator(
-                                            color: Styles.accentColor,
-                                            strokeWidth: 3,
-                                          ),
-                                        ),
-                                  // ElevatedButton(
-                                  //   onPressed: () {
-                                  //     addHome();
-                                  //   },
-                                  //   style: ElevatedButton.styleFrom(
-                                  //     minimumSize: const Size(30, 42),
-                                  //   ),
-                                  //   child: Text(
-                                  //     "Selesai",
-                                  //     style: Styles.bodyTextWhite3,
-                                  //   ),
-                                  // ),
-                                  // const Gap(20),
-                                ],
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Tambah Rumah",
+                style: Styles.headingStyle3,
+              ),
+              const Gap(12),
+              Text(
+                "Rumah digunakan Untuk Mengelompokkan Powerstrip",
+                style: Styles.bodyTextGrey3,
+              ),
+            ],
+          ),
+          const Gap(32),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const Gap(20),
+                    Image.asset("assets/images/router.png"),
+                    const Gap(32),
+                    Form(
+                      key: addHomeFormKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Gap(12),
+                          CustomTextFormField(
+                            hintText: "Nama rumah",
+                            formKey: addHomeFormKey,
+                            controller: homeController.homeNameController,
+                            keyboardType: TextInputType.name,
+                            prefixIcon: Icons.home_rounded,
+                            validator: (String? value) {
+                              if (!value!.isValidName) {
+                                return "Nama harus diisi";
+                              } else {
+                                addHomeFormKey.currentState!.save();
+                                return null;
+                              }
+                            },
+                          ),
+                          const Gap(16),
+                          InkWell(
+                            onTap: () => context.pushNamed("electricity_class_add_home", extra: setElClass, queryParams: {
+                              'selectedElClass': homeController.elClassController.text,
+                            }),
+                            child: AbsorbPointer(
+                              absorbing: true,
+                              child: CustomTextFormField(
+                                formKey: addHomeFormKey,
+                                controller: homeController.elClassController,
+                                hintText: "Golongan Listrik",
+                                prefixIcon: Icons.money,
+                                suffixIcon: const Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 20,
+                                ),
+                                validator: (String? value) {
+                                  if (value!.isEmpty) {
+                                    return "Golongan listrik harus diisi";
+                                  } else {
+                                    addHomeFormKey.currentState!.save();
+                                    return null;
+                                  }
+                                },
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const Gap(16),
+                          InkWell(
+                            onTap: () => context.pushNamed(
+                              "budgeting_page",
+                              extra: setBudget,
+                              queryParams: {
+                                'budgetText': homeController.budgetingController.text,
+                              },
+                            ),
+                            child: AbsorbPointer(
+                              absorbing: true,
+                              child: CustomTextFormField(
+                                formKey: addHomeFormKey,
+                                controller: homeController.budgetingController,
+                                hintText: "Budget",
+                                prefixIcon: Icons.money,
+                                suffixIcon: const Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Gap(24),
+                          if (!homeController.isLoading)
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: CustomElevatedButton(
+                                backgroundColor: Styles.accentColor,
+                                borderColor: Styles.secondaryColor,
+                                text: "tambah",
+                                textStyle: Styles.buttonTextWhite,
+                                onPressed: () async {
+                                  try {
+                                    addHome(homeProvider);
+                                  } catch (err) {
+                                    Logger().e(err);
+                                  }
+                                },
+                              ),
+                            )
+                          else
+                            SizedBox(
+                              height: 32,
+                              width: 32,
+                              child: CircularProgressIndicator(
+                                color: Styles.accentColor,
+                                strokeWidth: 3,
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -244,23 +235,26 @@ class _AddHomeViewState extends State<AddHomeView> {
           homeController.isLoading = false;
         });
 
-        // Menampilkan pesan status autentikasi
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(addHomeResponse.message)),
-        );
-
         var userId = UserModel().userId;
 
         // Jika status autentikasi sukses dengan kode 0
         if (addHomeResponse.code == 0) {
+          var budget = homeController.budgetingController.text;
+          var className = homeController.elClassController.text;
+          var homeName = homeController.homeNameController.text;
           var home = HomeModel(
-            budget: double.parse(homeController.budgetingController.text),
-            className: homeController.elClassController.text,
-            homeName: homeController.homeNameController.text,
+            budget: budget.isNotEmpty ? double.parse(budget) : 0,
+            className: className,
+            homeName: homeName,
             userId: userId,
           );
           homeProvider.addHome(home);
+
+          // Menampilkan pesan status
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(addHomeResponse.message)),
+          );
 
           // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
           // membaca pesan status autentikasi
