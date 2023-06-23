@@ -5,6 +5,7 @@ import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
+import 'package:jayandra_01/module/powerstrip/socket_controller.dart';
 import 'package:jayandra_01/view/powerstrip/socket_widget.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -78,7 +79,8 @@ class _PowerstripViewState extends State<PowerstripView> {
   /// ==========================================================================
   String pageTitle = "";
   List<String> sockets = ['Socket 1', 'Socket 2', 'Socket 3', 'Socket 4'];
-  final _powerstripController = PowerstripController();
+  final powerstripController = PowerstripController();
+  final socketController = SocketController();
   final TextEditingController _updateNameController = TextEditingController();
 
   List<SocketModel>? socketss;
@@ -238,7 +240,7 @@ class _PowerstripViewState extends State<PowerstripView> {
       }
     });
     myPowerstrip.updateAllSocketStatus(myPowerstrip.isPowerstripActive);
-    await _powerstripController.changeAllSocketStatus(myPowerstrip.id, myPowerstrip.isPowerstripActive);
+    await socketController.changeAllSocketStatus(myPowerstrip.id, myPowerstrip.isPowerstripActive);
   }
 
   List<Widget> getSockets(List<SocketModel> mySockets) {

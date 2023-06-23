@@ -6,9 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
+import 'package:jayandra_01/module/powerstrip/socket_controller.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
+import 'package:logger/logger.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -30,14 +32,16 @@ class SocketWidget extends StatefulWidget {
 }
 
 class _SocketState extends State<SocketWidget> {
-  // late SocketModel socket;
-  final PowerstripController powerstripController = PowerstripController();
-  final TextEditingController _updateNameController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
     // socket = widget.socket;
+  }
+
+  @override
+  void dispose() {
+    socketController.socketNameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -76,7 +80,7 @@ class _SocketState extends State<SocketWidget> {
                           mySocket.status = !mySocket.status;
                           powerstrip.updateOneSocketStatus(mySocket.socketId, mySocket.status);
                           widget.changeParentState(powerstrip);
-                          powerstripController.setSocketStatus(mySocket);
+                          socketController.setSocketStatus(mySocket);
                         });
                       },
                       activeColor: Styles.accentColor,
@@ -132,6 +136,14 @@ class _SocketState extends State<SocketWidget> {
     );
   }
 
+// =============================================================================
+// Local Var
+// =============================================================================
+
+  // late SocketModel socket;
+  final PowerstripController powerstripController = PowerstripController();
+  final SocketController socketController = SocketController();
+
   showEditNameDialog(SocketModel mySocket, PowerstripProvider powerstripProvider) {
     showDialog<String>(
       context: context,
@@ -152,7 +164,7 @@ class _SocketState extends State<SocketWidget> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   CustomTextFormField(
-                    controller: _updateNameController,
+                    controller: socketController.socketNameController,
                     prefixIcon: MdiIcons.powerSocketDe,
                     hintText: mySocket.name.isNotEmpty ? mySocket.name : "Socket ${widget.socketId}",
                     obscureText: false,
@@ -162,16 +174,7 @@ class _SocketState extends State<SocketWidget> {
                   const Gap(16),
                   ElevatedButton(
                     onPressed: () {
-                      // deleteTimer(timerProvider);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Nama socket diganti")),
-                      );
-                      powerstripProvider.setSocketName(
-                        _updateNameController.text,
-                        mySocket.socketId,
-                        mySocket.powerstripId,
-                      );
-                      context.pop();
+                      setSocketName(powerstripProvider, mySocket);
                     },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -269,4 +272,49 @@ class _SocketState extends State<SocketWidget> {
   //       Logger(printer: PrettyPrinter()).e(err);
   //     }
   // }
+
+  setSocketName(PowerstripProvider powerstripProvider, SocketModel mySocket) async {
+    try {
+      mySocket.name = socketController.socketNameController.text;
+      // Memproses API
+      final response = await socketController.updateSocketName(mySocket);
+
+      // Menyembunyikan animasi loading
+      setState(() {
+        socketController.isLoading = false;
+      });
+
+      // Jika status autentikasi sukses dengan kode 0
+      if (response.code == 0) {
+        // Set Provider
+        powerstripProvider.setSocketName(
+          mySocket.name,
+          mySocket.socketId,
+          mySocket.powerstripId,
+        );
+
+        // Menampilkan pesan status
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.message)),
+        );
+
+        // ignore: use_build_context_synchronously
+        context.pop();
+      }
+    } catch (err) {
+      // Menyembunyikan animasi loading
+      setState(() {
+        socketController.isLoading = false;
+      });
+
+      // Menampilkan pesan dari controller
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(err.toString())),
+      );
+
+      Logger(printer: PrettyPrinter()).e(err);
+    }
+  }
 }

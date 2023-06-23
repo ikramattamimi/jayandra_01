@@ -16,7 +16,7 @@ class PowerstripRepository {
   }
 
   Future<http.Response> setSocketStatus(int socketId, int powerstripId, bool status) async {
-    Logger(printer: PrettyPrinter()).i("API set socket status");
+    // Logger(printer: PrettyPrinter()).i("API set socket status");
     return http.post(
       Uri.parse('${NetworkAPI.ip}/updateSocketStatus/'),
       headers: <String, String>{
@@ -33,7 +33,7 @@ class PowerstripRepository {
   }
 
   Future<http.Response> updateSocketName(SocketModel socket) async {
-    return http.post(
+    return await http.post(
       Uri.parse('${NetworkAPI.ip}/updateSocketName/'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
@@ -42,7 +42,7 @@ class PowerstripRepository {
         {
           'id_socket': socket.socketId,
           'id_powerstrip': socket.powerstripId,
-          'name': socket.name,
+          'socket_name': socket.name,
         },
       ),
     );

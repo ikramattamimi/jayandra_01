@@ -1,6 +1,5 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
@@ -153,7 +152,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
   void initState() {
     super.initState();
     powerstrip = widget.powerstrip;
-    selectedValue = widget.powerstrip.sockets![0].socketId.toString();
+    selectedValue = widget.powerstrip.sockets[0].socketId.toString();
   }
 
   /// Simpan timer ke database
@@ -169,7 +168,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
     await _timerController.addTimer(timer).then((value) {
       timerToChange = timer;
       var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
-      var socket = powerstrip!.sockets!.firstWhere((element) => element.socketId == int.parse(selectedValue));
+      var socket = powerstrip!.sockets.firstWhere((element) => element.socketId == int.parse(selectedValue));
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
         value!.data.timerId ?? 12,
@@ -199,12 +198,12 @@ class _AddTimerPageState extends State<AddTimerPage> {
   /// Getter nama socket untuk dropdown
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [];
-    for (var socket in powerstrip!.sockets!) {
+    for (var socket in powerstrip!.sockets) {
       menuItems.add(
         DropdownMenuItem(
           value: socket.socketId.toString(),
           child: Text(
-            socket.name!,
+            socket.name,
             style: Styles.bodyTextBlack2,
           ),
         ),

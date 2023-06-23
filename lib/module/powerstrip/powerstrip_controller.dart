@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:jayandra_01/models/my_response.dart';
@@ -48,28 +49,6 @@ class PowerstripController {
     // return powerstripObjectResponse;
   }
 
-  Future<MyResponse?> setSocketStatus(SocketModel socket) async {
-    http.Response responseSocket;
-    responseSocket = await pwsRepo.setSocketStatus(socket.socketId!, socket.powerstripId!, socket.status!);
-
-    // Parse String jsonke Map
-    Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
-
-    MyResponse updateSocketResponse = MyResponse.fromJson(socketMapData, SocketModel.fromJson);
-
-    return updateSocketResponse;
-  }
-
-  Future<MyResponse?> updateSocketName(SocketModel socket) async {
-    http.Response responseSocket;
-    responseSocket = await pwsRepo.updateSocketName(socket);
-
-    // Parse String jsonke Map
-    Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
-    MyResponse updateSocketResponse = MyResponse.fromJson(socketMapData, SocketModel.fromJson);
-    return updateSocketResponse;
-  }
-
   Future<MyResponse?> updatePowerstripName(PowerstripModel powerstrip) async {
     http.Response result;
     // responsePowerstrip = await pwsRepo.updatePowerstripName(powerstrip);
@@ -90,20 +69,5 @@ class PowerstripController {
       return MyResponse();
     }
 
-    // Parse String jsonke Map
-    // Map<String, dynamic> powerstripMapData = jsonDecode(responsePowerstrip.body);
-    // MyResponse updatePowerstripResponse = MyResponse.fromJson(powerstripMapData, PowerstripModel.fromJson);
-    // return updatePowerstripResponse;
-  }
-
-  Future<PowerstripResponse?> changeAllSocketStatus(int idPowerstrip, bool status) async {
-    final prefs = await SharedPreferences.getInstance();
-    PowerstripResponse? powerstripObjectResponse;
-    // Get API data powerstrip
-    await pwsRepo.changeAllSocketStatus(idPowerstrip, status).then((value) async {
-      prefs.remove('powerstrip');
-      // powerstripObjectResponse = await getPowerstrip();
-    });
-    return powerstripObjectResponse;
   }
 }

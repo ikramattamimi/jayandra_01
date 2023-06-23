@@ -61,10 +61,9 @@ class PowerstripProvider with ChangeNotifier {
     return Provider.of<PowerstripProvider>(context, listen: listen);
   }
 
-  void setSocketName(String socketName, int socketId, int powerstripId) async {
+  void setSocketName(String socketName, int socketId, int powerstripId) {
     var socket = findSocket(powerstripId, socketId);
     socket.updateSocketName(socketName);
-    await _powerstripController.updateSocketName(socket);
     notifyListeners();
   }
 
