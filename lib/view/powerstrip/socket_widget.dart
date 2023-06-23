@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +31,7 @@ class SocketWidget extends StatefulWidget {
 
 class _SocketState extends State<SocketWidget> {
   // late SocketModel socket;
-  final PowerstripController _powerstripController = PowerstripController();
+  final PowerstripController powerstripController = PowerstripController();
   final TextEditingController _updateNameController = TextEditingController();
 
   @override
@@ -42,7 +44,7 @@ class _SocketState extends State<SocketWidget> {
   Widget build(BuildContext context) {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
     var powerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.powerstripId);
-    var mySocket = powerstrip.sockets!.firstWhere((element) => element.socketId == widget.socketId);
+    var mySocket = powerstrip.sockets.firstWhere((element) => element.socketId == widget.socketId);
     final screenSize = AppLayout.getSize(context);
     return SizedBox(
       // height: 120,
@@ -68,12 +70,13 @@ class _SocketState extends State<SocketWidget> {
                     height: 25,
                     child: Switch(
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      value: mySocket.status!,
+                      value: mySocket.status,
                       onChanged: (value) {
                         setState(() {
-                          mySocket.status = !mySocket.status!;
-                          powerstrip.updateOneSocketStatus(mySocket.socketId!, mySocket.status!);
+                          mySocket.status = !mySocket.status;
+                          powerstrip.updateOneSocketStatus(mySocket.socketId, mySocket.status);
                           widget.changeParentState(powerstrip);
+                          powerstripController.setSocketStatus(mySocket);
                         });
                       },
                       activeColor: Styles.accentColor,
@@ -92,7 +95,7 @@ class _SocketState extends State<SocketWidget> {
                         child: Wrap(
                           children: [
                             Text(
-                              mySocket.name!,
+                              mySocket.name.isNotEmpty ? mySocket.name : "Socket ${widget.socketId}",
                               style: Styles.title,
                             ),
                           ],
@@ -151,7 +154,7 @@ class _SocketState extends State<SocketWidget> {
                   CustomTextFormField(
                     controller: _updateNameController,
                     prefixIcon: MdiIcons.powerSocketDe,
-                    hintText: mySocket.name!,
+                    hintText: mySocket.name.isNotEmpty ? mySocket.name : "Socket ${widget.socketId}",
                     obscureText: false,
                     keyboardType: TextInputType.name,
                     // onSaved:
@@ -163,10 +166,10 @@ class _SocketState extends State<SocketWidget> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Nama socket diganti")),
                       );
-                      powerstripProvider.updateSocketName(
+                      powerstripProvider.setSocketName(
                         _updateNameController.text,
-                        mySocket.socketId!,
-                        mySocket.powerstripId!,
+                        mySocket.socketId,
+                        mySocket.powerstripId,
                       );
                       context.pop();
                     },
@@ -201,4 +204,69 @@ class _SocketState extends State<SocketWidget> {
       ),
     );
   }
+
+  // void setSocketStatus(HomeProvider homeProvider) async {
+
+  //     // Menampilkan animasi loading
+  //     setState(() {
+  //       powerstripController.isLoading = true;
+  //     });
+
+  //     try {
+  //       // Memproses API
+  //       final setSocketStatusResponse = await Future.any([
+  //         powerstripController.setSocketStatus(socket),
+  //         Future.delayed(
+  //           const Duration(seconds: 10),
+  //           () => throw TimeoutException('API call took too long'),
+  //         ),
+  //       ]);
+
+  //       // Menyembunyikan animasi loading
+  //       setState(() {
+  //         powerstripController.isLoading = false;
+  //       });
+
+  //       var userId = UserModel().userId;
+
+  //       // Jika status autentikasi sukses dengan kode 0
+  //       if (setSocketStatusResponse!.code == 0) {
+  //         var budget = powerstripController.budgetingController.text;
+  //         var className = powerstripController.elClassController.text;
+  //         var homeName = powerstripController.homeNameController.text;
+  //         var home = HomeModel(
+  //           budget: budget.isNotEmpty ? double.parse(budget) : 0,
+  //           className: className,
+  //           homeName: homeName,
+  //           userId: userId,
+  //         );
+  //         homeProvider.addHome(home);
+
+  //         // Menampilkan pesan status
+  //         // ignore: use_build_context_synchronously
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text(addHomeResponse.message)),
+  //         );
+
+  //         // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
+  //         // membaca pesan status autentikasi
+  //         Future.delayed(const Duration(seconds: 1), () {
+  //           context.pop();
+  //         });
+  //       }
+  //     } catch (err) {
+  //       // Menyembunyikan animasi loading
+  //       setState(() {
+  //         homeController.isLoading = false;
+  //       });
+
+  //       // Menampilkan pesan dari controller
+  //       // ignore: use_build_context_synchronously
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text(err.toString())),
+  //       );
+
+  //       Logger(printer: PrettyPrinter()).e(err);
+  //     }
+  // }
 }

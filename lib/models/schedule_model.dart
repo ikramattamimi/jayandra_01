@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/day_model.dart';
 import 'package:jayandra_01/models/days_indonesia.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
 
 class ScheduleModel extends ChangeNotifier {
   ScheduleModel({

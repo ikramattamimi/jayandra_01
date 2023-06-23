@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
+import 'package:jayandra_01/module/schedule/schedule_provider.dart';
+import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/module/user/login_controller.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 import 'package:jayandra_01/view/login/custom_container.dart';
@@ -18,6 +21,7 @@ import 'package:jayandra_01/custom_widget/white_container.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jayandra_01/models/init_models.dart';
 
 /// Widget ini menampilkan halaman Login
 class LoginView extends StatefulWidget {
@@ -33,8 +37,11 @@ class _LoginViewState extends State<LoginView> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
-    final userModel = Provider.of<UserModel>(context);
-    final powerstripProvider = Provider.of<PowerstripProvider>(context);
+    final userProvider = Provider.of<UserModel>(context, listen: false);
+    final powerstripProvider = Provider.of<PowerstripProvider>(context, listen: false);
+    final timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Styles.accentColor,
       appBar: AppBar(
@@ -111,7 +118,15 @@ class _LoginViewState extends State<LoginView> {
                                     textStyle: Styles.buttonTextWhite,
                                     onPressed: () async {
                                       try {
-                                        _login(userModel, powerstripProvider);
+                                        _login(userProvider);
+                                        initModels(
+                                          userProvider: userProvider,
+                                          powerstripProvider: powerstripProvider,
+                                          timerProvider: timerProvider,
+                                          scheduleProvider: scheduleProvider,
+                                          homeProvider: homeProvider,
+                                        );
+                                        goToDashboard();
                                       } catch (err) {
                                         Logger().e(err);
                                       }
@@ -175,7 +190,7 @@ class _LoginViewState extends State<LoginView> {
   ///
   /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
   /// dari [LoginController]
-  void _login(UserModel userModel, PowerstripProvider powerstripProvider) async {
+  void _login(UserModel userProvider) async {
     // int id;
     // Jika validasi form berhasil
     if (_loginFormKey.currentState!.validate()) {
@@ -206,23 +221,24 @@ class _LoginViewState extends State<LoginView> {
 
         // Jika status autentikasi sukses dengan kode 0
         if (loginResponse.code == 0) {
-          UserModel user = loginResponse.data;
-          // userModel.updateUser(user);
-          powerstripProvider.initializeData(userModel.userId);
+          var user = loginResponse.data;
+          userProvider.updateUser(
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+          );
+
+          userProvider.logger();
 
           final prefs = await SharedPreferences.getInstance();
 
           // simpan status user sudah login
-          await prefs.setBool('isUserLoggedIn', true);
-          await prefs.setString('user_name', user.name);
-          await prefs.setString('email', user.email);
-          await prefs.setInt('user_id', user.userId);
-
-          // Menunggu 1 detik untuk memberikan kesempatan kepada pengguna
-          // membaca pesan status autentikasi
-          Future.delayed(const Duration(seconds: 1), () {
-            context.pushNamed('main_page', extra: user);
-          });
+          await Future.any([
+            prefs.setBool('isUserLoggedIn', true),
+            prefs.setString('user_name', user.name),
+            prefs.setString('email', user.email),
+            prefs.setInt('user_id', user.userId),
+          ]);
         }
       } catch (err) {
         // Menyembunyikan animasi loading
@@ -239,5 +255,12 @@ class _LoginViewState extends State<LoginView> {
         Logger(printer: PrettyPrinter()).e(err);
       }
     }
+  }
+
+  void goToDashboard() {
+    // Menunggu 3 detik untuk melakukan pengambilan data
+    Future.delayed(const Duration(seconds: 3), () {
+      context.pushNamed('main_page');
+    });
   }
 }

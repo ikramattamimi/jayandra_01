@@ -2,7 +2,7 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/powerstrip/timer_controller.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';

@@ -1,16 +1,16 @@
 class SocketModel {
-  final int? socketId;
-  final int? powerstripId;
-  String? name;
-  bool? status;
+  final int socketId;
+  final int powerstripId;
+  String name;
+  bool status;
 
   SocketModel({this.socketId = 0, this.powerstripId = 0, this.name = "", this.status = false});
 
   factory SocketModel.fromJson(Map<String, dynamic> json) {
     return SocketModel(
       socketId: json['id_socket'],
-      powerstripId: json['id_terminal'],
-      name: json['name'],
+      powerstripId: json['id_powerstrip'],
+      name: json['socket_name'],
       status: json['status'],
     );
   }

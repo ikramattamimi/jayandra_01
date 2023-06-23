@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/socket_model.dart';
+import 'package:logger/logger.dart';
 
 class PowerstripModel extends ChangeNotifier {
   final int id;
   String name;
-  final List<SocketModel>? sockets;
+  final List<SocketModel> sockets;
   bool isPowerstripActive;
   int totalActiveSocket;
 
   PowerstripModel({
     this.id = 0,
-    this.name = "",
-    this.sockets,
+    this.name = "Powerstrip",
+    required this.sockets,
     this.isPowerstripActive = false,
     this.totalActiveSocket = 0,
   });
@@ -28,13 +29,23 @@ class PowerstripModel extends ChangeNotifier {
       }
     }
     return PowerstripModel(
-      id: json['id'],
-      name: json['name'],
+      id: json['id_powerstrip'],
+      name: json['powerstrip_name'],
       sockets: sockets,
       isPowerstripActive: isPowerstripActive,
       totalActiveSocket: totalActiveSoccket,
       // user_id: json['user_id'],
     );
+  }
+
+  void logger() {
+    Logger().i({
+      'id' : id,
+      'name' : name,
+      'sockets' : sockets,
+      'isPowerstripActive' : isPowerstripActive,
+      'totalActiveSocket' : totalActiveSocket,
+    });
   }
 
   void updateAllSocketStatus(bool isPowerstripOn) {
@@ -44,7 +55,7 @@ class PowerstripModel extends ChangeNotifier {
   }
 
   void updateOneSocketStatus(int socketId, bool isSocketOn) {
-    SocketModel socket = sockets!.firstWhere((element) => element.socketId == socketId);
+    SocketModel socket = sockets.firstWhere((element) => element.socketId == socketId);
     socket.updateSocketStatus(isSocketOn);
     setPowerstripStatusWhenSocketChange();
     setTotalActiveSocket();
@@ -57,7 +68,7 @@ class PowerstripModel extends ChangeNotifier {
   }
 
   void setPowerstripStatusWhenSocketChange() {
-    for (var socket in sockets!) {
+    for (var socket in sockets) {
       if (socket.status == true) {
         isPowerstripActive = true;
         break;

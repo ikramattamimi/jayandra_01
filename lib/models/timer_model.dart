@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
 
 class TimerModel extends ChangeNotifier {
   final int? timerId;

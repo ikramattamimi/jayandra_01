@@ -33,8 +33,6 @@ class HomeProvider with ChangeNotifier {
     List<HomeModel> homeModels = await createHomeModelsFromApi(userId); // nanti ganti sama email
     _homes = homeModels;
     notifyListeners();
-
-    // }
   }
 
   Future<List<HomeModel>> createHomeModelsFromApi(int userId) async {

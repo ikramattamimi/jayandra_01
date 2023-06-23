@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class UserModel extends ChangeNotifier {
   int userId;
   String name;
   String email;
-  String password;
+  String? password;
 
   UserModel({
     this.userId = 0,
@@ -22,11 +23,11 @@ class UserModel extends ChangeNotifier {
     );
   }
 
-  void updateUser(UserModel user) {
-    userId = user.userId;
-    name = user.name;
-    email = user.email;
-    password = user.password;
+  void updateUser({required int userId, required String name, required String email, String? password}) {
+    this.userId = userId;
+    this.name = name;
+    this.email = email;
+    this.password = password;
     notifyListeners();
   }
 
@@ -38,5 +39,14 @@ class UserModel extends ChangeNotifier {
   void setUserName(String userName) {
     name = userName;
     notifyListeners();
+  }
+
+  void logger() {
+    Logger().i({
+      "userId": userId,
+      "name": name,
+      "email": email,
+      "password": password,
+    });
   }
 }

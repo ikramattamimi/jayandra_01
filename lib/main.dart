@@ -14,7 +14,7 @@ import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jayandra_01/models/init_models.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:workmanager/workmanager.dart';
 
@@ -70,14 +70,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     // For get powerstrip
-    final userModel = Provider.of<UserModel>(context);
-    final powerstripProvider = Provider.of<PowerstripProvider>(context);
-    final timerProvider = Provider.of<TimerProvider>(context);
-    final scheduleProvider = Provider.of<ScheduleProvider>(context);
-    final homeProvider = Provider.of<HomeProvider>(context);
-    initModels(userModel, powerstripProvider, timerProvider, scheduleProvider, homeProvider);
+    final userModel = Provider.of<UserModel>(context, listen: false);
+    final powerstripProvider = Provider.of<PowerstripProvider>(context, listen: false);
+    final timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    initModels(
+      userProvider: userModel,
+      powerstripProvider: powerstripProvider,
+      timerProvider: timerProvider,
+      scheduleProvider: scheduleProvider,
+      homeProvider: homeProvider,
+    );
 
     _router = _appRouter.getRouter();
     return MaterialApp.router(
@@ -91,41 +96,5 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.openSansTextTheme(Theme.of(context).textTheme),
       ),
     );
-  }
-
-  void initModels(
-    UserModel userModel,
-    PowerstripProvider powerstripProvider,
-    TimerProvider timerProvider,
-    ScheduleProvider scheduleProvider,
-    HomeProvider homeProvider,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool('isUserLoggedIn') ?? false) {
-      UserModel user = UserModel(
-        userId: prefs.getInt('user_id')!,
-        name: prefs.getString('user_name')!,
-        email: prefs.getString('email')!,
-      );
-      if (userModel.email == "") {
-        userModel.updateUser(user);
-      }
-      if (homeProvider.homes.isEmpty) {
-        homeProvider.initializeData(user.userId);
-      }
-      if (powerstripProvider.powerstrips.isEmpty) {
-        powerstripProvider.initializeData(user.userId).then((value) {
-          // For get timer
-          for (var powerstrip in powerstripProvider.powerstrips) {
-            timerProvider.setPowerstrip = powerstrip;
-            timerProvider.initializeData();
-
-            scheduleProvider.setPowerstrip = powerstrip;
-            scheduleProvider.initializeData();
-          }
-        });
-      }
-      // return powerstripProvider.powerstrips;
-    }
   }
 }

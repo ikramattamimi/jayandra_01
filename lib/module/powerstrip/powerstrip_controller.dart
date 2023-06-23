@@ -2,15 +2,16 @@ import 'dart:convert';
 
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/socket_model.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
-import 'package:jayandra_01/module/powerstrip/powerstrip_api_service.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
+import 'package:jayandra_01/module/powerstrip/powerstrip_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PowerstripController {
-  /// [PowerstripAPIService] untuk melakukan pemanggilan API get Powerstrip
-  final PowerstripAPIService _powerstripRepositroy = PowerstripAPIService();
+  /// [PowerstripRepository] untuk melakukan pemanggilan API get Powerstrip
+  final PowerstripRepository pwsRepo = PowerstripRepository();
 
   bool isLoading = false;
   var emailValue = '';
@@ -18,11 +19,11 @@ class PowerstripController {
   var passwordController = TextEditingController();
   String electricityClassValue = "";
 
-  Future<PowerstripResponse?> getPowerstrip(int userId) async {
+  Future<MyArrayResponse?> getPowerstrip(int userId) async {
     final prefs = await SharedPreferences.getInstance();
-    PowerstripResponse powerstripObjectResponse;
+    MyArrayResponse powerstripObjectResponse;
     // Get API data powerstrip
-    http.Response response = await _powerstripRepositroy.getPowerstrip(userId);
+    http.Response response = await pwsRepo.getPowerstrip(userId);
     // Jika status 200
     try {
       if (response.statusCode == 200) {
@@ -33,21 +34,23 @@ class PowerstripController {
         Map<String, dynamic> powerstripMapData = jsonDecode(response.body);
 
         // Response dengan response.data berupa List dari objek Powerstrip
-        powerstripObjectResponse = PowerstripResponse.fromJsonArray(powerstripMapData, PowerstripModel.fromJson);
+        powerstripObjectResponse = MyArrayResponse.fromJson(powerstripMapData, PowerstripModel.fromJson);
         powerstripObjectResponse.message = "Data powerstrip berhasil dimuat";
         return powerstripObjectResponse;
       } else {
-        return PowerstripResponse(code: 1, message: "Terjadi Masalah");
+        return MyArrayResponse(code: 1, message: "Terjadi Masalah");
       }
-    } catch (e) {}
-    return null;
+    } catch (e) {
+      Logger().e(e);
+      return MyArrayResponse(code: 1, message: "Terjadi Masalah");
+    }
 
     // return powerstripObjectResponse;
   }
 
   Future<MyResponse?> setSocketStatus(SocketModel socket) async {
     http.Response responseSocket;
-    responseSocket = await _powerstripRepositroy.setSocketStatus(socket.socketId!, socket.powerstripId!, socket.status!);
+    responseSocket = await pwsRepo.setSocketStatus(socket.socketId!, socket.powerstripId!, socket.status!);
 
     // Parse String jsonke Map
     Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
@@ -59,7 +62,7 @@ class PowerstripController {
 
   Future<MyResponse?> updateSocketName(SocketModel socket) async {
     http.Response responseSocket;
-    responseSocket = await _powerstripRepositroy.updateSocketName(socket);
+    responseSocket = await pwsRepo.updateSocketName(socket);
 
     // Parse String jsonke Map
     Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
@@ -68,9 +71,24 @@ class PowerstripController {
   }
 
   Future<MyResponse?> updatePowerstripName(PowerstripModel powerstrip) async {
-    http.Response responsePowerstrip;
-    responsePowerstrip = await _powerstripRepositroy.updatePowerstripName(powerstrip);
-    return null;
+    http.Response result;
+    // responsePowerstrip = await pwsRepo.updatePowerstripName(powerstrip);
+    // return null;
+
+    try {
+      result = await pwsRepo.updatePowerstripName(powerstrip);
+
+      Map<String, dynamic> myBody = jsonDecode(result.body);
+
+      var myResponse = MyResponse();
+      if (result.statusCode == 200) {
+        myResponse.message = "Nama Powerstrip berhasil diupdate";
+      }
+      return myResponse;
+    } catch (e) {
+      Logger().e(e);
+      return MyResponse();
+    }
 
     // Parse String jsonke Map
     // Map<String, dynamic> powerstripMapData = jsonDecode(responsePowerstrip.body);
@@ -82,7 +100,7 @@ class PowerstripController {
     final prefs = await SharedPreferences.getInstance();
     PowerstripResponse? powerstripObjectResponse;
     // Get API data powerstrip
-    await _powerstripRepositroy.changeAllSocketStatus(idPowerstrip, status).then((value) async {
+    await pwsRepo.changeAllSocketStatus(idPowerstrip, status).then((value) async {
       prefs.remove('powerstrip');
       // powerstripObjectResponse = await getPowerstrip();
     });

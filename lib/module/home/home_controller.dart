@@ -33,7 +33,7 @@ class HomeController {
 
       MyResponse<HomeModel> myResponse = MyResponse.fromJson(myBody, HomeModel.fromJson);
       if (result.statusCode == 200) {
-        myResponse.message = "Terminal Berhasil Ditambahkan";
+        myResponse.message = "Home Berhasil Ditambahkan";
       }
       return myResponse;
     } catch (e) {

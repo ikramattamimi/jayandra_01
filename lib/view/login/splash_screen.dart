@@ -49,20 +49,6 @@ class _LandingPageState extends State<SplashScreen> {
     }));
   }
 
-  void initWidgets(UserModel userModel, PowerstripProvider powerstripProvider) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool('isUserLoggedIn') ?? false) {
-      UserModel user = UserModel(
-        userId: prefs.getInt('user_id')!,
-        name: prefs.getString('user_name')!,
-        email: prefs.getString('email')!,
-      );
-
-      userModel.updateUser(user);
-
-      powerstripProvider.initializeData(user.userId);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

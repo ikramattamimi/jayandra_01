@@ -2,7 +2,7 @@ import 'package:carbon_icons/carbon_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/home_model.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
@@ -148,7 +148,7 @@ class _DashboardViewState extends State<DashboardView> {
         email: prefs.getString('email')!,
       );
       if (userModel.email == "") {
-        userModel.updateUser(user);
+        // userModel.updateUser(user);
       }
       if (homeProvider.homes.isEmpty) {
         homeProvider.initializeData(user.userId);

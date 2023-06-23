@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/view/powerstrip/powerstrip_view.dart';
@@ -13,13 +13,12 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin {
+class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -32,8 +31,9 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
     var powerstrips = powerstripProvider.powerstrips;
+    _tabController = TabController(length: 1, vsync: this);
 
-    final myPowerstrip = powerstrips.isEmpty ? PowerstripModel() : powerstrips.firstWhere((element) => element.id == 1);
+    final myPowerstrip = powerstrips.isEmpty ? null : powerstrips.firstWhere((element) => element.id == 1);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -65,11 +65,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
               dividerColor: Styles.accentColor,
               indicatorColor: Styles.accentColor,
               unselectedLabelColor: Styles.accentColor2,
-              tabs: [
-                Tab(text: myPowerstrip.name),
-                const Tab(text: 'Kamar'),
-                const Tab(text: 'Ruang Keluarga'),
-              ],
+              tabs: getTabs(powerstrips),
               // final myPowerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == 1);
             ),
             Expanded(
@@ -97,5 +93,13 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
       }
     }
     return powerstripWidgets;
+  }
+
+  List<Widget> getTabs(List<PowerstripModel> powerstrips) {
+    List<Widget> tabs = [];
+    for (var powerstrip in powerstrips) {
+      tabs.add(Tab(text: powerstrip.name.isEmpty ? "Powerstrip" : powerstrip.name));
+    }
+    return tabs;
   }
 }

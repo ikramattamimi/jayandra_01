@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/day_model.dart';
 import 'package:jayandra_01/models/days_indonesia.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/schedule_controller.dart';
 import 'package:jayandra_01/view/powerstrip/schedule/day_widget.dart';

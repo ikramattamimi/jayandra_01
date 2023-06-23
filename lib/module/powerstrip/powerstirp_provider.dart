@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
+import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +16,7 @@ class PowerstripProvider with ChangeNotifier {
 
   final _powerstripController = PowerstripController();
 
-  PowerstripProvider() {
-    // initializeData();
-  }
+  PowerstripProvider();
 
   void addPowerstrip(PowerstripModel powerstrip) {
     _powerstrips.add(powerstrip);
@@ -33,7 +32,6 @@ class PowerstripProvider with ChangeNotifier {
     List<PowerstripModel> powerstripModels = await createPowerstripModelsFromApi(userId);
     _powerstrips = powerstripModels;
     notifyListeners();
-    // }
   }
 
   Future<List<PowerstripModel>> createPowerstripModelsFromApi(userId) async {
@@ -42,8 +40,11 @@ class PowerstripProvider with ChangeNotifier {
       printer: PrettyPrinter(),
     );
     try {
-      await _powerstripController.getPowerstrip(userId).then((value) {
-        powerstripModels = value!.data!;
+      await _powerstripController.getPowerstrip(16).then((value) {
+        for (var powerstrip in value!.data!) {
+          powerstripModels.add(powerstrip);
+          powerstrip.logger();
+        }
       });
     } catch (e) {
       // Tangani pengecualian "Connection refused"
@@ -60,22 +61,21 @@ class PowerstripProvider with ChangeNotifier {
     return Provider.of<PowerstripProvider>(context, listen: listen);
   }
 
-  void updateSocketName(String socketName, int socketId, int powerstripId) async {
-    var powerstrip = _powerstrips.firstWhere((element) => element.id == powerstripId);
-    var socket = powerstrip.sockets!.firstWhere((element) => element.socketId == socketId);
+  void setSocketName(String socketName, int socketId, int powerstripId) async {
+    var socket = findSocket(powerstripId, socketId);
     socket.updateSocketName(socketName);
     await _powerstripController.updateSocketName(socket);
     notifyListeners();
   }
 
-  void updatePowerstripName(String powerstripName, int powerstripId) async {
-    var powerstrip = _powerstrips.firstWhere((element) => element.id == powerstripId);
+  void setPowerstripName(String powerstripName, int powerstripId) async {
+    var powerstrip = findPowerstrip(powerstripId);
     powerstrip.setPowerstripName(powerstripName);
     notifyListeners();
     await _powerstripController.updatePowerstripName(powerstrip);
   }
 
-  void updateOneSocketStatus(int socketId, int powerstripId, bool isSocketOn) {
+  void setOneSocketStatus(int socketId, int powerstripId, bool isSocketOn) {
     var logger = Logger(
       printer: PrettyPrinter(),
     );
@@ -87,5 +87,11 @@ class PowerstripProvider with ChangeNotifier {
   PowerstripModel findPowerstrip(int powerstripId) {
     var powerstrip = _powerstrips.firstWhere((element) => element.id == powerstripId);
     return powerstrip;
+  }
+
+  SocketModel findSocket(int powerstripId, int socketId) {
+    var powerstrip = _powerstrips.firstWhere((element) => element.id == powerstripId);
+    var socket = powerstrip.sockets.firstWhere((element) => element.socketId == socketId);
+    return socket;
   }
 }

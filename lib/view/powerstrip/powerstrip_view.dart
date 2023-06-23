@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/socket_model.dart';
-import 'package:jayandra_01/models/powestrip_model.dart';
+import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/view/powerstrip/socket_widget.dart';
@@ -33,7 +33,7 @@ class _PowerstripViewState extends State<PowerstripView> {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
 
     // initWidgets(userModel, powerstripProvider);
-    var myPowerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.powerstripId);
+    var myPowerstrip = powerstripProvider.findPowerstrip(widget.powerstripId);
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: Container(
@@ -64,7 +64,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                 shrinkWrap: true,
                 childAspectRatio: 1.3,
                 physics: const NeverScrollableScrollPhysics(),
-                children: getSockets(myPowerstrip.sockets!),
+                children: getSockets(myPowerstrip.sockets),
               ),
             ),
           ],
@@ -93,12 +93,15 @@ class _PowerstripViewState extends State<PowerstripView> {
     super.initState();
     BuildContext myContext = context;
     final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
-    powerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.powerstripId);
-    // pageTitle = widget.powerstrip.name;
-    getPowerstripState(powerstrip!.isPowerstripActive, powerstrip!.totalActiveSocket);
+    powerstrip = powerstripProvider.findPowerstrip(widget.powerstripId);
+
+    getPowerstripState(
+      isPowerstripOn: powerstrip?.isPowerstripActive ?? false,
+      totalActiveSocket: powerstrip?.totalActiveSocket ?? 0,
+    );
   }
 
-  void getPowerstripState(bool isPowerstripOn, int totalActiveSocket) {
+  void getPowerstripState({required bool isPowerstripOn, required int totalActiveSocket}) {
     if (isPowerstripOn == true) {
       _activeSocket = "$totalActiveSocket Socket Nyala";
     } else {
@@ -120,8 +123,8 @@ class _PowerstripViewState extends State<PowerstripView> {
                   onPressed: () {
                     setPowerstrip(myPowerstrip);
                     getPowerstripState(
-                      myPowerstrip.isPowerstripActive,
-                      myPowerstrip.totalActiveSocket,
+                      isPowerstripOn: myPowerstrip.isPowerstripActive,
+                      totalActiveSocket: myPowerstrip.totalActiveSocket,
                     );
                   },
                   icon: Icon(
@@ -143,7 +146,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                     Row(
                       children: [
                         Text(
-                          myPowerstrip.name,
+                          myPowerstrip.name.isNotEmpty ? myPowerstrip.name : "Powerstrip",
                           style: Styles.title,
                         ),
                         const Gap(20),
@@ -213,7 +216,7 @@ class _PowerstripViewState extends State<PowerstripView> {
   }
 
   updatePowerstripStatusByOneSocketChange(PowerstripModel powerstrip) {
-    for (var socket in powerstrip.sockets!) {
+    for (var socket in powerstrip.sockets) {
       if (socket.status == true) {
         setState(() {
           powerstrip.isPowerstripActive = true;
@@ -229,8 +232,8 @@ class _PowerstripViewState extends State<PowerstripView> {
 
   void setPowerstrip(PowerstripModel myPowerstrip) async {
     setState(() {
-      myPowerstrip.isPowerstripActive = !myPowerstrip.isPowerstripActive;
-      for (var socket in myPowerstrip.sockets!) {
+      myPowerstrip.isPowerstripActive = myPowerstrip.isPowerstripActive;
+      for (var socket in myPowerstrip.sockets) {
         socket.status = myPowerstrip.isPowerstripActive;
       }
     });
@@ -245,8 +248,8 @@ class _PowerstripViewState extends State<PowerstripView> {
         Container(
           constraints: BoxConstraints(minHeight: AppLayout.getSize(context).height / 6.5),
           child: SocketWidget(
-            socketId: element.socketId!,
-            powerstripId: element.powerstripId!,
+            socketId: element.socketId ?? 0,
+            powerstripId: element.powerstripId ?? 0,
             changeParentState: updatePowerstripStatusByOneSocketChange,
           ),
         ),
@@ -277,7 +280,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                   CustomTextFormField(
                     controller: _updateNameController,
                     prefixIcon: Icons.electrical_services_rounded,
-                    hintText: myPowerstrip.name,
+                    hintText: myPowerstrip.name.isNotEmpty ? myPowerstrip.name : "Powerstrip",
                     obscureText: false,
                     keyboardType: TextInputType.name,
                     // onSaved:
@@ -289,7 +292,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Nama socket diganti")),
                       );
-                      powerstripProvider.updatePowerstripName(
+                      powerstripProvider.setPowerstripName(
                         _updateNameController.text,
                         myPowerstrip.id,
                       );
