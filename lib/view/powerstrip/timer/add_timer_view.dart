@@ -10,11 +10,12 @@ import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/unique_int_generator.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 
 // import 'package:timezone/timezone.dart' as tz;
-TimerModel? timerToChange;
+late TimerModel timerToChange;
 
 class AddTimerPage extends StatefulWidget {
   const AddTimerPage({super.key, required this.powerstrip});
@@ -166,22 +167,27 @@ class _AddTimerPageState extends State<AddTimerPage> {
     timer.powerstripId = powerstrip!.id;
 
     await _timerController.addTimer(timer).then((value) {
-      timerToChange = timer;
+      TimerModel newTimer = value!.data;
       var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
       var socket = powerstrip!.sockets.firstWhere((element) => element.socketId == int.parse(selectedValue));
+      // timerToChange.logger();
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
-        value!.data.timerId ?? 12,
+        value.data.timerId ?? 12,
         getTimerNotification,
         params: {
           'socketName': socket.name,
           'socketId': socket.socketId,
           'powerstripId': socket.powerstripId,
           'status': socket.status,
+          'timerId': newTimer.timerId,
         },
       );
 
-      timerProvider.addTimer(timer);
+      timerProvider.addTimer(newTimer);
+      timer.logger();
+      newTimer.logger();
+      Logger().i(timerProvider.timers);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -228,6 +234,7 @@ getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
       'socketId': socket['socketId'],
       'powerstripId': socket['powerstripId'],
       'status': false,
+      'timerId': socket['timerId'],
     },
     // initialDelay: Duration(seconds: 5),
     existingWorkPolicy: ExistingWorkPolicy.replace,
@@ -240,6 +247,6 @@ getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
   NotificationService().showAlarm(
     id: generator.generateUniqueInt(),
     title: "Timer selesai",
-    body: "Timer selesai untuk Socket ${socket['socketName']}. Segera nonaktifkan socket supaya tagihan tidak membengkak!",
+    body: "Timer selesai untuk Socket ${socket['socketName']}. Socket sudah dimatikan",
   );
 }

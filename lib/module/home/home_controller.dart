@@ -25,7 +25,7 @@ class HomeController {
       http.Response result = await homeRepo.addHome(
         homeNameController.text,
         elClassController.text,
-        user.userId,
+        user.email,
         budgetingController.text,
       );
 

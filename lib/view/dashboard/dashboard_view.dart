@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:workmanager/workmanager.dart';
+import 'package:jayandra_01/models/init_models.dart';
 
 /// Widget ini menampilkan halaman Dashboard
 class DashboardView extends StatefulWidget {
@@ -34,6 +35,19 @@ class _DashboardViewState extends State<DashboardView> {
 
     final homeProvider = Provider.of<HomeProvider>(context);
     var homes = homeProvider.homes;
+
+    final userProvider = Provider.of<UserModel>(context, listen: false);
+    final powerstripProvider = Provider.of<PowerstripProvider>(context, listen: false);
+    final timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
+    // final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    initModels(
+      userProvider: userProvider,
+      powerstripProvider: powerstripProvider,
+      timerProvider: timerProvider,
+      scheduleProvider: scheduleProvider,
+      homeProvider: homeProvider,
+    );
 
     return Scaffold(
       backgroundColor: Styles.primaryColor,
@@ -133,41 +147,41 @@ class _DashboardViewState extends State<DashboardView> {
     // initModels(userModel, powerstripProvider, timerProvider, scheduleProvider, homeProvider);
   }
 
-  void initModels(
-    UserModel userModel,
-    PowerstripProvider powerstripProvider,
-    TimerProvider timerProvider,
-    ScheduleProvider scheduleProvider,
-    HomeProvider homeProvider,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool('isUserLoggedIn') ?? false) {
-      UserModel user = UserModel(
-        userId: prefs.getInt('user_id')!,
-        name: prefs.getString('user_name')!,
-        email: prefs.getString('email')!,
-      );
-      if (userModel.email == "") {
-        // userModel.updateUser(user);
-      }
-      if (homeProvider.homes.isEmpty) {
-        homeProvider.initializeData(user.userId);
-      }
-      if (powerstripProvider.powerstrips.isEmpty) {
-        powerstripProvider.initializeData(user.userId).then((value) {
-          // For get timer
-          for (var powerstrip in powerstripProvider.powerstrips) {
-            timerProvider.setPowerstrip = powerstrip;
-            timerProvider.initializeData();
+  // void initModels(
+  //   UserModel userModel,
+  //   PowerstripProvider powerstripProvider,
+  //   TimerProvider timerProvider,
+  //   ScheduleProvider scheduleProvider,
+  //   HomeProvider homeProvider,
+  // ) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   if (prefs.getBool('isUserLoggedIn') ?? false) {
+  //     UserModel user = UserModel(
+  //       userId: prefs.getInt('user_id')!,
+  //       name: prefs.getString('user_name')!,
+  //       email: prefs.getString('email')!,
+  //     );
+  //     if (userModel.email == "") {
+  //       // userModel.updateUser(user);
+  //     }
+  //     if (homeProvider.homes.isEmpty) {
+  //       homeProvider.initializeData(user.userId);
+  //     }
+  //     if (powerstripProvider.powerstrips.isEmpty) {
+  //       powerstripProvider.initializeData(user.userId).then((value) {
+  //         // For get timer
+  //         for (var powerstrip in powerstripProvider.powerstrips) {
+  //           timerProvider.setPowerstrip = powerstrip;
+  //           timerProvider.initializeData();
 
-            scheduleProvider.setPowerstrip = powerstrip;
-            scheduleProvider.initializeData();
-          }
-        });
-      }
-      // return powerstripProvider.powerstrips;
-    }
-  }
+  //           scheduleProvider.setPowerstrip = powerstrip;
+  //           scheduleProvider.initializeData();
+  //         }
+  //       });
+  //     }
+  //     // return powerstripProvider.powerstrips;
+  //   }
+  // }
 
   void _isPowerstripNull() async {
     final prefs = await SharedPreferences.getInstance();

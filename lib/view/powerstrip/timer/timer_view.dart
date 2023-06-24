@@ -7,6 +7,7 @@ import 'package:jayandra_01/module/powerstrip/timer_controller.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/view/powerstrip/timer/timer_widget.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class TimerView extends StatefulWidget {
@@ -66,6 +67,7 @@ class _TimerViewState extends State<TimerView> {
         itemCount: timersfromprovider.length,
         itemBuilder: (context, index) {
           final timerModel = timersfromprovider.elementAt(index);
+          // Logger().i(powerstrip, timerModel);
           return TimerWidget(powerstripTimer: PowerstripTimer(powerstrip: powerstrip, timer: timerModel));
         },
       ),
@@ -103,6 +105,8 @@ class _TimerViewState extends State<TimerView> {
   /// Get Timer data from API
   getTimer() async {
     await _timerController.getTimer(powerstrip.id).then((value) {
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value!.message)));
+      // Logger().i(value.data);
       setState(() {
         timers = value!.data!;
       });

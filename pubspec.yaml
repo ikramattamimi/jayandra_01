@@ -57,6 +57,7 @@ dependencies:
   workmanager: ^0.5.1
   logger: ^1.4.0
   connectivity_plus: ^4.0.1
+  flutter_riverpod: ^2.3.6
 
 dev_dependencies:
   flutter_test:

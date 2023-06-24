@@ -8,7 +8,7 @@ class UserModel extends ChangeNotifier {
   String? password;
 
   UserModel({
-    this.userId = 0,
+    this.userId = 16,
     this.name = "",
     this.email = "",
     this.password = "",
@@ -16,7 +16,7 @@ class UserModel extends ChangeNotifier {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      userId: json['id_user'],
+      // userId: json['id_user'],
       name: json['name'],
       email: json['email'],
       password: (json['password'] != null) ? json['password'] : "",

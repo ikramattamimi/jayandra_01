@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+// import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_repository.dart';
+// import 'package:jayandra_01/module/timer/timer_repository.dart';
 import 'package:logger/logger.dart';
+// import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @pragma('vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() async {
@@ -11,20 +15,29 @@ void callbackDispatcher() async {
   );
 
   var powerstripRepository = PowerstripRepository();
+  // var timerRepo = TimerRepository();
 
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
       case "changeSocketStatusTimer":
-        logger.i("Panggil setSocketStatus");
-        logger.i(inputData);
+        // final providerContainer = ProviderContainer();
+        // var powerstripProvider = Provider.of<PowerstripProvider>(
+        //   context,
+        //   listen: false,
+        // );
+
         try {
           await powerstripRepository.setSocketStatus(
             inputData?['socketId'],
             inputData?['powerstripId'],
             inputData?['status'],
           );
+          // await timerRepo.deleteTimer(
+          //   inputData?['timerId'],
+          // );
 
-          // PowerstripProvider.instance.updateOneSocketStatus(
+          // TODO: Ganti Provider dengan Riverpod
+          // powerstripProvider.setOneSocketStatus(
           //   inputData?['socketId'],
           //   inputData?['termminalId'],
           //   inputData?['status'],

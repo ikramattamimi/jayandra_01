@@ -210,9 +210,9 @@ class _LoginViewState extends State<LoginView> {
         ]);
 
         // Menyembunyikan animasi loading
-        setState(() {
-          _loginController.isLoading = false;
-        });
+        // setState(() {
+        //   _loginController.isLoading = false;
+        // });
 
         // Menampilkan pesan status autentikasi
         ScaffoldMessenger.of(context).showSnackBar(
@@ -242,9 +242,9 @@ class _LoginViewState extends State<LoginView> {
         }
       } catch (err) {
         // Menyembunyikan animasi loading
-        setState(() {
-          _loginController.isLoading = false;
-        });
+        // setState(() {
+        //   _loginController.isLoading = false;
+        // });
 
         // Menampilkan pesan dari controller
         // ignore: use_build_context_synchronously
@@ -259,7 +259,7 @@ class _LoginViewState extends State<LoginView> {
 
   void goToDashboard() {
     // Menunggu 3 detik untuk melakukan pengambilan data
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 6), () {
       context.pushNamed('main_page');
     });
   }

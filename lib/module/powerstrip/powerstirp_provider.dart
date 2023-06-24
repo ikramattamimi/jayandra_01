@@ -43,7 +43,7 @@ class PowerstripProvider with ChangeNotifier {
       await _powerstripController.getPowerstrip(16).then((value) {
         for (var powerstrip in value!.data!) {
           powerstripModels.add(powerstrip);
-          powerstrip.logger();
+          // powerstrip.logger();
         }
       });
     } catch (e) {

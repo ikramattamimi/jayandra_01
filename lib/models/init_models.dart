@@ -14,7 +14,6 @@ void initModels({
 }) async {
   final prefs = await SharedPreferences.getInstance();
   if (prefs.getBool('isUserLoggedIn') ?? false) {
-
     if (userProvider.email == "") {
       userProvider.updateUser(
         userId: prefs.getInt('user_id')!,

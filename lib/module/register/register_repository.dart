@@ -17,4 +17,29 @@ class RegisterRepository {
       }),
     );
   }
+
+  Future<http.Response> sendOTP(String email) async {
+    return http.post(
+      Uri.parse('${NetworkAPI.ip}/send-otp'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(<String?, String?>{
+        'email': email,
+      }),
+    );
+  }
+  
+  Future<http.Response> verifyOTP(String email, String otp) async {
+    return http.post(
+      Uri.parse('${NetworkAPI.ip}/verify-otp'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(<String?, String?>{
+        'email': email,
+        'otp': otp,
+      }),
+    );
+  }
 }

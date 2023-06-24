@@ -31,9 +31,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
     var powerstrips = powerstripProvider.powerstrips;
-    _tabController = TabController(length: 1, vsync: this);
+    _tabController = TabController(length: powerstrips.length, vsync: this);
 
-    final myPowerstrip = powerstrips.isEmpty ? null : powerstrips.firstWhere((element) => element.id == 1);
+    // final myPowerstrip = powerstrips.isEmpty ? null : powerstrips.firstWhere((element) => element.id == 1);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

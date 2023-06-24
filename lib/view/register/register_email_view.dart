@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/module/register/cek_email_controller.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
+import 'package:jayandra_01/module/register/register_controller.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/custom_elevated_button.dart';
@@ -36,46 +39,53 @@ class _RegisterFormState extends State<RegisterForm> {
   //
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
-  final _registerFormKey = GlobalKey<FormState>();
-  final _controller = CekEmailController();
+  final registerFormKey = GlobalKey<FormState>();
+  final cekEmailController = CekEmailController();
+  final registerController = RegisterController();
 
   // late String? _email;
   // late String? _password;
   // bool _showPassword = false;
 
   void _cekEmail() async {
-    if (_registerFormKey.currentState!.validate()) {
+    if (registerFormKey.currentState!.validate()) {
       // Menampilkan animasi loading
       setState(() {
-        _controller.isLoading = true;
+        cekEmailController.isLoading = true;
       });
 
       try {
         // Memproses API cek email
         final response = await Future.any([
-          _controller.cekEmail(),
+          cekEmailController.cekEmail(),
           Future.delayed(
             const Duration(seconds: 10),
             () => throw TimeoutException('API call took too long'),
           ),
         ]);
 
-        // Menyembunyikan animasi loading
-        setState(() {
-          _controller.isLoading = false;
-        });
         if (response.code == 1) {
+          // Kirim OTP ke Email
+          sendOTP(
+            cekEmailController.emailController.text,
+          );
+
           Future.delayed(const Duration(seconds: 2), () {
+            // Menyembunyikan animasi loading
+            setState(() {
+              cekEmailController.isLoading = false;
+            });
+
+            // Pindah view
             context.pushNamed(
               "register_page_2",
               queryParams: {
-                "email": _controller.emailController.text,
+                "email": cekEmailController.emailController.text,
               },
             );
           });
         } else {
           // Menampilkan pesan dari controller
-          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(response.message)),
           );
@@ -83,11 +93,10 @@ class _RegisterFormState extends State<RegisterForm> {
       } catch (err) {
         // Menyembunyikan animasi loading
         setState(() {
-          _controller.isLoading = false;
+          cekEmailController.isLoading = false;
         });
 
         // Menampilkan pesan dari controller
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(err.toString())),
         );
@@ -97,18 +106,39 @@ class _RegisterFormState extends State<RegisterForm> {
     }
   }
 
+  void sendOTP(String email) async {
+    try {
+      // Memproses API cek email
+      final response = await Future.any([
+        registerController.sendOTP(email),
+        Future.delayed(
+          const Duration(seconds: 10),
+          () => throw TimeoutException('API call took too long'),
+        ),
+      ]);
+
+      if (response.code == 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.message)),
+        );
+      }
+    } catch (e) {
+      Logger().e(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _registerFormKey,
+      key: registerFormKey,
       child: Column(
         children: [
           EmailTextForm(
-            formKey: _registerFormKey,
-            controller: _controller.emailController,
+            formKey: registerFormKey,
+            controller: cekEmailController.emailController,
           ),
           const Gap(20),
-          (!_controller.isLoading)
+          (!cekEmailController.isLoading)
               ? NextButton(
                   onPressed: () => _cekEmail(),
                 )

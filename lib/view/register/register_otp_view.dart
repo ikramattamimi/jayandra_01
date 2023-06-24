@@ -1,12 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/module/register/register_controller.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
 import 'package:jayandra_01/view/register/register_elclass_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:logger/logger.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class RegisterOTPView extends StatefulWidget {
@@ -19,7 +23,8 @@ class RegisterOTPView extends StatefulWidget {
 
 class _RegisterOTPViewState extends State<RegisterOTPView> {
   final _registerForm2Key = GlobalKey<FormState>();
-  late String _email;
+  late String email;
+  final registerController = RegisterController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +34,14 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
       form: Form(
         key: _registerForm2Key,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: _getRegisterFormWidget,
         ),
       ),
     );
   }
 
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController otpTextController = TextEditingController();
   // ..text = "123456";
 
   // ignore: close_sinks
@@ -51,7 +56,7 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
     super.initState();
     errorController = StreamController<ErrorAnimationType>();
     startTimer();
-    _email = widget.email;
+    email = widget.email;
   }
 
   @override
@@ -66,36 +71,6 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
   int _start = 30;
   late String _resendTimer;
   bool _isButtonDisabled = true;
-
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-    _resendTimer = '($_start' 'd)';
-    _timer = Timer.periodic(oneSec, (Timer timer) {
-      if (mounted) {
-        if (_start == 0) {
-          setState(() {
-            timer.cancel();
-            _isButtonDisabled = false;
-            _resendTimer = '';
-          });
-        } else {
-          setState(() {
-            _start--;
-            _resendTimer = '($_start' 'd)';
-          });
-        }
-      }
-    });
-  }
-
-  resendOTP() {
-    if (!_isButtonDisabled) {
-      return ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mengirimkan ulang Kode OTP ke email')),
-      );
-    }
-    null;
-  }
 
   List<Widget> get _getRegisterFormWidget {
     return [
@@ -130,7 +105,7 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
         animationDuration: const Duration(milliseconds: 100),
         enableActiveFill: true,
         errorAnimationController: errorController,
-        controller: textEditingController,
+        controller: otpTextController,
         keyboardType: TextInputType.number,
         onChanged: (value) {
           debugPrint(value);
@@ -154,26 +129,127 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
         ],
       ),
       const Gap(20),
-      NextButton(
-        onPressed: () {
-          if (_registerForm2Key.currentState!.validate()) {
-            // If the form is valid, display a snackbar. In the real world,
-            // you'd often call a server or save the information in a database.
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Mengecek Kode OTP')),
-            );
-            Future.delayed(const Duration(seconds: 1), () {
-              context.pushNamed(
-                "register_page_3",
-                queryParams: {
-                  "email": _email,
-                },
-              );
-            });
-          }
-        },
-      ),
+      (!registerController.isLoading)
+          ? NextButton(
+              onPressed: () {
+                onNext();
+              },
+            )
+          : SizedBox(
+              height: 32,
+              width: 32,
+              child: CircularProgressIndicator(
+                color: Styles.accentColor,
+                strokeWidth: 3,
+              ),
+            ),
       const Gap(8),
     ];
+  }
+
+  void onNext() async {
+    if (_registerForm2Key.currentState!.validate()) {
+      // If the form is valid, display a snackbar. In the real world,
+      // you'd often call a server or save the information in a database.
+
+      // Menampilkan animasi loading
+      setState(() {
+        registerController.isLoading = true;
+      });
+
+      try {
+        // Memproses API
+        final response = await Future.any([
+          registerController.verifyOTP(email, otpTextController.text),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
+
+        // Menyembunyikan animasi loading
+        setState(() {
+          registerController.isLoading = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mengecek Kode OTP')),
+        );
+
+        // Menampilkan pesan status autentikasi
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.message)),
+        );
+
+        // Jika status autentikasi sukses dengan kode 0
+        if (response.code == 0) {
+          Future.delayed(const Duration(seconds: 1), () {
+            context.pushNamed(
+              "register_page_3",
+              queryParams: {
+                "email": email,
+              },
+            );
+          });
+        }
+      } catch (err) {
+        // Menyembunyikan animasi loading
+        // setState(() {
+        //   _loginController.isLoading = false;
+        // });
+
+        // Menampilkan pesan dari controller
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(err.toString())),
+        );
+
+        Logger(printer: PrettyPrinter()).e(err);
+      }
+    }
+  }
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _resendTimer = '($_start' 'd)';
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      if (mounted) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+            _isButtonDisabled = false;
+            _resendTimer = '';
+          });
+        } else {
+          setState(() {
+            _start--;
+            _resendTimer = '($_start' 'd)';
+          });
+        }
+      }
+    });
+  }
+
+  void resendOTP() async {
+    if (!_isButtonDisabled) {
+      try {
+        // Memproses API cek email
+        final response = await Future.any([
+          registerController.sendOTP(email),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
+
+        if (response.code == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response.message)),
+          );
+        }
+      } catch (e) {
+        Logger().e(e);
+      }
+    }
   }
 }

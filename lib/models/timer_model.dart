@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
+import 'package:logger/logger.dart';
 
 class TimerModel extends ChangeNotifier {
-  final int? timerId;
+  final int timerId;
   final int? socketId;
-  int? powerstripId;
+  int powerstripId;
   final TimeOfDay? time;
   bool status;
 
-  TimerModel({this.timerId = 0, this.socketId = 0, this.time, this.status = false, this.powerstripId});
+  TimerModel({this.timerId = 0, this.socketId = 0, this.time, this.status = false, this.powerstripId = 1});
 
   factory TimerModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');
@@ -27,6 +28,16 @@ class TimerModel extends ChangeNotifier {
   void changeTimerStatus(bool isTimerOn) {
     status = isTimerOn;
     notifyListeners();
+  }
+
+  void logger() {
+    Logger().i({
+      "timerId": timerId,
+      "socketId": socketId,
+      "powerstripId": powerstripId,
+      "time": time,
+      "status": status,
+    });
   }
 }
 

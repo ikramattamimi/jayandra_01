@@ -58,7 +58,7 @@ class TimerProvider with ChangeNotifier {
 
         // Response dengan response.data berupa List dari objek Powerstrip
         timerObjectResponse = MyArrayResponse.fromJson(timerMapData, TimerModel.fromJson);
-        timerObjectResponse.message = "Data powerstrip berhasil dimuat";
+        timerObjectResponse.message = "Data timer berhasil dimuat";
         // return timerObjectResponse.data;
       }
     });
