@@ -7,11 +7,11 @@ import 'package:jayandra_01/module/timer/timer_repository.dart';
 class TimerController {
   final _timerRepository = TimerRepository();
 
-  Future<MyArrayResponse?> getTimer(int powerstripId) async {
+  Future<MyArrayResponse?> getTimer(String pwsKey) async {
     var timerObjectResponse = MyArrayResponse();
 
     // Get API data timer
-    await _timerRepository.getTimer(powerstripId).then((value) {
+    await _timerRepository.getTimer(pwsKey).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);
@@ -46,10 +46,10 @@ class TimerController {
     return timerObjectResponse;
   }
 
-  Future<MyResponse?> deleteTimer(int timerId) async {
+  Future<MyResponse?> deleteTimer(int socketNr, String pwsKey) async {
     MyResponse timerObjectResponse = MyResponse();
     // Get API data powerstrip
-    await _timerRepository.deleteTimer(timerId).then((value) {
+    await _timerRepository.deleteTimer(socketNr, pwsKey).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);

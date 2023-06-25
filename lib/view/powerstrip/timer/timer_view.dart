@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
@@ -29,7 +28,8 @@ class _TimerViewState extends State<TimerView> {
   @override
   Widget build(BuildContext context) {
     final timerProvider = Provider.of<TimerProvider>(context);
-    final timersfromprovider = timerProvider.timers.where((element) => element.powerstripId == powerstrip.id);
+    final timersfromprovider = timerProvider.timers.where((element) => element.pwsKey == powerstrip.pwsKey);
+    // Logger().i(timersfromprovider);
 
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +104,7 @@ class _TimerViewState extends State<TimerView> {
 
   /// Get Timer data from API
   getTimer() async {
-    await _timerController.getTimer(powerstrip.id).then((value) {
+    await _timerController.getTimer(powerstrip.pwsKey).then((value) {
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value!.message)));
       // Logger().i(value.data);
       setState(() {

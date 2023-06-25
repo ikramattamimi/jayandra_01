@@ -3,6 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
+import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/powerstrip/socket_controller.dart';
@@ -15,11 +17,12 @@ import 'package:provider/provider.dart';
 class PowerstripView extends StatefulWidget {
   const PowerstripView({
     super.key,
-    required this.powerstripId,
+    required this.pwsKey, required this.homeName,
     // required this.powerstrip,
   });
   // final PowerstripModel powerstrip;
-  final int powerstripId;
+  final String pwsKey;
+  final String homeName;
 
   @override
   State<PowerstripView> createState() => _PowerstripViewState();
@@ -34,7 +37,7 @@ class _PowerstripViewState extends State<PowerstripView> {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
 
     // initWidgets(userModel, powerstripProvider);
-    var myPowerstrip = powerstripProvider.findPowerstrip(widget.powerstripId);
+    var myPowerstrip = powerstripProvider.findPowerstrip(widget.pwsKey);
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: Container(
@@ -86,6 +89,7 @@ class _PowerstripViewState extends State<PowerstripView> {
   List<SocketModel>? socketss;
   PowerstripModel? powerstrip;
   late String _activeSocket;
+  late String userEmail;
 
   /// ==========================================================================
   /// Local Function
@@ -95,7 +99,9 @@ class _PowerstripViewState extends State<PowerstripView> {
     super.initState();
     BuildContext myContext = context;
     final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
-    powerstrip = powerstripProvider.findPowerstrip(widget.powerstripId);
+    final userProvider = Provider.of<UserModel>(myContext, listen: false);
+    powerstrip = powerstripProvider.findPowerstrip(widget.pwsKey);
+    userEmail = userProvider.email;
 
     getPowerstripState(
       isPowerstripOn: powerstrip?.isPowerstripActive ?? false,
@@ -148,7 +154,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                     Row(
                       children: [
                         Text(
-                          myPowerstrip.name.isNotEmpty ? myPowerstrip.name : "Powerstrip",
+                          myPowerstrip.pwsName.isNotEmpty ? myPowerstrip.pwsName : "Powerstrip",
                           style: Styles.title,
                         ),
                         const Gap(20),
@@ -234,13 +240,13 @@ class _PowerstripViewState extends State<PowerstripView> {
 
   void setPowerstrip(PowerstripModel myPowerstrip) async {
     setState(() {
-      myPowerstrip.isPowerstripActive = myPowerstrip.isPowerstripActive;
+      myPowerstrip.isPowerstripActive = !myPowerstrip.isPowerstripActive;
       for (var socket in myPowerstrip.sockets) {
         socket.status = myPowerstrip.isPowerstripActive;
       }
     });
     myPowerstrip.updateAllSocketStatus(myPowerstrip.isPowerstripActive);
-    await socketController.changeAllSocketStatus(myPowerstrip.id, myPowerstrip.isPowerstripActive);
+    await socketController.changeAllSocketStatus(myPowerstrip.pwsKey, myPowerstrip.isPowerstripActive);
   }
 
   List<Widget> getSockets(List<SocketModel> mySockets) {
@@ -250,8 +256,8 @@ class _PowerstripViewState extends State<PowerstripView> {
         Container(
           constraints: BoxConstraints(minHeight: AppLayout.getSize(context).height / 6.5),
           child: SocketWidget(
-            socketId: element.socketId ?? 0,
-            powerstripId: element.powerstripId ?? 0,
+            socketId: element.socketNr,
+            pwsKey: element.pwsKey,
             changeParentState: updatePowerstripStatusByOneSocketChange,
           ),
         ),
@@ -282,22 +288,28 @@ class _PowerstripViewState extends State<PowerstripView> {
                   CustomTextFormField(
                     controller: _updateNameController,
                     prefixIcon: Icons.electrical_services_rounded,
-                    hintText: myPowerstrip.name.isNotEmpty ? myPowerstrip.name : "Powerstrip",
+                    hintText: myPowerstrip.pwsName.isNotEmpty ? myPowerstrip.pwsName : "Powerstrip",
                     obscureText: false,
                     keyboardType: TextInputType.name,
                     // onSaved:
                   ),
                   const Gap(16),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // deleteTimer(timerProvider);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Nama socket diganti")),
                       );
                       powerstripProvider.setPowerstripName(
                         _updateNameController.text,
-                        myPowerstrip.id,
+                        myPowerstrip.pwsKey,
                       );
+                      await powerstripController.updatePowerstripName(
+                        myPowerstrip,
+                        widget.homeName,
+                        userEmail,
+                      );
+
                       context.pop();
                     },
                     style: ElevatedButton.styleFrom(

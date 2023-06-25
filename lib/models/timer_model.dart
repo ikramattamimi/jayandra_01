@@ -3,13 +3,12 @@ import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:logger/logger.dart';
 
 class TimerModel extends ChangeNotifier {
-  final int timerId;
-  final int? socketId;
-  int powerstripId;
+  final int socketNr;
+  final String pwsKey;
   final TimeOfDay? time;
   bool status;
 
-  TimerModel({this.timerId = 0, this.socketId = 0, this.time, this.status = false, this.powerstripId = 1});
+  TimerModel({this.socketNr = 0, this.time, this.status = false, this.pwsKey = "Pws-01"});
 
   factory TimerModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');
@@ -18,8 +17,8 @@ class TimerModel extends ChangeNotifier {
     final time = TimeOfDay(hour: hour, minute: minute);
 
     return TimerModel(
-      timerId: json['id_timer'],
-      socketId: json['id_socket'],
+      pwsKey: json['pws_serial_key'],
+      socketNr: json['socket_number'],
       time: time,
       status: json['status'],
     );
@@ -32,9 +31,8 @@ class TimerModel extends ChangeNotifier {
 
   void logger() {
     Logger().i({
-      "timerId": timerId,
-      "socketId": socketId,
-      "powerstripId": powerstripId,
+      "socketNr": socketNr,
+      "pwsKey": pwsKey,
       "time": time,
       "status": status,
     });

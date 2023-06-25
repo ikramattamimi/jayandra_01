@@ -19,9 +19,9 @@ class HomeRepository {
     );
   }
 
-  Future<http.Response> getHome(String userId) async {
+  Future<http.Response> getHome(String email) async {
     return http.get(
-      Uri.parse('${NetworkAPI.ip}/getHome/$userId'),
+      Uri.parse('${NetworkAPI.ip}/getHome/$email'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },

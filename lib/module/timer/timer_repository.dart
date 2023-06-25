@@ -5,10 +5,10 @@ import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
 
 class TimerRepository {
-  Future<http.Response> getTimer(int powerstripId) async {
+  Future<http.Response> getTimer(String pwsKey) async {
     return http.get(
-      // Uri.parse('${NetworkAPI.ip}/getTimer/$powerstripId'),
-      Uri.parse('${NetworkAPI.ip}/getTimer/1'),
+      // Uri.parse('${NetworkAPI.ip}/getTimer/$pwsKey'),
+      Uri.parse('${NetworkAPI.ip}/getTimer/$pwsKey'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
@@ -25,7 +25,8 @@ class TimerRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': timer.socketId.toString(),
+          'pws_serial_key': timer.pwsKey,
+          'socket_number': timer.socketNr,
           'time': time,
           'status': timer.status,
         },
@@ -33,7 +34,7 @@ class TimerRepository {
     );
   }
 
-  Future<http.Response> deleteTimer(int timerId) async {
+  Future<http.Response> deleteTimer(int socketNr, String pwsKey) async {
     // int updateStatus = status == true ? 1 : 0;
 
     return http.post(
@@ -42,9 +43,7 @@ class TimerRepository {
         'Content-Type': "application/json; charset=UTF-8",
       },
       body: jsonEncode(
-        {
-          'id_timer': timerId.toString(),
-        },
+        {'socket_number': socketNr, 'pws_serial_key': pwsKey},
       ),
     );
   }

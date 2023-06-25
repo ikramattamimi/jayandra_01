@@ -86,7 +86,6 @@ class _RegisterIdentityViewState extends State<RegisterIdentityView> {
           await prefs.setBool('isUserLoggedIn', true);
           await prefs.setString('user_name', user.name);
           await prefs.setString('email', user.email);
-          await prefs.setInt('user_id', user.userId);
 
           Future.delayed(const Duration(seconds: 2), () {
             context.goNamed("main_page");

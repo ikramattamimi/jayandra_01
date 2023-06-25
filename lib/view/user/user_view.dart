@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserView extends StatefulWidget {
-  const UserView({super.key});
+  const UserView({super.key, required this.notifyParent});
+  final Function notifyParent;
 
   @override
   State<UserView> createState() => _UserViewState();

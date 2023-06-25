@@ -28,19 +28,19 @@ class PowerstripProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initializeData(int userId) async {
-    List<PowerstripModel> powerstripModels = await createPowerstripModelsFromApi(userId);
+  Future<void> initializeData(String email, String homeName) async {
+    List<PowerstripModel> powerstripModels = await createPowerstripModelsFromApi(email, homeName);
     _powerstrips = powerstripModels;
     notifyListeners();
   }
 
-  Future<List<PowerstripModel>> createPowerstripModelsFromApi(userId) async {
+  Future<List<PowerstripModel>> createPowerstripModelsFromApi(String email, String homeName) async {
     List<PowerstripModel> powerstripModels = [];
     var logger = Logger(
       printer: PrettyPrinter(),
     );
     try {
-      await _powerstripController.getPowerstrip(16).then((value) {
+      await _powerstripController.getPowerstrip(email, homeName).then((value) {
         for (var powerstrip in value!.data!) {
           powerstripModels.add(powerstrip);
           // powerstrip.logger();
@@ -61,36 +61,35 @@ class PowerstripProvider with ChangeNotifier {
     return Provider.of<PowerstripProvider>(context, listen: listen);
   }
 
-  void setSocketName(String socketName, int socketId, int powerstripId) {
-    var socket = findSocket(powerstripId, socketId);
+  void setSocketName(String socketName, int socketNr, String pwsKey) {
+    var socket = findSocket(pwsKey, socketNr);
     socket.updateSocketName(socketName);
     notifyListeners();
   }
 
-  void setPowerstripName(String powerstripName, int powerstripId) async {
-    var powerstrip = findPowerstrip(powerstripId);
+  void setPowerstripName(String powerstripName, String pwsKey) {
+    var powerstrip = findPowerstrip(pwsKey);
     powerstrip.setPowerstripName(powerstripName);
     notifyListeners();
-    await _powerstripController.updatePowerstripName(powerstrip);
   }
 
-  void setOneSocketStatus(int socketId, int powerstripId, bool isSocketOn) {
+  void setOneSocketStatus(int socketNr, String pwsKey, bool isSocketOn) {
     var logger = Logger(
       printer: PrettyPrinter(),
     );
     logger.i("update one socket status");
-    var powerstrip = findPowerstrip(powerstripId);
-    powerstrip.updateOneSocketStatus(socketId, isSocketOn);
+    var powerstrip = findPowerstrip(pwsKey);
+    powerstrip.updateOneSocketStatus(socketNr, isSocketOn);
   }
 
-  PowerstripModel findPowerstrip(int powerstripId) {
-    var powerstrip = _powerstrips.firstWhere((element) => element.id == powerstripId);
+  PowerstripModel findPowerstrip(String pwsKey) {
+    var powerstrip = _powerstrips.firstWhere((element) => element.pwsKey == pwsKey);
     return powerstrip;
   }
 
-  SocketModel findSocket(int powerstripId, int socketId) {
-    var powerstrip = _powerstrips.firstWhere((element) => element.id == powerstripId);
-    var socket = powerstrip.sockets.firstWhere((element) => element.socketId == socketId);
+  SocketModel findSocket(String pwsKey, int socketNr) {
+    var powerstrip = _powerstrips.firstWhere((element) => element.pwsKey == pwsKey);
+    var socket = powerstrip.sockets.firstWhere((element) => element.socketNr == socketNr);
     return socket;
   }
 }

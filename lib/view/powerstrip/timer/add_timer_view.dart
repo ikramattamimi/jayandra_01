@@ -153,23 +153,22 @@ class _AddTimerPageState extends State<AddTimerPage> {
   void initState() {
     super.initState();
     powerstrip = widget.powerstrip;
-    selectedValue = widget.powerstrip.sockets[0].socketId.toString();
+    selectedValue = widget.powerstrip.sockets[0].socketNr.toString();
   }
 
   /// Simpan timer ke database
   addTimer(TimerProvider timerProvider) async {
     TimerModel timer = TimerModel(
-      socketId: int.parse(selectedValue),
+      pwsKey: powerstrip!.pwsKey,
+      socketNr: int.parse(selectedValue),
       time: endTime,
       status: isSwitched,
     );
 
-    timer.powerstripId = powerstrip!.id;
-
     await _timerController.addTimer(timer).then((value) {
       TimerModel newTimer = value!.data;
       var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
-      var socket = powerstrip!.sockets.firstWhere((element) => element.socketId == int.parse(selectedValue));
+      var socket = powerstrip!.sockets.firstWhere((element) => element.socketNr == int.parse(selectedValue));
       // timerToChange.logger();
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
@@ -177,10 +176,10 @@ class _AddTimerPageState extends State<AddTimerPage> {
         getTimerNotification,
         params: {
           'socketName': socket.name,
-          'socketId': socket.socketId,
-          'powerstripId': socket.powerstripId,
+          'socketId': socket.socketNr,
+          'pwsKey': socket.pwsKey,
           'status': socket.status,
-          'timerId': newTimer.timerId,
+          // 'timerId': newTimer.timerId,
         },
       );
 
@@ -207,7 +206,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
     for (var socket in powerstrip!.sockets) {
       menuItems.add(
         DropdownMenuItem(
-          value: socket.socketId.toString(),
+          value: socket.socketNr.toString(),
           child: Text(
             socket.name,
             style: Styles.bodyTextBlack2,
@@ -228,11 +227,11 @@ class _AddTimerPageState extends State<AddTimerPage> {
 
 getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
   await Workmanager().registerOneOffTask(
-    "timer.powerstrip${socket['powerstripId']}.socket${socket['socketName']}",
+    "timer.powerstrip${socket['pwsKey']}.socket${socket['socketName']}",
     "changeSocketStatusTimer",
     inputData: {
       'socketId': socket['socketId'],
-      'powerstripId': socket['powerstripId'],
+      'pwsKey': socket['pwsKey'],
       'status': false,
       'timerId': socket['timerId'],
     },

@@ -3,19 +3,18 @@ import 'package:http/http.dart' as http;
 import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
-import 'package:logger/logger.dart';
 
 class PowerstripRepository {
-  Future<http.Response> getPowerstrip(int userId) async {
-    return http.get(
-      Uri.parse('${NetworkAPI.ip}/getpowerstrip/$userId'),
-      headers: <String, String>{
-        'Content-Type': "application/json; charset=UTF-8",
-      },
-    );
+  Future<http.Response> getPowerstrip(String email, String homeName) async {
+    return http.post(Uri.parse('${NetworkAPI.ip}/getpowerstrip/'), headers: <String, String>{
+      'Content-Type': "application/json; charset=UTF-8",
+    }, body: jsonEncode({
+      "email": email,
+      "home_name": homeName
+    }));
   }
 
-  Future<http.Response> setSocketStatus(int socketId, int powerstripId, bool status) async {
+  Future<http.Response> setSocketStatus(int socketNr, String pwsKey, bool socketStatus) async {
     // Logger(printer: PrettyPrinter()).i("API set socket status");
     return http.post(
       Uri.parse('${NetworkAPI.ip}/updateSocketStatus/'),
@@ -24,9 +23,9 @@ class PowerstripRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': socketId,
-          'id_powerstrip': powerstripId,
-          'socket_status': status,
+          'socket_number': socketNr,
+          'pws_serial_key': pwsKey,
+          'socket_status': socketStatus,
         },
       ),
     );
@@ -40,33 +39,35 @@ class PowerstripRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': socket.socketId,
-          'id_powerstrip': socket.powerstripId,
+          'socket_number': socket.socketNr,
+          'pws_serial_key': socket.pwsKey,
           'socket_name': socket.name,
         },
       ),
     );
   }
 
-  Future<http.Response> updatePowerstripName(PowerstripModel powerstrip) async {
+  Future<http.Response> updatePowerstripName(PowerstripModel pwsModel, String homeName, String email) async {
     return http.post(
-      Uri.parse('${NetworkAPI.ip}/updatepowerstripName/'),
+      Uri.parse('${NetworkAPI.ip}/updatePowerstripName/'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
       body: jsonEncode(
         {
-          'id_powerstrip': powerstrip.id,
-          'powerstrip_name': powerstrip.name,
+          'pws_serial_key': pwsModel.pwsKey,
+          'pws_name': pwsModel.pwsName,
+          'home_name': homeName,
+          'email' : email
         },
       ),
     );
   }
 
-  Future<http.Response> changeAllSocketStatus(int idPowerstrip, bool status) async {
+  Future<http.Response> changeAllSocketStatus(String pwsKey, bool status) async {
     int updateStatus = status == true ? 1 : 0;
     return http.post(
-      Uri.parse('${NetworkAPI.ip}/changeAllSocketStatus/$idPowerstrip/$updateStatus'),
+      Uri.parse('${NetworkAPI.ip}/changeAllSocketStatus/$pwsKey/$updateStatus'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },

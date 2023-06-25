@@ -6,10 +6,10 @@ import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/utils/network_api.dart';
 
 class ScheduleRepository {
-  Future<http.Response> getSchedule(int powerstripId) async {
+  Future<http.Response> getSchedule(String pwsKey) async {
     return http.get(
-      // Uri.parse('${NetworkAPI.ip}/getTimer/$powerstripId'),
-      Uri.parse('${NetworkAPI.ip}/getSchedule/$powerstripId'),
+      // Uri.parse('${NetworkAPI.ip}/getTimer/$pwsKey'),
+      Uri.parse('${NetworkAPI.ip}/getSchedule/$pwsKey'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
@@ -32,8 +32,8 @@ class ScheduleRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': schedule.sockeId.toString(),
-          'status': schedule.status,
+          'id_socket': schedule.socketNr.toString(),
+          'status': schedule.socketStatus,
           'time': time,
           'note': schedule.note,
           'day': days,

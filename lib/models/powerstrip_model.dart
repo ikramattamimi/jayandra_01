@@ -3,15 +3,15 @@ import 'package:jayandra_01/models/socket_model.dart';
 import 'package:logger/logger.dart';
 
 class PowerstripModel extends ChangeNotifier {
-  final int id;
-  String name;
+  String pwsKey;
+  String pwsName;
   final List<SocketModel> sockets;
   bool isPowerstripActive;
   int totalActiveSocket;
 
   PowerstripModel({
-    this.id = 0,
-    this.name = "Powerstrip",
+    this.pwsKey = "Pws-01",
+    this.pwsName = "Powerstrip",
     required this.sockets,
     this.isPowerstripActive = false,
     this.totalActiveSocket = 0,
@@ -23,14 +23,13 @@ class PowerstripModel extends ChangeNotifier {
     List<SocketModel> sockets = [];
     for (var socket in json['sockets']) {
       sockets.add(SocketModel.fromJson(socket));
-      if (socket['status'] == true) {
+      if (socket['socket_status'] == true) {
         totalActiveSoccket++;
         isPowerstripActive = true;
       }
     }
     return PowerstripModel(
-      id: json['id_powerstrip'],
-      name: json['powerstrip_name'],
+      pwsName: json['pws_name'],
       sockets: sockets,
       isPowerstripActive: isPowerstripActive,
       totalActiveSocket: totalActiveSoccket,
@@ -40,11 +39,10 @@ class PowerstripModel extends ChangeNotifier {
 
   void logger() {
     Logger().i({
-      'id' : id,
-      'name' : name,
-      'sockets' : sockets,
-      'isPowerstripActive' : isPowerstripActive,
-      'totalActiveSocket' : totalActiveSocket,
+      'name': pwsName,
+      'sockets': sockets,
+      'isPowerstripActive': isPowerstripActive,
+      'totalActiveSocket': totalActiveSocket,
     });
   }
 
@@ -55,7 +53,7 @@ class PowerstripModel extends ChangeNotifier {
   }
 
   void updateOneSocketStatus(int socketId, bool isSocketOn) {
-    SocketModel socket = sockets.firstWhere((element) => element.socketId == socketId);
+    SocketModel socket = sockets.firstWhere((element) => element.socketNr == socketId);
     socket.updateSocketStatus(isSocketOn);
     setPowerstripStatusWhenSocketChange();
     setTotalActiveSocket();
@@ -81,7 +79,7 @@ class PowerstripModel extends ChangeNotifier {
 
   void setTotalActiveSocket() {
     int total = 0;
-    for (var socket in sockets!) {
+    for (var socket in sockets) {
       if (socket.status == true) {
         total++;
       }
@@ -90,6 +88,6 @@ class PowerstripModel extends ChangeNotifier {
   }
 
   void setPowerstripName(String powerstripName) {
-    name = powerstripName;
+    pwsName = powerstripName;
   }
 }

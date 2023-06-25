@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
@@ -187,7 +186,7 @@ class _EditTimerViewState extends State<EditTimerView> {
     // Inisialisasi Timer
     isTimerActive = timer!.status;
     socketOffTime = timer!.time!;
-    selectedValue = timer!.socketId.toString();
+    selectedValue = timer!.socketNr.toString();
   }
 
   /// Update Timer
@@ -195,7 +194,7 @@ class _EditTimerViewState extends State<EditTimerView> {
   /// TODO: ganti fungsi jadi update timer
   addTimer() async {
     TimerModel timer = TimerModel(
-      socketId: int.parse(selectedValue),
+      socketNr: int.parse(selectedValue),
       time: socketOffTime,
       status: isTimerActive,
     );
@@ -206,8 +205,8 @@ class _EditTimerViewState extends State<EditTimerView> {
   ///
   /// Memanggil function [deleteTimer] dari [TimerController]
   deleteTimer(TimerProvider timerProvider) async {
-    await _timerController.deleteTimer(timer!.timerId!);
-    timerProvider.removeTimer(timer!.timerId!);
+    await _timerController.deleteTimer(timer!.socketNr, "Pws-01");
+    timerProvider.removeTimer(timer!);
   }
 
   /// Menampilkan dialog konfirmasi hapus timer
@@ -274,12 +273,12 @@ class _EditTimerViewState extends State<EditTimerView> {
   /// Inisiasi Menu Dropdown pemilihan Socket
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [];
-    for (var socket in powerstrip!.sockets!) {
+    for (var socket in powerstrip!.sockets) {
       menuItems.add(
         DropdownMenuItem(
-          value: socket.socketId.toString(),
+          value: socket.socketNr.toString(),
           child: Text(
-            socket.name!,
+            socket.name,
             style: Styles.bodyTextBlack2,
           ),
         ),

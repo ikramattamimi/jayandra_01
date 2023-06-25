@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -18,14 +17,14 @@ class SocketWidget extends StatefulWidget {
   const SocketWidget({
     super.key,
     required this.socketId,
-    required this.powerstripId,
+    required this.pwsKey,
     // required this.socket,
     required this.changeParentState,
   });
   // final SocketModel socket;
   final Function changeParentState;
   final int socketId;
-  final int powerstripId;
+  final String pwsKey;
 
   @override
   State<SocketWidget> createState() => _SocketState();
@@ -47,8 +46,8 @@ class _SocketState extends State<SocketWidget> {
   @override
   Widget build(BuildContext context) {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
-    var powerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.powerstripId);
-    var mySocket = powerstrip.sockets.firstWhere((element) => element.socketId == widget.socketId);
+    var powerstrip = powerstripProvider.findPowerstrip(widget.pwsKey);
+    var mySocket = powerstrip.sockets.firstWhere((element) => element.socketNr == widget.socketId);
     final screenSize = AppLayout.getSize(context);
     return SizedBox(
       // height: 120,
@@ -78,7 +77,7 @@ class _SocketState extends State<SocketWidget> {
                       onChanged: (value) {
                         setState(() {
                           mySocket.status = !mySocket.status;
-                          powerstrip.updateOneSocketStatus(mySocket.socketId, mySocket.status);
+                          powerstrip.updateOneSocketStatus(mySocket.socketNr, mySocket.status);
                           widget.changeParentState(powerstrip);
                           socketController.setSocketStatus(mySocket);
                         });
@@ -91,6 +90,10 @@ class _SocketState extends State<SocketWidget> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    "(Socket ${mySocket.socketNr})",
+                    style: Styles.bodyTextGrey3,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -289,8 +292,8 @@ class _SocketState extends State<SocketWidget> {
         // Set Provider
         powerstripProvider.setSocketName(
           mySocket.name,
-          mySocket.socketId,
-          mySocket.powerstripId,
+          mySocket.socketNr,
+          mySocket.pwsKey,
         );
 
         // Menampilkan pesan status

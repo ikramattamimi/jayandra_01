@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -23,15 +22,27 @@ class _ElectricityClassAddHomeViewState extends State<ElectricityClassAddHomeVie
       'biaya': 1352.00,
     },
     {
-      'nama': 'R1 / 1.300 VA - 2.200 VA',
+      'nama': 'R1 / 1.300 VA',
       'biaya': 1444.70,
     },
     {
-      'nama': 'R2 / 3.500 VA - 5.500 VA',
+      'nama': 'R1 / 2.200 VA',
+      'biaya': 1444.70,
+    },
+    {
+      'nama': 'R2 / 3.500 VA',
       'biaya': 1699.53,
     },
     {
-      'nama': 'R3 / 6.600 VA ke atas',
+      'nama': 'R2 / 5.500 VA',
+      'biaya': 1699.53,
+    },
+    {
+      'nama': 'R3 / 6.600',
+      'biaya': 1699.53,
+    },
+    {
+      'nama': 'Lainnya (Di atas R3)',
       'biaya': 1699.53,
     },
   ];

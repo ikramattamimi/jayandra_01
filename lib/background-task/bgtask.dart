@@ -29,7 +29,7 @@ void callbackDispatcher() async {
         try {
           await powerstripRepository.setSocketStatus(
             inputData?['socketId'],
-            inputData?['powerstripId'],
+            inputData?['pwsKey'],
             inputData?['status'],
           );
           // await timerRepo.deleteTimer(

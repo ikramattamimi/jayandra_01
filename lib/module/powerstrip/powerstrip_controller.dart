@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:jayandra_01/models/my_response.dart';
-import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_repository.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +18,11 @@ class PowerstripController {
   var passwordController = TextEditingController();
   String electricityClassValue = "";
 
-  Future<MyArrayResponse?> getPowerstrip(int userId) async {
+  Future<MyArrayResponse?> getPowerstrip(String email, String homeName) async {
     final prefs = await SharedPreferences.getInstance();
     MyArrayResponse powerstripObjectResponse;
     // Get API data powerstrip
-    http.Response response = await pwsRepo.getPowerstrip(userId);
+    http.Response response = await pwsRepo.getPowerstrip(email, homeName);
     // Jika status 200
     try {
       if (response.statusCode == 200) {
@@ -39,7 +37,7 @@ class PowerstripController {
         powerstripObjectResponse.message = "Data powerstrip berhasil dimuat";
         return powerstripObjectResponse;
       } else {
-        return MyArrayResponse(code: 1, message: "Terjadi Masalah");
+        return MyArrayResponse(code: 1, message: "Periksa Input dan Response");
       }
     } catch (e) {
       Logger().e(e);
@@ -49,15 +47,15 @@ class PowerstripController {
     // return powerstripObjectResponse;
   }
 
-  Future<MyResponse?> updatePowerstripName(PowerstripModel powerstrip) async {
+  Future<MyResponse?> updatePowerstripName(PowerstripModel pwsModel, String homeName, String email) async {
     http.Response result;
     // responsePowerstrip = await pwsRepo.updatePowerstripName(powerstrip);
     // return null;
 
     try {
-      result = await pwsRepo.updatePowerstripName(powerstrip);
+      result = await pwsRepo.updatePowerstripName(pwsModel, homeName, email);
 
-      Map<String, dynamic> myBody = jsonDecode(result.body);
+      // Map<String, dynamic> myBody = jsonDecode(result.body);
 
       var myResponse = MyResponse();
       if (result.statusCode == 200) {
@@ -68,6 +66,5 @@ class PowerstripController {
       Logger().e(e);
       return MyResponse();
     }
-
   }
 }

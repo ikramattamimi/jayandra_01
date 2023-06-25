@@ -1,18 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/custom_widget/custom_elevated_button.dart';
 import 'package:jayandra_01/models/home_model.dart';
-import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/home/home_controller.dart';
 import 'package:jayandra_01/module/home/home_provider.dart';
-import 'package:jayandra_01/view/login/login_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
-import 'package:jayandra_01/custom_widget/white_container.dart';
 import 'package:jayandra_01/utils/form_regex.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -235,8 +231,6 @@ class _AddHomeViewState extends State<AddHomeView> {
           homeController.isLoading = false;
         });
 
-        var userId = UserModel().userId;
-
         // Jika status autentikasi sukses dengan kode 0
         if (addHomeResponse.code == 0) {
           var budget = homeController.budgetingController.text;
@@ -246,7 +240,7 @@ class _AddHomeViewState extends State<AddHomeView> {
             budget: budget.isNotEmpty ? double.parse(budget) : 0,
             className: className,
             homeName: homeName,
-            userId: userId,
+            // email: user,
           );
           homeProvider.addHome(home);
 

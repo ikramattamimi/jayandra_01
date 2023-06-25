@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/user_model.dart';
-import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/view/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/circle_icon_container.dart';

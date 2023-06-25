@@ -1,17 +1,21 @@
 class SocketModel {
-  final int socketId;
-  final int powerstripId;
+  final int socketNr;
   String name;
+  String pwsKey;
   bool status;
 
-  SocketModel({this.socketId = 0, this.powerstripId = 0, this.name = "", this.status = false});
+  SocketModel({
+    this.pwsKey = "Pws-01",
+    this.socketNr = 0,
+    this.name = "",
+    this.status = false,
+  });
 
   factory SocketModel.fromJson(Map<String, dynamic> json) {
     return SocketModel(
-      socketId: json['id_socket'],
-      powerstripId: json['id_powerstrip'],
+      socketNr: json['socket_number'],
       name: json['socket_name'],
-      status: json['status'],
+      status: json['socket_status'],
     );
   }
 

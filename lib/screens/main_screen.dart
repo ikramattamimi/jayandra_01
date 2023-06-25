@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carbon_icons/carbon_icons.dart';
-import 'package:flutter/services.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/view/dashboard/dashboard_view.dart';
 import 'package:jayandra_01/view/user/user_view.dart';
@@ -51,26 +50,27 @@ class _BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
   late String userName;
   late UserModel user;
-  List<Widget> _widgetoptions = <Widget>[
-    // DashboardPage(user: user1),
-    const DashboardView(),
-    const ReportView(),
-    const UserView(),
-  ];
+  late List<Widget> _widgetoptions;
 
-  void getUserName() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userName = prefs.getString('user_name').toString();
-    });
+  @override
+  void initState() {
+    super.initState();
+    _widgetoptions = getWidgets();
+  }
+
+  void resetIndex() {
+    _selectedIndex = 0;
+  }
+
+  List<Widget> getWidgets() {
     // user = widget.user;
     // UserModel user1 = UserModel(id: 123, name: "Ikram", email: "ikramikram@gmail.com", electricityclass: "");
 
-    _widgetoptions = <Widget>[
+    return <Widget>[
       // DashboardPage(user: user1),
       const DashboardView(),
       const ReportView(),
-      const UserView(),
+      UserView(notifyParent: resetIndex),
     ];
   }
 

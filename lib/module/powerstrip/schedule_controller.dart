@@ -7,11 +7,11 @@ import 'package:jayandra_01/module/schedule/schedule_repository.dart';
 class ScheduleController {
   final _scheduleRepository = ScheduleRepository();
 
-  Future<MyArrayResponse?> getSchedule(int powerstripId) async {
+  Future<MyArrayResponse?> getSchedule(String pwsKey) async {
     var scheduleObjectResponse = MyArrayResponse();
 
     // Get API data schedule
-    await _scheduleRepository.getSchedule(powerstripId).then((value) {
+    await _scheduleRepository.getSchedule(pwsKey).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);

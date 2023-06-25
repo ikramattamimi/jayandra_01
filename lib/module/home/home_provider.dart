@@ -29,19 +29,19 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initializeData(int userId) async {
-    List<HomeModel> homeModels = await createHomeModelsFromApi(userId); // nanti ganti sama email
+  Future<void> initializeData(String email) async {
+    List<HomeModel> homeModels = await createHomeModelsFromApi(email); // nanti ganti sama email
     _homes = homeModels;
     notifyListeners();
   }
 
-  Future<List<HomeModel>> createHomeModelsFromApi(int userId) async {
+  Future<List<HomeModel>> createHomeModelsFromApi(String email) async {
     List<HomeModel> homeModels = [];
     var logger = Logger(
       printer: PrettyPrinter(),
     );
     try {
-      await _homeController.getHome(userId).then((value) {
+      await _homeController.getHome(email).then((value) {
         for (var home in value.data!) {
           homeModels.add(home);
         }
@@ -85,8 +85,8 @@ class HomeProvider with ChangeNotifier {
   //   home.updateOneSocketStatus(socketId, isSocketOn);
   // }
 
-  HomeModel findHome(int homeId) {
-    var home = _homes.firstWhere((element) => element.userId == homeId);
+  HomeModel findHome(String email, String homeName) {
+    var home = _homes.firstWhere((element) => element.email == email && element.homeName == homeName);
     return home;
   }
 }

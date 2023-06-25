@@ -76,10 +76,10 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                   ),
                   Switch(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    value: _schedule.status,
+                    value: _schedule.socketStatus,
                     onChanged: (value) {
                       setState(() {
-                        _schedule.status = value;
+                        _schedule.socketStatus = value;
                       });
                     },
                     activeColor: Styles.accentColor,
@@ -143,8 +143,8 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   }
 
   void getSocketName() {
-    socketName = _powerstrip.sockets!.where((socket) => socket.socketId == _schedule.sockeId).first.name!;
-    _schedule.status == true ? scheduleStatus = "Aktif" : scheduleStatus = "Nonaktif";
+    socketName = _powerstrip.sockets.where((socket) => socket.socketNr == _schedule.socketNr).first.name;
+    _schedule.socketStatus == true ? scheduleStatus = "Aktif" : scheduleStatus = "Nonaktif";
   }
 
   Future<void> _deleteScheduleDialogBuilder(BuildContext context, ScheduleProvider scheduleProvider) {
@@ -210,7 +210,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   ///
   /// Memanggil function [deleteSchedule] dari [ScheduleController]
   deleteSchedule(ScheduleProvider scheduleProvider) async {
-    await _scheduleController.deleteSchedule(_schedule.scheduleId!);
-    scheduleProvider.removeSchedule(_schedule.scheduleId!);
+    // await _scheduleController.deleteSchedule(_schedule.scheduleId!);
+    scheduleProvider.removeSchedule(_schedule);
   }
 }

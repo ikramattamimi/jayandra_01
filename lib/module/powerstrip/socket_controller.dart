@@ -18,7 +18,7 @@ class SocketController {
 
   Future<MyResponse?> setSocketStatus(SocketModel socket) async {
     http.Response responseSocket;
-    responseSocket = await pwsRepo.setSocketStatus(socket.socketId, socket.powerstripId, socket.status);
+    responseSocket = await pwsRepo.setSocketStatus(socket.socketNr, socket.pwsKey, socket.status);
 
     // Parse String jsonke Map
     Map<String, dynamic> socketMapData = jsonDecode(responseSocket.body);
@@ -52,11 +52,11 @@ class SocketController {
     }
   }
 
-  Future<PowerstripResponse?> changeAllSocketStatus(int idPowerstrip, bool status) async {
+  Future<PowerstripResponse?> changeAllSocketStatus(String pwsKey, bool status) async {
     final prefs = await SharedPreferences.getInstance();
     PowerstripResponse? powerstripObjectResponse;
     // Get API data powerstrip
-    await pwsRepo.changeAllSocketStatus(idPowerstrip, status).then((value) async {
+    await pwsRepo.changeAllSocketStatus(pwsKey, status).then((value) async {
       prefs.remove('powerstrip');
       // powerstripObjectResponse = await getPowerstrip();
     });

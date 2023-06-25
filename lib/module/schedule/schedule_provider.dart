@@ -24,8 +24,8 @@ class ScheduleProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeSchedule(int scheduleId) {
-    var schedule = _schedules.firstWhere((element) => element.scheduleId == scheduleId);
+  void removeSchedule(ScheduleModel selSchedule) {
+    var schedule = _schedules.firstWhere((element) => element == selSchedule);
     var index = _schedules.indexOf(schedule);
     _schedules.removeAt(index);
     notifyListeners();
@@ -47,7 +47,7 @@ class ScheduleProvider with ChangeNotifier {
 
     // Logika pemanggilan API untuk mendapatkan data schedule
     // Get API data schedule
-    await _scheduleRepository.getSchedule(_powerstrip.id).then((value) {
+    await _scheduleRepository.getSchedule(_powerstrip.pwsKey).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
@@ -61,7 +61,7 @@ class ScheduleProvider with ChangeNotifier {
 
     List<ScheduleModel> scheduleModels = [];
     for (ScheduleModel scheduleData in scheduleObjectResponse.data!) {
-      scheduleData.powerstripId = _powerstrip.id;
+      scheduleData.pwsKey = _powerstrip.pwsKey;
       scheduleModels.add(scheduleData);
     }
 
@@ -72,8 +72,8 @@ class ScheduleProvider with ChangeNotifier {
     return Provider.of<ScheduleProvider>(context, listen: listen);
   }
 
-  void changeScheduleStatus(int scheduleId, bool isScheduleOn) {
-    final schedule = _schedules.firstWhere((schedule) => schedule.scheduleId == scheduleId);
+  void changeScheduleStatus(ScheduleModel selSchedule, bool isScheduleOn) {
+    final schedule = _schedules.firstWhere((schedule) => schedule == selSchedule);
     schedule.changeScheduleStatus(isScheduleOn);
     notifyListeners();
   }

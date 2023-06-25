@@ -5,6 +5,7 @@ import 'package:jayandra_01/models/home_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/home/home_provider.dart';
+import 'package:jayandra_01/module/report/report_provider.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
@@ -40,6 +41,7 @@ class _DashboardViewState extends State<DashboardView> {
     final powerstripProvider = Provider.of<PowerstripProvider>(context, listen: false);
     final timerProvider = Provider.of<TimerProvider>(context, listen: false);
     final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
+    final reportProvider = Provider.of<ReportProvider>(context, listen: false);
     // final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     initModels(
       userProvider: userProvider,
@@ -47,6 +49,7 @@ class _DashboardViewState extends State<DashboardView> {
       timerProvider: timerProvider,
       scheduleProvider: scheduleProvider,
       homeProvider: homeProvider,
+      reportProvider: reportProvider,
     );
 
     return Scaffold(
@@ -205,46 +208,46 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
-  List<Widget> _getPowerstripWidget(List<PowerstripModel> powerstrips) {
-    if (powerstrips != []) {
-      _powerstripWidgets = [];
-      for (var powerstrip in powerstrips) {
-        _powerstripWidgets!.add(
-          PowerstripWidget(
-            powerstripId: powerstrip.id,
-          ),
-        );
-      }
-      final screenSize = AppLayout.getSize(context);
+  // List<Widget> _getPowerstripWidget(List<PowerstripModel> powerstrips) {
+  //   if (powerstrips != []) {
+  //     _powerstripWidgets = [];
+  //     for (var powerstrip in powerstrips) {
+  //       _powerstripWidgets!.add(
+  //         PowerstripWidget(
+  //           pwsKey: powerstrip.pwsKey,
+  //         ),
+  //       );
+  //     }
+  //     final screenSize = AppLayout.getSize(context);
 
-      _powerstripWidgets!.add(
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            bottom: 16,
-          ),
-          child: InkWell(
-            onTap: () {},
-            child: SizedBox(
-              height: screenSize.height / 4.9,
-              width: screenSize.width / 2.2,
-              child: Card(
-                elevation: 0,
-                child: Center(
-                  child: Icon(
-                    Icons.add_circle_rounded,
-                    size: 60,
-                    color: Styles.textColor2,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    return _powerstripWidgets!;
-  }
+  //     _powerstripWidgets!.add(
+  //       Padding(
+  //         padding: const EdgeInsets.only(
+  //           left: 16,
+  //           bottom: 16,
+  //         ),
+  //         child: InkWell(
+  //           onTap: () {},
+  //           child: SizedBox(
+  //             height: screenSize.height / 4.9,
+  //             width: screenSize.width / 2.2,
+  //             child: Card(
+  //               elevation: 0,
+  //               child: Center(
+  //                 child: Icon(
+  //                   Icons.add_circle_rounded,
+  //                   size: 60,
+  //                   color: Styles.textColor2,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  //   }
+  //   return _powerstripWidgets!;
+  // }
 
   List<Widget> getHomeWidgets(List<HomeModel> homes) {
     List<Widget> homeWidgets = [];

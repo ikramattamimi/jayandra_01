@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
+import 'package:jayandra_01/module/report/report_provider.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/module/user/login_controller.dart';
@@ -42,6 +43,7 @@ class _LoginViewState extends State<LoginView> {
     final timerProvider = Provider.of<TimerProvider>(context, listen: false);
     final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    final reportProvider = Provider.of<ReportProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Styles.accentColor,
       appBar: AppBar(
@@ -125,6 +127,7 @@ class _LoginViewState extends State<LoginView> {
                                           timerProvider: timerProvider,
                                           scheduleProvider: scheduleProvider,
                                           homeProvider: homeProvider,
+                                          reportProvider: reportProvider,
                                         );
                                         goToDashboard();
                                       } catch (err) {
@@ -223,7 +226,6 @@ class _LoginViewState extends State<LoginView> {
         if (loginResponse.code == 0) {
           var user = loginResponse.data;
           userProvider.updateUser(
-            userId: user.userId,
             name: user.name,
             email: user.email,
           );
@@ -237,7 +239,6 @@ class _LoginViewState extends State<LoginView> {
             prefs.setBool('isUserLoggedIn', true),
             prefs.setString('user_name', user.name),
             prefs.setString('email', user.email),
-            prefs.setInt('user_id', user.userId),
           ]);
         }
       } catch (err) {

@@ -28,8 +28,8 @@ class TimerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeTimer(int timerId) {
-    var timer = _timers.firstWhere((element) => element.timerId == timerId);
+  void removeTimer(TimerModel selTimer) {
+    var timer = _timers.firstWhere((element) => element == selTimer);
     var index = _timers.indexOf(timer);
     _timers.removeAt(index);
     notifyListeners();
@@ -51,7 +51,7 @@ class TimerProvider with ChangeNotifier {
 
     // Logika pemanggilan API untuk mendapatkan data timer
     // Get API data timer
-    await _timerRepository.getTimer(_powerstrip.id).then((value) {
+    await _timerRepository.getTimer(_powerstrip.pwsKey).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);
@@ -74,7 +74,7 @@ class TimerProvider with ChangeNotifier {
       // final id = timerData['id'];
       // final time = timerData['time'];
       // final timerModel = TimerModel(id_timer: id, time: time);
-      timerData.powerstripId = _powerstrip.id;
+      // timerData.pwsKey = _powerstrip.id;
       timerModels.add(timerData);
     }
 
@@ -88,8 +88,8 @@ class TimerProvider with ChangeNotifier {
     return Provider.of<TimerProvider>(context, listen: listen);
   }
 
-  void changeTimerStatus(int timerId, bool isTimerOn) {
-    final timer = _timers.firstWhere((timer) => timer.timerId == timerId);
+  void changeTimerStatus(TimerModel selTimer, bool isTimerOn) {
+    final timer = _timers.firstWhere((timer) => timer == selTimer);
     timer.changeTimerStatus(isTimerOn);
     notifyListeners();
   }

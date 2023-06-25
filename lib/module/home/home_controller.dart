@@ -19,7 +19,7 @@ class HomeController {
 
   Future<MyResponse> addHome(BuildContext context) async {
     var user = Provider.of<UserModel>(context, listen: false);
-    Logger().i(user.userId);
+    // Logger().i(user.userId);
 
     try {
       http.Response result = await homeRepo.addHome(
@@ -42,8 +42,8 @@ class HomeController {
     }
   }
 
-  Future<MyArrayResponse> getHome(int userId) async {
-    http.Response result = await homeRepo.getHome(userId.toString());
+  Future<MyArrayResponse> getHome(String email) async {
+    http.Response result = await homeRepo.getHome(email);
     Map<String, dynamic> myBody = jsonDecode(result.body);
     var myResponse = MyArrayResponse.fromJson(myBody, HomeModel.fromJson);
     return myResponse;

@@ -1,6 +1,5 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/day_model.dart';
@@ -228,7 +227,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   void initState() {
     super.initState();
     powerstrip = widget.powerstrip;
-    selectedSocket = widget.powerstrip.sockets![0].socketId.toString();
+    selectedSocket = widget.powerstrip.sockets[0].socketNr.toString();
     daysIndo[dayOfWeek - 1].isSelected = true;
     getRepeatDay();
   }
@@ -280,12 +279,12 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   /// Drop Down Socket
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [];
-    for (var socket in powerstrip.sockets!) {
+    for (var socket in powerstrip.sockets) {
       menuItems.add(
         DropdownMenuItem(
-          value: socket.socketId.toString(),
+          value: socket.socketNr.toString(),
           child: Text(
-            socket.name!,
+            socket.name,
             style: Styles.bodyTextBlack2,
           ),
         ),
@@ -297,19 +296,18 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   /// Panggil API addSchedule
   addSchedule(ScheduleProvider scheduleProvider) async {
     ScheduleModel schedule = ScheduleModel(
-      sockeId: int.parse(selectedSocket),
+      socketNr: int.parse(selectedSocket),
       time: startTime,
-      status: isSocketOn,
+      socketStatus: isSocketOn,
       scheduleStatus: isSocketOn,
       days: daysIndo,
       note: _catatanController.text,
+      pwsKey: powerstrip.pwsKey,
     );
-
-    schedule.powerstripId = powerstrip.id;
 
     await _scheduleController.addSchedule(schedule).then((value) {
       var scheduledTime = DateTime.now().add(const Duration(seconds: 5));
-      var socket = powerstrip.sockets!.firstWhere((element) => element.socketId == int.parse(selectedSocket));
+      var socket = powerstrip.sockets.firstWhere((element) => element.socketNr == int.parse(selectedSocket));
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
         UniqueIntGenerator().generateUniqueInt(),

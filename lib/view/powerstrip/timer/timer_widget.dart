@@ -32,7 +32,7 @@ class _TimerWidgetState extends State<TimerWidget> {
     powerstripTimer = widget.powerstripTimer;
     timer = powerstripTimer!.timer;
     powerstrip = powerstripTimer!.powerstrip;
-    socketName = powerstrip!.sockets!.firstWhere((element) => element.socketId! == timer!.socketId).name!;
+    socketName = powerstrip!.sockets.firstWhere((element) => element.socketNr== timer!.socketNr).name;
   }
 
   @override
@@ -96,8 +96,8 @@ class _TimerWidgetState extends State<TimerWidget> {
                         value: timer!.status,
                         onChanged: (value) {
                           setState(() {
+                            timerProvider.changeTimerStatus(timer!, value);
                             timer!.status = value;
-                            timerProvider.changeTimerStatus(timer!.timerId!, timer!.status);
 
                             timer!.status ? null : cancel("changeSocketStatusTimer");
                           });
@@ -183,7 +183,7 @@ class _TimerWidgetState extends State<TimerWidget> {
   ///
   /// Memanggil function [deleteTimer] dari [TimerController]
   deleteTimer(TimerProvider timerProvider) async {
-    await _timerController.deleteTimer(timer!.timerId!);
-    timerProvider.removeTimer(timer!.timerId!);
+    await _timerController.deleteTimer(timer!.socketNr, "Pws-01");
+    timerProvider.removeTimer(timer!);
   }
 }

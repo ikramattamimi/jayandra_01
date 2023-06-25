@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
 class UserModel extends ChangeNotifier {
-  int userId;
   String name;
   String email;
   String? password;
 
   UserModel({
-    this.userId = 16,
     this.name = "",
     this.email = "",
     this.password = "",
@@ -23,8 +21,7 @@ class UserModel extends ChangeNotifier {
     );
   }
 
-  void updateUser({required int userId, required String name, required String email, String? password}) {
-    this.userId = userId;
+  void updateUser({required String name, required String email, String? password}) {
     this.name = name;
     this.email = email;
     this.password = password;
@@ -43,7 +40,6 @@ class UserModel extends ChangeNotifier {
 
   void logger() {
     Logger().i({
-      "userId": userId,
       "name": name,
       "email": email,
       "password": password,

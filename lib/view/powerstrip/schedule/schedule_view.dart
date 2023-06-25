@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
@@ -22,7 +21,7 @@ class _ScheduleViewState extends State<ScheduleView> {
   @override
   Widget build(BuildContext context) {
     final scheduleProvider = Provider.of<ScheduleProvider>(context);
-    final schedulesfromprovider = scheduleProvider.schedules.where((element) => element.powerstripId == powerstrip.id);
+    final schedulesfromprovider = scheduleProvider.schedules.where((element) => element.pwsKey == powerstrip.pwsKey);
     return Scaffold(
         appBar: AppBar(
           elevation: 0.5,
@@ -83,7 +82,7 @@ class _ScheduleViewState extends State<ScheduleView> {
 
   /// get Schedule
   getSchedule() async {
-    await _scheduleController.getSchedule(powerstrip.id).then((value) {
+    await _scheduleController.getSchedule(powerstrip.pwsKey).then((value) {
       setState(() {});
     });
   }

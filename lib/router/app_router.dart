@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/home_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/view/golongan_listrik/electricity_class_addhome_view.dart';
@@ -18,7 +19,6 @@ import 'package:jayandra_01/view/report/budgeting/budgeting_view.dart';
 import 'package:jayandra_01/view/user/edit_profile_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
 import 'package:jayandra_01/view/register/register_otp_view.dart';
-import 'package:jayandra_01/view/register/register_elclass_view.dart';
 import 'package:jayandra_01/view/powerstrip/schedule/add_schedule_view.dart';
 import 'package:jayandra_01/view/powerstrip/timer/add_timer_view.dart';
 import 'package:jayandra_01/view/powerstrip/timer/edit_timer_view.dart';
@@ -127,16 +127,18 @@ class AppRouter {
           GoRoute(
             path: "home",
             name: "home_view",
-            builder: (BuildContext context, GoRouterState state) => HomeView(),
-          ),
-          GoRoute(
-            path: "powerstrip",
-            name: "powerstrip",
-            builder: (BuildContext context, GoRouterState state) => PowerstripView(
-              powerstripId: state.extra as int,
-              // powerstrip: state.extra as PowerstripModel,
+            builder: (BuildContext context, GoRouterState state) => HomeView(
+              homeModel: state.extra as HomeModel,
             ),
           ),
+          // GoRoute(
+          //   path: "powerstrip",
+          //   name: "powerstrip",
+          //   builder: (BuildContext context, GoRouterState state) => PowerstripView(
+          //     pwsKey: state.extra as String,
+          //     // powerstrip: state.extra as PowerstripModel,
+          //   ),
+          // ),
           GoRoute(
             path: "budgeting",
             name: "budgeting_page",

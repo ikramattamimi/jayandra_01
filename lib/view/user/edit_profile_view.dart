@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/user_model.dart';
-import 'package:jayandra_01/view/login/login_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/custom_elevated_button.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';

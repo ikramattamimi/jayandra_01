@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 class PowerstripWidget extends StatefulWidget {
   const PowerstripWidget({
     super.key,
-    required this.powerstripId,
+    required this.pwsKey,
   });
-  final int powerstripId;
+  final String pwsKey;
 
   @override
   State<PowerstripWidget> createState() => _PowerstripWidgetState();
@@ -39,7 +39,7 @@ class _PowerstripWidgetState extends State<PowerstripWidget> {
   void setToggle() async {
     _toggleStatus = !_toggleStatus;
     // _totalActiveSocket = 4;
-    // _powerstripObjectResponse = await _powerstripController.changeAllSocketStatus(widget.powerstrip.id, _toggleStatus);
+    // _powerstripObjectResponse = await _powerstripController.changeAllSocketStatus(widget.powerstrip.pwsKey, _toggleStatus);
     setState(() {
       // getTogglesStatus();
     });
@@ -48,14 +48,14 @@ class _PowerstripWidgetState extends State<PowerstripWidget> {
   @override
   Widget build(BuildContext context) {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
-    final myPowerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == widget.powerstripId);
+    final myPowerstrip = powerstripProvider.findPowerstrip(widget.pwsKey);
 
     getTogglesStatus(myPowerstrip.isPowerstripActive, myPowerstrip.totalActiveSocket);
     final screenSize = AppLayout.getSize(context);
 
     return GestureDetector(
       onTap: () {
-        context.pushNamed('powerstrip', extra: myPowerstrip.id);
+        context.pushNamed('powerstrip', extra: myPowerstrip.pwsKey);
       },
       child: SizedBox(
         width: screenSize.width / 2.2,
@@ -101,7 +101,7 @@ class _PowerstripWidgetState extends State<PowerstripWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      myPowerstrip.name,
+                      myPowerstrip.pwsName,
                       style: Styles.title,
                     ),
                     Text(

@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/module/register/register_controller.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
-import 'package:jayandra_01/view/register/register_elclass_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:logger/logger.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -199,7 +198,6 @@ class _RegisterOTPViewState extends State<RegisterOTPView> {
         // });
 
         // Menampilkan pesan dari controller
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(err.toString())),
         );

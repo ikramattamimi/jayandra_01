@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jayandra_01/background-task/bgtask.dart';
 import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/home/home_provider.dart';
+import 'package:jayandra_01/module/report/report_provider.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
@@ -53,6 +53,9 @@ void main() {
         ChangeNotifierProvider<HomeProvider>(
           create: (context) => HomeProvider(),
         ),
+        ChangeNotifierProvider<ReportProvider>(
+          create: (context) => ReportProvider(),
+        ),
       ],
       child: MyApp(),
     ),
@@ -76,12 +79,14 @@ class MyApp extends StatelessWidget {
     final timerProvider = Provider.of<TimerProvider>(context, listen: false);
     final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    final reportProvider = Provider.of<ReportProvider>(context, listen: false);
     initModels(
       userProvider: userModel,
       powerstripProvider: powerstripProvider,
       timerProvider: timerProvider,
       scheduleProvider: scheduleProvider,
       homeProvider: homeProvider,
+      reportProvider: reportProvider,
     );
 
     _router = _appRouter.getRouter();

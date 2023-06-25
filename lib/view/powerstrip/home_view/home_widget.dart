@@ -38,7 +38,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       ),
       child: InkWell(
         onTap: () {
-          context.goNamed('home_view');
+          context.goNamed('home_view', extra: widget.homeModel);
         },
         child: SizedBox(
           width: screenSize.width / 2.5,
