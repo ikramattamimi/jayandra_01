@@ -110,7 +110,7 @@ class BarChartWidget extends StatelessWidget {
     if (value <= 0) {
       text = '0';
     } else if (value >= 0) {
-      text = '${value.toInt()}k';
+      text = '${value}k';
       // } else if (value == 40) {
       //   text = '40k';
       // } else if (value == 40) {

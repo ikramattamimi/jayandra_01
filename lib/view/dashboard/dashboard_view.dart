@@ -108,7 +108,7 @@ class _DashboardViewState extends State<DashboardView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Perangkat Anda",
+                  "Rumah Anda",
                   style: Styles.headingStyle2,
                   textAlign: TextAlign.start,
                 ),
@@ -139,52 +139,7 @@ class _DashboardViewState extends State<DashboardView> {
     _isPowerstripNull();
     ConnectivityStatus.checkConnectivityState();
 
-    // BuildContext myContext = context;
-
-    // For get powerstrip
-    // final userModel = Provider.of<UserModel>(myContext, listen: false);
-    // final powerstripProvider = Provider.of<PowerstripProvider>(myContext, listen: false);
-    // final timerProvider = Provider.of<TimerProvider>(myContext, listen: false);
-    // final scheduleProvider = Provider.of<ScheduleProvider>(myContext, listen: false);
-    // final homeProvider = Provider.of<HomeProvider>(myContext, listen: false);
-    // initModels(userModel, powerstripProvider, timerProvider, scheduleProvider, homeProvider);
   }
-
-  // void initModels(
-  //   UserModel userModel,
-  //   PowerstripProvider powerstripProvider,
-  //   TimerProvider timerProvider,
-  //   ScheduleProvider scheduleProvider,
-  //   HomeProvider homeProvider,
-  // ) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   if (prefs.getBool('isUserLoggedIn') ?? false) {
-  //     UserModel user = UserModel(
-  //       userId: prefs.getInt('user_id')!,
-  //       name: prefs.getString('user_name')!,
-  //       email: prefs.getString('email')!,
-  //     );
-  //     if (userModel.email == "") {
-  //       // userModel.updateUser(user);
-  //     }
-  //     if (homeProvider.homes.isEmpty) {
-  //       homeProvider.initializeData(user.userId);
-  //     }
-  //     if (powerstripProvider.powerstrips.isEmpty) {
-  //       powerstripProvider.initializeData(user.userId).then((value) {
-  //         // For get timer
-  //         for (var powerstrip in powerstripProvider.powerstrips) {
-  //           timerProvider.setPowerstrip = powerstrip;
-  //           timerProvider.initializeData();
-
-  //           scheduleProvider.setPowerstrip = powerstrip;
-  //           scheduleProvider.initializeData();
-  //         }
-  //       });
-  //     }
-  //     // return powerstripProvider.powerstrips;
-  //   }
-  // }
 
   void _isPowerstripNull() async {
     final prefs = await SharedPreferences.getInstance();
