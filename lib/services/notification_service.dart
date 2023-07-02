@@ -16,7 +16,7 @@ class NotificationService {
     await notificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {});
   }
 
-  notificationDetails({bool isAlarm = false}) {
+  alarmDetails({bool isAlarm = false}) {
     return NotificationDetails(
       android: AndroidNotificationDetails(
         'channelId',
@@ -32,12 +32,24 @@ class NotificationService {
     );
   }
 
+  notificationDetails({bool isAlarm = false}) {
+    return const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'channelId2',
+        'channelName2',
+        channelDescription: 'SSsSSS',
+        sound: RawResourceAndroidNotificationSound('bell'),
+        playSound: true,
+      ),
+    );
+  }
+
   Future showNotification({int id = 0, String? title, String? body, String? payLoad}) async {
     return notificationsPlugin.show(id, title, body, notificationDetails());
   }
 
   Future showAlarm({int id = 0, String? title, String? body, String? payLoad}) async {
-    return notificationsPlugin.show(id, title, body, notificationDetails(isAlarm: true));
+    return notificationsPlugin.show(id, title, body, alarmDetails(isAlarm: true));
   }
 
   Future showNotificationAtTime({int id = 0, required String title, required String body, String? payLoad, required TZDateTime scheduledDate}) async {
@@ -46,7 +58,7 @@ class NotificationService {
       title,
       body,
       scheduledDate,
-      notificationDetails(),
+      alarmDetails(),
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
     );

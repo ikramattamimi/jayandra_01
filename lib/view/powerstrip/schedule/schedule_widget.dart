@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -5,9 +6,13 @@ import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/schedule_controller.dart';
+import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/timeofday_converter.dart';
+import 'package:jayandra_01/utils/unique_int_generator.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
+import 'package:jayandra_01/background-task/bgtask.dart';
 
 class ScheduleWidget extends StatefulWidget {
   const ScheduleWidget({super.key, required this.powerstripSchedule});
@@ -57,6 +62,11 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                 );
               });
         },
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Tekan lama untuk menghapus jadwal")),
+          );
+        },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -76,10 +86,12 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                   ),
                   Switch(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    value: _schedule.socketStatus,
+                    value: _schedule.scheduleStatus,
                     onChanged: (value) {
                       setState(() {
                         _schedule.socketStatus = value;
+                        scheduleProvider.changeScheduleStatus(_schedule, value);
+                        _schedule.scheduleStatus ? setScheduleOn() : cancel("changeSocketStatusSchedule");
                       });
                     },
                     activeColor: Styles.accentColor,
@@ -92,7 +104,11 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                 style: Styles.bodyTextGrey2,
               ),
               Text(
-                '$socketName $scheduleStatus',
+                '$scheduleSocketStatus $socketName',
+                style: Styles.bodyTextGrey2,
+              ),
+              Text(
+                _schedule.scheduleName,
                 style: Styles.bodyTextGrey2,
               ),
             ],
@@ -111,7 +127,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   late ScheduleModel _schedule;
   List<String> repeatDay = [];
   late String socketName;
-  late String scheduleStatus;
+  late String scheduleSocketStatus;
   final _scheduleController = ScheduleController();
 
   /// ==========================================================================
@@ -144,7 +160,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
 
   void getSocketName() {
     socketName = _powerstrip.sockets.where((socket) => socket.socketNr == _schedule.socketNr).first.name;
-    _schedule.socketStatus == true ? scheduleStatus = "Aktif" : scheduleStatus = "Nonaktif";
+    _schedule.socketStatus == true ? scheduleSocketStatus = "Mengaktifkan" : scheduleSocketStatus = "Menonaktifkan";
   }
 
   Future<void> _deleteScheduleDialogBuilder(BuildContext context, ScheduleProvider scheduleProvider) {
@@ -214,4 +230,45 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
     // await _scheduleController.deleteSchedule(_schedule.scheduleId!);
     scheduleProvider.removeSchedule(_schedule);
   }
+
+  setScheduleOn() {
+    var scheduledTime = DateTime.now().add(Duration(hours: _schedule.time!.hour, minutes: _schedule.time!.minute));
+    AndroidAlarmManager.oneShotAt(
+      scheduledTime,
+      UniqueIntGenerator().generateUniqueInt(),
+      getScheduleNotification,
+      params: {
+        'socketName': socketName,
+        'socketId': _schedule.socketNr,
+        'pwsKey': _schedule.pwsKey,
+        'status': _schedule.socketStatus,
+      },
+    );
+  }
+}
+
+getScheduleNotification(int idTimer, Map<String, dynamic> socket) async {
+  await Workmanager().registerOneOffTask(
+    "schedule.powerstrip${socket['pwsKey']}.socket${socket['socketName']}",
+    "changeSocketStatusSchedule",
+    inputData: {
+      'socketId': socket['socketId'],
+      'pwsKey': socket['pwsKey'],
+      'status': socket['status'],
+      // 'timerId': socket['timerId'],
+    },
+    // initialDelay: Duration(seconds: 5),
+    existingWorkPolicy: ExistingWorkPolicy.replace,
+    constraints: Constraints(networkType: NetworkType.connected),
+    backoffPolicy: BackoffPolicy.linear,
+    backoffPolicyDelay: const Duration(seconds: 10),
+  );
+
+  UniqueIntGenerator generator = UniqueIntGenerator();
+  var status = socket['status'] ? "aktif" : "nonaktif";
+  NotificationService().showNotification(
+    id: generator.generateUniqueInt(),
+    title: "Jadwal untuk ${status}kan socket ${socket['socketName']}",
+    body: "Schedule selesai untuk Socket ${socket['socketName']}. Socket sudah $status",
+  );
 }

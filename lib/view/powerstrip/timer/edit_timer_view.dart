@@ -184,7 +184,7 @@ class _EditTimerViewState extends State<EditTimerView> {
     timer = widget.powerstripTimer.timer;
 
     // Inisialisasi Timer
-    isTimerActive = timer!.status;
+    isTimerActive = timer!.timerStatus;
     socketOffTime = timer!.time!;
     selectedValue = timer!.socketNr.toString();
   }
@@ -196,7 +196,7 @@ class _EditTimerViewState extends State<EditTimerView> {
     TimerModel timer = TimerModel(
       socketNr: int.parse(selectedValue),
       time: socketOffTime,
-      status: isTimerActive,
+      timerStatus: isTimerActive,
     );
     await _timerController.addTimer(timer);
   }

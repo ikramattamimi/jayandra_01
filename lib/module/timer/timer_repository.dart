@@ -28,7 +28,7 @@ class TimerRepository {
           'pws_serial_key': timer.pwsKey,
           'socket_number': timer.socketNr,
           'time': time,
-          'status': timer.status,
+          'status': timer.timerStatus,
         },
       ),
     );

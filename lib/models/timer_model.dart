@@ -6,9 +6,16 @@ class TimerModel extends ChangeNotifier {
   final int socketNr;
   final String pwsKey;
   final TimeOfDay? time;
-  bool status;
+  bool timerStatus;
+  final String timerName;
 
-  TimerModel({this.socketNr = 0, this.time, this.status = false, this.pwsKey = "Pws-01"});
+  TimerModel({
+    this.socketNr = 0,
+    this.time,
+    this.timerStatus = false,
+    this.pwsKey = "Pws-01",
+    this.timerName = "",
+  });
 
   factory TimerModel.fromJson(Map<String, dynamic> json) {
     final parts = json['time'].split(':');
@@ -16,16 +23,11 @@ class TimerModel extends ChangeNotifier {
     final minute = int.parse(parts[1]);
     final time = TimeOfDay(hour: hour, minute: minute);
 
-    return TimerModel(
-      pwsKey: json['pws_serial_key'],
-      socketNr: json['socket_number'],
-      time: time,
-      status: json['status'],
-    );
+    return TimerModel(pwsKey: json['pws_serial_key'], socketNr: json['socket_number'], time: time, timerStatus: json['status'], timerName: json['timer_name'] ?? "");
   }
 
   void changeTimerStatus(bool isTimerOn) {
-    status = isTimerOn;
+    timerStatus = isTimerOn;
     notifyListeners();
   }
 
@@ -34,7 +36,7 @@ class TimerModel extends ChangeNotifier {
       "socketNr": socketNr,
       "pwsKey": pwsKey,
       "time": time,
-      "status": status,
+      "status": timerStatus,
     });
   }
 }

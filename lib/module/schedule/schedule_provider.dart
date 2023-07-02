@@ -5,7 +5,6 @@ import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_repository.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class ScheduleProvider with ChangeNotifier {
@@ -49,7 +48,6 @@ class ScheduleProvider with ChangeNotifier {
     // Logika pemanggilan API untuk mendapatkan data schedule
     // Get API data schedule
     await _scheduleRepository.getSchedule(_powerstrip.pwsKey).then((value) {
-      Logger().i(value.statusCode);
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);

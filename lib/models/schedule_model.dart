@@ -4,21 +4,13 @@ import 'package:jayandra_01/models/days_indonesia.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 
 class ScheduleModel extends ChangeNotifier {
-  ScheduleModel({
-    this.socketNr = 0,
-    this.time,
-    this.socketStatus = false,
-    required this.scheduleStatus,
-    required this.note,
-    required this.days,
-    this.pwsKey = "Pws-01"
-  });
+  ScheduleModel({this.socketNr = 0, this.time, this.socketStatus = false, required this.scheduleStatus, this.scheduleName = "", required this.days, this.pwsKey = "Pws-01"});
 
   final int socketNr;
   final TimeOfDay? time;
   bool socketStatus;
   bool scheduleStatus;
-  final String note;
+  final String scheduleName;
   final List<DayModel> days;
   String pwsKey;
 
@@ -39,12 +31,12 @@ class ScheduleModel extends ChangeNotifier {
       socketStatus: json['schedule_status'],
       scheduleStatus: json['schedule_socket_status'],
       days: days,
-      note: json['schedule_name'],
+      scheduleName: json['schedule_name'] ?? "",
     );
   }
 
   void changeScheduleStatus(bool isScheduleOn) {
-    socketStatus = isScheduleOn;
+    scheduleStatus = isScheduleOn;
     notifyListeners();
   }
 }

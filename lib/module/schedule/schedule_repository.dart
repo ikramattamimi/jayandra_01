@@ -37,7 +37,7 @@ class ScheduleRepository {
           "schedule_status": schedule.scheduleStatus,
           "schedule_socket_status": schedule.socketStatus,
           "schedule_time": time,
-          "schedule_name": schedule.note,
+          "schedule_name": schedule.scheduleName,
           "day": days
         },
       ),

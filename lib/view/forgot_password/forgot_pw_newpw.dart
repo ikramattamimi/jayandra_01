@@ -8,7 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/module/register/register_controller.dart';
-import 'package:jayandra_01/module/user/login_controller.dart';
+import 'package:jayandra_01/module/user/user_controller.dart';
 import 'package:jayandra_01/view/login/login_view.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
@@ -26,7 +26,7 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
   final forgotPwKey = GlobalKey<FormState>();
   late String _email;
   final _controller = RegisterController();
-  final _loginController = LoginController();
+  final _loginController = UserController();
   String password = "";
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
     );
   }
 
-  void _register() async {
+  void updatePassword() async {
     // int id;
     // Jika validasi form berhasil
     if (forgotPwKey.currentState!.validate()) {
@@ -114,7 +114,7 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
       ),
       const Gap(20),
       NextButton(
-        onPressed: () => _register(),
+        onPressed: () => updatePassword(),
       ),
       const Gap(8),
     ];

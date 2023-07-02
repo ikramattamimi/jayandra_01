@@ -303,7 +303,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
       socketStatus: isSocketOn,
       scheduleStatus: true,
       days: daysIndo,
-      note: _catatanController.text,
+      scheduleName: _catatanController.text,
       pwsKey: powerstrip.pwsKey,
     );
 
@@ -356,9 +356,9 @@ getScheduleNotification(int idTimer, Map<String, dynamic> socket) async {
 
   UniqueIntGenerator generator = UniqueIntGenerator();
   var status = socket['status'] ? "aktif" : "nonaktif";
-  NotificationService().showAlarm(
+  NotificationService().showNotification(
     id: generator.generateUniqueInt(),
     title: "Jadwal untuk ${status}kan socket ${socket['socketName']}",
-    body: "Sudah saatnya untuk ${status}kan socket ${socket['socketName']}. Segera ${status}kan socket!",
+    body: "Schedule selesai untuk Socket ${socket['socketName']}. Socket sudah $status",
   );
 }

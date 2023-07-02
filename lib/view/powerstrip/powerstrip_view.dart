@@ -17,7 +17,8 @@ import 'package:provider/provider.dart';
 class PowerstripView extends StatefulWidget {
   const PowerstripView({
     super.key,
-    required this.pwsKey, required this.homeName,
+    required this.pwsKey,
+    required this.homeName,
     // required this.powerstrip,
   });
   // final PowerstripModel powerstrip;
@@ -35,9 +36,9 @@ class _PowerstripViewState extends State<PowerstripView> {
   @override
   Widget build(BuildContext context) {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
-
-    // initWidgets(userModel, powerstripProvider);
     var myPowerstrip = powerstripProvider.findPowerstrip(widget.pwsKey);
+    final userProvider = Provider.of<UserModel>(context);
+
     return Scaffold(
       backgroundColor: Styles.primaryColor,
       body: Container(
@@ -54,9 +55,26 @@ class _PowerstripViewState extends State<PowerstripView> {
             const Gap(5),
             getPowerstripInfoWidget(powerstripProvider, myPowerstrip),
             const Gap(16),
-            Text(
-              "Informasi Socket",
-              style: Styles.headingStyle2,
+            Row(
+              children: [
+                Text(
+                  "Informasi Socket",
+                  style: Styles.headingStyle2,
+                ),
+                IconButton(
+                  onPressed: () {
+                    powerstripProvider.initializeData(
+                      userProvider.email,
+                      widget.homeName,
+                    );
+                  },
+                  icon: Icon(
+                    Icons.replay_circle_filled_rounded,
+                    color: Styles.accentColor,
+                    size: 26,
+                  ),
+                ),
+              ],
             ),
             const Gap(5),
             SizedBox(

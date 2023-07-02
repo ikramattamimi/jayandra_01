@@ -11,7 +11,7 @@ import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/report/report_provider.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
-import 'package:jayandra_01/module/user/login_controller.dart';
+import 'package:jayandra_01/module/user/user_controller.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 import 'package:jayandra_01/view/login/custom_container.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -175,7 +175,7 @@ class _LoginViewState extends State<LoginView> {
   final _loginFormKey = GlobalKey<FormState>();
 
   /// Controller untuk form login
-  final LoginController _loginController = LoginController();
+  final UserController _loginController = UserController();
 
   /// Controller untuk mendapatkan data powerstrip ketika login berhasil
   final _powerstripController = PowerstripController();
@@ -190,7 +190,7 @@ class _LoginViewState extends State<LoginView> {
   /// Autentikasi akun user
   ///
   /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
-  /// dari [LoginController]
+  /// dari [UserController]
   void _login(
     UserModel userProvider,
     PowerstripProvider powerstripProvider,

@@ -5,10 +5,14 @@ import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/powerstrip/timer_controller.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
+import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/timeofday_converter.dart';
+import 'package:jayandra_01/utils/unique_int_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:jayandra_01/background-task/bgtask.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:workmanager/workmanager.dart';
 
 class TimerWidget extends StatefulWidget {
   const TimerWidget({super.key, required this.powerstripTimer});
@@ -32,7 +36,7 @@ class _TimerWidgetState extends State<TimerWidget> {
     powerstripTimer = widget.powerstripTimer;
     timer = powerstripTimer!.timer;
     powerstrip = powerstripTimer!.powerstrip;
-    socketName = powerstrip!.sockets.firstWhere((element) => element.socketNr== timer!.socketNr).name;
+    socketName = powerstrip!.sockets.firstWhere((element) => element.socketNr == timer!.socketNr).name;
   }
 
   @override
@@ -75,6 +79,11 @@ class _TimerWidgetState extends State<TimerWidget> {
                   );
                 });
           },
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Tekan lama untuk menghapus timer")),
+            );
+          },
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -93,13 +102,13 @@ class _TimerWidgetState extends State<TimerWidget> {
                       height: 25,
                       child: Switch(
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        value: timer!.status,
+                        value: timer!.timerStatus,
                         onChanged: (value) {
                           setState(() {
                             timerProvider.changeTimerStatus(timer!, value);
-                            timer!.status = value;
+                            timer!.timerStatus = value;
 
-                            timer!.status ? null : cancel("changeSocketStatusTimer");
+                            timer!.timerStatus ? setTimerOn() : cancel("changeSocketStatusTimer");
                           });
                         },
                         activeColor: Styles.accentColor,
@@ -186,4 +195,45 @@ class _TimerWidgetState extends State<TimerWidget> {
     await _timerController.deleteTimer(timer!.socketNr, "Pws-01");
     timerProvider.removeTimer(timer!);
   }
+
+  setTimerOn() {
+    var scheduledTime = DateTime.now().add(Duration(hours: timer!.time!.hour, minutes: timer!.time!.minute));
+    AndroidAlarmManager.oneShotAt(
+      scheduledTime,
+      timer!.socketNr ?? 12,
+      setTimerNotification,
+      params: {
+        'socketName': socketName,
+        'socketId': timer!.socketNr,
+        'pwsKey': timer!.pwsKey,
+        'status': false,
+        // 'timerId': newTimer.timerId,
+      },
+    );
+  }
+}
+
+setTimerNotification(int idTimer, Map<String, dynamic> socket) async {
+  await Workmanager().registerOneOffTask(
+    "timer.powerstrip${socket['pwsKey']}.socket${socket['socketName']}",
+    "changeSocketStatusTimer",
+    inputData: {
+      'socketId': socket['socketId'],
+      'pwsKey': socket['pwsKey'],
+      'status': false,
+      // 'timerId': socket['timerId'],
+    },
+    // initialDelay: Duration(seconds: 5),
+    existingWorkPolicy: ExistingWorkPolicy.replace,
+    constraints: Constraints(networkType: NetworkType.connected),
+    backoffPolicy: BackoffPolicy.linear,
+    backoffPolicyDelay: const Duration(seconds: 10),
+  );
+
+  var generator = UniqueIntGenerator();
+  NotificationService().showNotification(
+    id: generator.generateUniqueInt(),
+    title: "Timer selesai",
+    body: "Timer selesai untuk Socket ${socket['socketName']}. Socket sudah dimatikan",
+  );
 }

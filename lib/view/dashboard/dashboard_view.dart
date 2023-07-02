@@ -68,31 +68,31 @@ class _DashboardViewState extends State<DashboardView> {
                       'Halo ${userModel.name}!',
                       style: Styles.headingStyle1,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () async {
-                            await Workmanager().cancelAll();
-                          },
-                          icon: Icon(
-                            Icons.notifications_rounded,
-                            size: 30,
-                            color: Styles.textColor3,
-                          ),
-                        ),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () => context.pushNamed('add_device'),
-                          icon: Icon(
-                            CarbonIcons.add_filled,
-                            size: 30,
-                            color: Styles.accentColor,
-                          ),
-                        )
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   children: [
+                    //     IconButton(
+                    //       padding: EdgeInsets.zero,
+                    //       onPressed: () async {
+                    //         await Workmanager().cancelAll();
+                    //       },
+                    //       icon: Icon(
+                    //         Icons.notifications_rounded,
+                    //         size: 30,
+                    //         color: Styles.textColor3,
+                    //       ),
+                    //     ),
+                    //     IconButton(
+                    //       padding: EdgeInsets.zero,
+                    //       onPressed: () => context.pushNamed('add_device'),
+                    //       icon: Icon(
+                    //         CarbonIcons.add_filled,
+                    //         size: 30,
+                    //         color: Styles.accentColor,
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
                   ],
                 ),
                 const Gap(16),
@@ -138,7 +138,6 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
     _isPowerstripNull();
     ConnectivityStatus.checkConnectivityState();
-
   }
 
   void _isPowerstripNull() async {
@@ -214,33 +213,33 @@ class _DashboardViewState extends State<DashboardView> {
         homeModel: home,
       ));
     }
-    homeWidgets.add(
-      Padding(
-        padding: const EdgeInsets.only(
-          left: 16,
-          bottom: 16,
-        ),
-        child: InkWell(
-          onTap: () {
-            context.goNamed("add_home");
-          },
-          child: SizedBox(
-            width: screenSize.width / 2.5,
-            height: screenSize.height / 5.5,
-            child: Card(
-              elevation: 0,
-              child: Center(
-                child: Icon(
-                  Icons.add_circle_rounded,
-                  size: 60,
-                  color: Styles.textColor2,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+    // homeWidgets.add(
+    //   Padding(
+    //     padding: const EdgeInsets.only(
+    //       left: 16,
+    //       bottom: 16,
+    //     ),
+    //     child: InkWell(
+    //       onTap: () {
+    //         context.goNamed("add_home");
+    //       },
+    //       child: SizedBox(
+    //         width: screenSize.width / 2.5,
+    //         height: screenSize.height / 5.5,
+    //         child: Card(
+    //           elevation: 0,
+    //           child: Center(
+    //             child: Icon(
+    //               Icons.add_circle_rounded,
+    //               size: 60,
+    //               color: Styles.textColor2,
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
     return homeWidgets;
   }
 }

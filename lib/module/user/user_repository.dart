@@ -26,4 +26,15 @@ class UserRepository {
       }),
     );
   }
+  Future<http.Response> changeName(String? email, String? name) async {
+    return http.put(
+      Uri.parse('${NetworkAPI.ip}/updateUser/$email'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(<String?, String?>{
+        'name': name,
+      }),
+    );
+  }
 }

@@ -125,6 +125,17 @@ class _AddTimerPageState extends State<AddTimerPage> {
                     });
                   },
                 ),
+                SizedBox(
+                  height: 48,
+                  child: TextField(
+                    maxLength: 20,
+                    controller: _catatanController,
+                    decoration: InputDecoration(
+                      hintText: "Catatan",
+                      hintStyle: Styles.bodyTextGrey2,
+                    ),
+                  ),
+                ),
               ],
             ),
           )
@@ -145,6 +156,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
   PowerstripModel? powerstrip;
   final _timerController = TimerController();
   TimeOfDay endTime = const TimeOfDay(hour: 0, minute: 1);
+  final _catatanController = TextEditingController();
 
   /// ==========================================================================
   /// Local Function
@@ -162,7 +174,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
       pwsKey: powerstrip!.pwsKey,
       socketNr: int.parse(selectedValue),
       time: endTime,
-      status: isSwitched,
+      timerStatus: isSwitched,
     );
 
     await _timerController.addTimer(timer).then((value) {
@@ -243,7 +255,7 @@ setTimerNotification(int idTimer, Map<String, dynamic> socket) async {
   );
 
   var generator = UniqueIntGenerator();
-  NotificationService().showAlarm(
+  NotificationService().showNotification(
     id: generator.generateUniqueInt(),
     title: "Timer selesai",
     body: "Timer selesai untuk Socket ${socket['socketName']}. Socket sudah dimatikan",
