@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jayandra_01/models/socket_model.dart';
+import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 // import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_repository.dart';
+import 'package:jayandra_01/module/powerstrip/socket_controller.dart';
 // import 'package:jayandra_01/module/timer/timer_repository.dart';
 import 'package:logger/logger.dart';
 // import 'package:provider/provider.dart';
@@ -15,6 +18,7 @@ void callbackDispatcher() async {
   );
 
   var powerstripRepository = PowerstripRepository();
+  var socketController = SocketController();
   // var timerRepo = TimerRepository();
 
   Workmanager().executeTask((task, inputData) async {
@@ -27,11 +31,40 @@ void callbackDispatcher() async {
         // );
 
         try {
-          await powerstripRepository.setSocketStatus(
-            inputData?['socketId'],
-            inputData?['pwsKey'],
-            inputData?['status'],
+          var socket = SocketModel(
+            pwsKey: inputData?['pwsKey'],
+            socketNr: inputData?['socketId'],
+            status: inputData?['status'],
           );
+          await socketController.setSocketStatus(socket);
+          // await timerRepo.deleteTimer(
+          //   inputData?['timerId'],
+          // );
+
+          // TODO: Ganti Provider dengan Riverpod
+          // powerstripProvider.setOneSocketStatus(
+          //   inputData?['socketId'],
+          //   inputData?['termminalId'],
+          //   inputData?['status'],
+          // );
+        } catch (err) {
+          logger.e(err);
+        }
+        break;
+      case "changeSocketStatusSchedule":
+        // final providerContainer = ProviderContainer();
+        // var powerstripProvider = Provider.of<PowerstripProvider>(
+        //   context,
+        //   listen: false,
+        // );
+
+        try {
+          var socket = SocketModel(
+            pwsKey: inputData?['pwsKey'],
+            socketNr: inputData?['socketId'],
+            status: inputData?['status'],
+          );
+          await socketController.setSocketStatus(socket);
           // await timerRepo.deleteTimer(
           //   inputData?['timerId'],
           // );

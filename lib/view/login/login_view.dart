@@ -120,16 +120,14 @@ class _LoginViewState extends State<LoginView> {
                                     textStyle: Styles.buttonTextWhite,
                                     onPressed: () async {
                                       try {
-                                        _login(userProvider);
-                                        initModels(
-                                          userProvider: userProvider,
-                                          powerstripProvider: powerstripProvider,
-                                          timerProvider: timerProvider,
-                                          scheduleProvider: scheduleProvider,
-                                          homeProvider: homeProvider,
-                                          reportProvider: reportProvider,
+                                        _login(
+                                          userProvider,
+                                          powerstripProvider,
+                                          timerProvider,
+                                          scheduleProvider,
+                                          homeProvider,
+                                          reportProvider,
                                         );
-                                        goToDashboard();
                                       } catch (err) {
                                         Logger().e(err);
                                       }
@@ -193,7 +191,14 @@ class _LoginViewState extends State<LoginView> {
   ///
   /// Menampilkan [SnackBar] dengan isi dari [loginResponse.message]
   /// dari [LoginController]
-  void _login(UserModel userProvider) async {
+  void _login(
+    UserModel userProvider,
+    PowerstripProvider powerstripProvider,
+    TimerProvider timerProvider,
+    ScheduleProvider scheduleProvider,
+    HomeProvider homeProvider,
+    ReportProvider reportProvider,
+  ) async {
     // int id;
     // Jika validasi form berhasil
     if (_loginFormKey.currentState!.validate()) {
@@ -240,6 +245,16 @@ class _LoginViewState extends State<LoginView> {
             prefs.setString('user_name', user.name),
             prefs.setString('email', user.email),
           ]);
+
+          initModels(
+            userProvider: userProvider,
+            powerstripProvider: powerstripProvider,
+            timerProvider: timerProvider,
+            scheduleProvider: scheduleProvider,
+            homeProvider: homeProvider,
+            reportProvider: reportProvider,
+          );
+          goToDashboard();
         }
       } catch (err) {
         // Menyembunyikan animasi loading

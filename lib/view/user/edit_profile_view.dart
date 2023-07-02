@@ -79,16 +79,16 @@ class _EditProfileFormState extends State<EditProfileForm> {
               keyboardType: TextInputType.name,
             ),
             const Gap(16),
-            PasswordTextForm(
-              formKey: _editProfileFormKey,
-              hintText: "Password",
-            ),
-            const Gap(16),
-            PasswordTextForm(
-              formKey: _editProfileFormKey,
-              hintText: "Ulangi Password",
-            ),
-            const Gap(32),
+            // PasswordTextForm(
+            //   formKey: _editProfileFormKey,
+            //   hintText: "Password",
+            // ),
+            // const Gap(16),
+            // PasswordTextForm(
+            //   formKey: _editProfileFormKey,
+            //   hintText: "Ulangi Password",
+            // ),
+            // const Gap(32),
             CustomElevatedButton(
               backgroundColor: Styles.accentColor,
               borderColor: Colors.transparent,

@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:jayandra_01/module/register/register_controller.dart';
 import 'package:jayandra_01/view/forgot_password/forgot_pw_newpw.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:logger/logger.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class ForgotPasswordOTPView extends StatefulWidget {
@@ -19,6 +21,7 @@ class ForgotPasswordOTPView extends StatefulWidget {
 class _ForgotPasswordOTPViewState extends State<ForgotPasswordOTPView> {
   final _registerForm2Key = GlobalKey<FormState>();
   late String _email;
+  final registerController = RegisterController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class _ForgotPasswordOTPViewState extends State<ForgotPasswordOTPView> {
     );
   }
 
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController otpTextController = TextEditingController();
   // ..text = "123456";
 
   // ignore: close_sinks
@@ -88,13 +91,27 @@ class _ForgotPasswordOTPViewState extends State<ForgotPasswordOTPView> {
     );
   }
 
-  resendOTP() {
+   void resendOTP() async {
     if (!_isButtonDisabled) {
-      return ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Mengirimkan ulang Kode OTP ke email')),
-      );
+      try {
+        // Memproses API cek email
+        final response = await Future.any([
+          registerController.sendOTP(_email),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
+
+        if (response.code == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response.message)),
+          );
+        }
+      } catch (e) {
+        Logger().e(e);
+      }
     }
-    null;
   }
 
   List<Widget> get _getRegisterFormWidget {
@@ -130,7 +147,7 @@ class _ForgotPasswordOTPViewState extends State<ForgotPasswordOTPView> {
         animationDuration: const Duration(milliseconds: 100),
         enableActiveFill: true,
         errorAnimationController: errorController,
-        controller: textEditingController,
+        controller: otpTextController,
         keyboardType: TextInputType.number,
         onChanged: (value) {
           debugPrint(value);
@@ -156,21 +173,80 @@ class _ForgotPasswordOTPViewState extends State<ForgotPasswordOTPView> {
       const Gap(20),
       NextButton(
         onPressed: () {
-          if (_registerForm2Key.currentState!.validate()) {
-            // If the form is valid, display a snackbar. In the real world,
-            // you'd often call a server or save the information in a database.
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Mengecek Kode OTP')),
-            );
-            Future.delayed(const Duration(seconds: 1), () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ForgotPasswordNewPwView(email: _email);
-              }));
-            });
-          }
+          // if (_registerForm2Key.currentState!.validate()) {
+          //   // If the form is valid, display a snackbar. In the real world,
+          //   // you'd often call a server or save the information in a database.
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     const SnackBar(content: Text('Mengecek Kode OTP')),
+          //   );
+          //   Future.delayed(const Duration(seconds: 1), () {
+          //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+          //       return ForgotPasswordNewPwView(email: _email);
+          //     }));
+          //   });
+          // }
+          onNext();
         },
       ),
       const Gap(8),
     ];
+  }
+
+  void onNext() async {
+    if (_registerForm2Key.currentState!.validate()) {
+      // If the form is valid, display a snackbar. In the real world,
+      // you'd often call a server or save the information in a database.
+
+      // Menampilkan animasi loading
+      setState(() {
+        registerController.isLoading = true;
+      });
+
+      try {
+        // Memproses API
+        final response = await Future.any([
+          registerController.verifyOTP(_email, otpTextController.text),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
+
+        // Menyembunyikan animasi loading
+        setState(() {
+          registerController.isLoading = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mengecek Kode OTP')),
+        );
+
+        // Menampilkan pesan status autentikasi
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.message)),
+        );
+
+        // Jika status autentikasi sukses dengan kode 0
+        if (response.code == 0) {
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ForgotPasswordNewPwView(email: _email);
+            }));
+          });
+        }
+      } catch (err) {
+        // Menyembunyikan animasi loading
+        // setState(() {
+        //   _loginController.isLoading = false;
+        // });
+
+        // Menampilkan pesan dari controller
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(err.toString())),
+        );
+
+        Logger(printer: PrettyPrinter()).e(err);
+      }
+    }
   }
 }

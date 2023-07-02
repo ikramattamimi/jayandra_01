@@ -94,13 +94,13 @@ class _UserViewState extends State<UserView> {
                   ),
                   child: Column(
                     children: [
-                      CustomListTile(
-                        icon: Icons.money,
-                        title: "Golongan Listrik",
-                        onTap: () {
-                          context.pushNamed("electricity_class_page");
-                        },
-                      ),
+                      // CustomListTile(
+                      //   icon: Icons.money,
+                      //   title: "Golongan Listrik",
+                      //   onTap: () {
+                      //     context.pushNamed("electricity_class_page");
+                      //   },
+                      // ),
                       CustomListTile(
                         icon: Icons.logout_rounded,
                         title: "Keluar",
@@ -126,7 +126,7 @@ class _UserViewState extends State<UserView> {
                                           final prefs = await SharedPreferences.getInstance();
                                           prefs.clear();
                                           // ignore: use_build_context_synchronously
-                                          context.pushNamed("landing_page");
+                                          context.pushReplacementNamed("landing_page");
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(

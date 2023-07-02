@@ -6,9 +6,9 @@ import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
 class BudgetingView extends StatefulWidget {
-  const BudgetingView({super.key, required this.notifyParent, required this.budgetingText});
-  final Function notifyParent;
-  final String budgetingText;
+  const BudgetingView({super.key, this.notifyParent, this.budgetingText});
+  final Function? notifyParent;
+  final String? budgetingText;
 
   @override
   State<BudgetingView> createState() => _BudgetingViewState();
@@ -40,7 +40,7 @@ class _BudgetingViewState extends State<BudgetingView> {
           IconButton(
             onPressed: () {
               context.pop();
-              widget.notifyParent(budgetController.text);
+              // widget.notifyParent(budgetController.text);
             },
             icon: const Icon(Icons.check_rounded),
           ),
@@ -105,6 +105,6 @@ class _BudgetingViewState extends State<BudgetingView> {
   @override
   void initState() {
     super.initState();
-    budgetController.text = widget.budgetingText;
+    // budgetController.text = widget.budgetingText;
   }
 }

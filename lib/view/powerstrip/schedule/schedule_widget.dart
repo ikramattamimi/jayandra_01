@@ -168,6 +168,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      _scheduleController.deleteSchedule(_schedule.pwsKey, _schedule.socketNr);
                       deleteSchedule(scheduleProvider);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Schedule berhasil dihapus")),

@@ -6,18 +6,17 @@ import 'package:jayandra_01/utils/network_api.dart';
 
 class PowerstripRepository {
   Future<http.Response> getPowerstrip(String email, String homeName) async {
-    return http.post(Uri.parse('${NetworkAPI.ip}/getpowerstrip/'), headers: <String, String>{
-      'Content-Type': "application/json; charset=UTF-8",
-    }, body: jsonEncode({
-      "email": email,
-      "home_name": homeName
-    }));
+    return http.post(Uri.parse('${NetworkAPI.ip}/getpowerstrip/'),
+        headers: <String, String>{
+          'Content-Type': "application/json; charset=UTF-8",
+        },
+        body: jsonEncode({"email": email, "home_name": homeName}));
   }
 
   Future<http.Response> setSocketStatus(int socketNr, String pwsKey, bool socketStatus) async {
     // Logger(printer: PrettyPrinter()).i("API set socket status");
-    return http.post(
-      Uri.parse('${NetworkAPI.ip}/updateSocketStatus/'),
+    return http.put(
+      Uri.parse('${NetworkAPI.ip}/updateSocketStatus/$pwsKey/$socketNr'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
@@ -54,12 +53,7 @@ class PowerstripRepository {
         'Content-Type': "application/json; charset=UTF-8",
       },
       body: jsonEncode(
-        {
-          'pws_serial_key': pwsModel.pwsKey,
-          'pws_name': pwsModel.pwsName,
-          'home_name': homeName,
-          'email' : email
-        },
+        {'pws_serial_key': pwsModel.pwsKey, 'pws_name': pwsModel.pwsName, 'home_name': homeName, 'email': email},
       ),
     );
   }

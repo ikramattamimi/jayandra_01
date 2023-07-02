@@ -13,7 +13,9 @@ import 'package:jayandra_01/view/powerstrip/time_picker.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/unique_int_generator.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
 
 class AddScheduleView extends StatefulWidget {
   const AddScheduleView({super.key, required this.powerstrip});
@@ -299,20 +301,26 @@ class _AddScheduleViewState extends State<AddScheduleView> {
       socketNr: int.parse(selectedSocket),
       time: startTime,
       socketStatus: isSocketOn,
-      scheduleStatus: isSocketOn,
+      scheduleStatus: true,
       days: daysIndo,
       note: _catatanController.text,
       pwsKey: powerstrip.pwsKey,
     );
 
     await _scheduleController.addSchedule(schedule).then((value) {
-      var scheduledTime = DateTime.now().add(const Duration(seconds: 5));
+      var scheduledTime = DateTime.now().add(Duration(hours: startTime.hour - DateTime.now().hour, minutes: startTime.minute - DateTime.now().minute));
+      Logger().i(scheduledTime);
       var socket = powerstrip.sockets.firstWhere((element) => element.socketNr == int.parse(selectedSocket));
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
         UniqueIntGenerator().generateUniqueInt(),
         getScheduleNotification,
-        params: {'socketName': socket.name, 'status': schedule.scheduleStatus},
+        params: {
+          'socketName': socket.name,
+          'socketId': socket.socketNr,
+          'pwsKey': socket.pwsKey,
+          'status': schedule.socketStatus,
+        },
       );
 
       scheduleProvider.addSchedule(schedule);
@@ -329,7 +337,23 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   }
 }
 
-getScheduleNotification(int idTimer, Map<String, dynamic> socket) {
+getScheduleNotification(int idTimer, Map<String, dynamic> socket) async {
+  await Workmanager().registerOneOffTask(
+    "schedule.powerstrip${socket['pwsKey']}.socket${socket['socketName']}",
+    "changeSocketStatusSchedule",
+    inputData: {
+      'socketId': socket['socketId'],
+      'pwsKey': socket['pwsKey'],
+      'status': socket['status'],
+      // 'timerId': socket['timerId'],
+    },
+    // initialDelay: Duration(seconds: 5),
+    existingWorkPolicy: ExistingWorkPolicy.replace,
+    constraints: Constraints(networkType: NetworkType.connected),
+    backoffPolicy: BackoffPolicy.linear,
+    backoffPolicyDelay: const Duration(seconds: 10),
+  );
+
   UniqueIntGenerator generator = UniqueIntGenerator();
   var status = socket['status'] ? "aktif" : "nonaktif";
   NotificationService().showAlarm(

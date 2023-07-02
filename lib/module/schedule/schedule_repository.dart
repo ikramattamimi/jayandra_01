@@ -32,17 +32,19 @@ class ScheduleRepository {
       },
       body: jsonEncode(
         {
-          'id_socket': schedule.socketNr.toString(),
-          'status': schedule.socketStatus,
-          'time': time,
-          'note': schedule.note,
-          'day': days,
+          "socket_number": schedule.socketNr,
+          "pws_serial_key": schedule.pwsKey,
+          "schedule_status": schedule.scheduleStatus,
+          "schedule_socket_status": schedule.socketStatus,
+          "schedule_time": time,
+          "schedule_name": schedule.note,
+          "day": days
         },
       ),
     );
   }
 
-  Future<http.Response> deleteSchedule(int scheduleId) async {
+  Future<http.Response> deleteSchedule(String pwsKey, int socketNr) async {
     // int updateStatus = status == true ? 1 : 0;
 
     return http.post(
@@ -52,7 +54,8 @@ class ScheduleRepository {
       },
       body: jsonEncode(
         {
-          'id_schedule': scheduleId.toString(),
+          "socket_number": socketNr,
+          "pws_serial_key": pwsKey,
         },
       ),
     );

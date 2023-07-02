@@ -15,4 +15,15 @@ class UserRepository {
       }),
     );
   }
+  Future<http.Response> changePassword(String? email, String? password) async {
+    return http.put(
+      Uri.parse('${NetworkAPI.ip}/changePassword/$email'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(<String?, String?>{
+        'password': password,
+      }),
+    );
+  }
 }

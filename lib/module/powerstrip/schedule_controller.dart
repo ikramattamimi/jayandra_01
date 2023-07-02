@@ -48,11 +48,11 @@ class ScheduleController {
     return scheduleObjectResponse;
   }
 
-  Future<MyResponse?> deleteSchedule(int scheduleId) async {
+  Future<MyResponse?> deleteSchedule(String pwsKey, int socketNr) async {
     MyResponse scheduleObjectResponse = MyResponse();
 
     // Get API data powerstrip
-    await _scheduleRepository.deleteSchedule(scheduleId).then((value) {
+    await _scheduleRepository.deleteSchedule(pwsKey, socketNr).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);

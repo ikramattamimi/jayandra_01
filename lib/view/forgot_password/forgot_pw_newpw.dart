@@ -1,13 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/module/register/register_controller.dart';
+import 'package:jayandra_01/module/user/login_controller.dart';
 import 'package:jayandra_01/view/login/login_view.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/view/register/register_email_view.dart';
+import 'package:logger/logger.dart';
 
 class ForgotPasswordNewPwView extends StatefulWidget {
   const ForgotPasswordNewPwView({super.key, required this.email});
@@ -18,10 +23,11 @@ class ForgotPasswordNewPwView extends StatefulWidget {
 }
 
 class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
-  final _registerForm3Key = GlobalKey<FormState>();
+  final forgotPwKey = GlobalKey<FormState>();
   late String _email;
   final _controller = RegisterController();
-
+  final _loginController = LoginController();
+  String password = "";
   @override
   void initState() {
     super.initState();
@@ -34,7 +40,7 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
       title: "Lupa Password",
       subtitle: "Masukkan Password Baru",
       form: Form(
-        key: _registerForm3Key,
+        key: forgotPwKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: _getRegisterFormWidget,
@@ -44,35 +50,51 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
   }
 
   void _register() async {
-    if (_registerForm3Key.currentState!.validate()) {
+    // int id;
+    // Jika validasi form berhasil
+    if (forgotPwKey.currentState!.validate()) {
       // Menampilkan animasi loading
       setState(() {
-        _controller.isLoading = true;
+        _loginController.isLoading = true;
       });
 
-      _controller.emailValue = _email;
+      try {
+        // Memproses API
+        final changePwResponse = await Future.any([
+          _loginController.changePassword(_email, _controller.passwordController.text),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
 
-      // Memproses API cek email
-      MyResponse response = await _controller.register();
+        // Menyembunyikan animasi loading
+        // setState(() {
+        //   _loginController.isLoading = false;
+        // });
 
-      // Menyembunyikan animasi loading
-      setState(() {
-        _controller.isLoading = false;
-      });
+        // Menampilkan pesan status autentikasi
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(changePwResponse.message)),
+        );
 
-      // Menampilkan pesan dari controller
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.message)),
-      );
+        // Jika status autentikasi sukses dengan kode 0
+        if (changePwResponse.code == 0) {
+          context.goNamed("login_page");
+        }
+      } catch (err) {
+        // Menyembunyikan animasi loading
+        // setState(() {
+        //   _loginController.isLoading = false;
+        // });
 
-      Future.delayed(const Duration(seconds: 2), () {
-        if (response.code == 0) {
-          // context.pushNamed("register_page_2");
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const LoginView();
-          }));
-        } else {}
-      });
+        // Menampilkan pesan dari controller
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(err.toString())),
+        );
+
+        Logger(printer: PrettyPrinter()).e(err);
+      }
     }
   }
 
@@ -80,13 +102,15 @@ class _ForgotPasswordNewPwViewState extends State<ForgotPasswordNewPwView> {
     return [
       const Gap(16),
       PasswordTextForm(
-        formKey: _registerForm3Key,
+        formKey: forgotPwKey,
         controller: _controller.passwordController,
       ),
       const Gap(16),
       PasswordTextForm(
         hintText: "Konfirmasi Password",
-        formKey: _registerForm3Key,
+        formKey: forgotPwKey,
+        controller: _controller.repeatPasswordController,
+        confirmPassword: password,
       ),
       const Gap(20),
       NextButton(

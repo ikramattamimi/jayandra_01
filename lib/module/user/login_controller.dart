@@ -25,4 +25,17 @@ class LoginController {
       return MyResponse(code: 1, message: "Username atau Password Salah");
     }
   }
+
+  Future<MyResponse> changePassword(String email, String password) async {
+    http.Response result = await _repository.changePassword(email, password);
+
+    if (result.statusCode == 200) {
+      Map<String, dynamic> myBody = jsonDecode(result.body);
+      MyResponse<UserModel> myResponse = MyResponse.fromJson(myBody, UserModel.fromJson);
+      myResponse.message = "Ubah Password Berhasil Berhasil";
+      return myResponse;
+    } else {
+      return MyResponse(code: 1, message: "Terjadi Masalah");
+    }
+  }
 }

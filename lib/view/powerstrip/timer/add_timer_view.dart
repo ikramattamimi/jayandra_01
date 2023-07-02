@@ -166,14 +166,14 @@ class _AddTimerPageState extends State<AddTimerPage> {
     );
 
     await _timerController.addTimer(timer).then((value) {
-      TimerModel newTimer = value!.data;
+      TimerModel newTimer = timer;
       var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
       var socket = powerstrip!.sockets.firstWhere((element) => element.socketNr == int.parse(selectedValue));
       // timerToChange.logger();
       AndroidAlarmManager.oneShotAt(
         scheduledTime,
-        value.data.timerId ?? 12,
-        getTimerNotification,
+        timer.socketNr ?? 12,
+        setTimerNotification,
         params: {
           'socketName': socket.name,
           'socketId': socket.socketNr,
@@ -225,7 +225,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
   }
 }
 
-getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
+setTimerNotification(int idTimer, Map<String, dynamic> socket) async {
   await Workmanager().registerOneOffTask(
     "timer.powerstrip${socket['pwsKey']}.socket${socket['socketName']}",
     "changeSocketStatusTimer",
@@ -233,7 +233,7 @@ getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
       'socketId': socket['socketId'],
       'pwsKey': socket['pwsKey'],
       'status': false,
-      'timerId': socket['timerId'],
+      // 'timerId': socket['timerId'],
     },
     // initialDelay: Duration(seconds: 5),
     existingWorkPolicy: ExistingWorkPolicy.replace,
@@ -242,7 +242,7 @@ getTimerNotification(int idTimer, Map<String, dynamic> socket) async {
     backoffPolicyDelay: const Duration(seconds: 10),
   );
 
-  UniqueIntGenerator generator = UniqueIntGenerator();
+  var generator = UniqueIntGenerator();
   NotificationService().showAlarm(
     id: generator.generateUniqueInt(),
     title: "Timer selesai",

@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/module/register/cek_email_controller.dart';
+import 'package:jayandra_01/module/register/register_controller.dart';
 import 'package:jayandra_01/view/forgot_password/forgot_pw_otp_view.dart';
 import 'package:jayandra_01/view/register/register_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/custom_elevated_button.dart';
+import 'package:logger/logger.dart';
 
 class ForgotPasswordEmailView extends StatelessWidget {
   const ForgotPasswordEmailView({super.key});
@@ -36,25 +40,26 @@ class _RegisterFormState extends State<RegisterForm> {
   // Note: This is a GlobalKey<FormState>,
   // not a GlobalKey<MyCustomFormState>.
   final _registerFormKey = GlobalKey<FormState>();
-  final _controller = CekEmailController();
+  final cekEmailController = CekEmailController();
+  final registerController = RegisterController();
 
   // late String? _email;
   // late String? _password;
   // bool _showPassword = false;
 
-  void _cekEmail() async {
+  void _cekEmailOld() async {
     if (_registerFormKey.currentState!.validate()) {
       // Menampilkan animasi loading
       setState(() {
-        _controller.isLoading = true;
+        cekEmailController.isLoading = true;
       });
 
       // Memproses API cek email
-      MyResponse response = await _controller.cekEmail();
+      MyResponse response = await cekEmailController.cekEmail();
 
       // Menyembunyikan animasi loading
       setState(() {
-        _controller.isLoading = false;
+        cekEmailController.isLoading = false;
       });
 
       // Menampilkan pesan dari controller
@@ -67,10 +72,85 @@ class _RegisterFormState extends State<RegisterForm> {
         if (response.code == 1) {
           // context.pushNamed("register_page_2");
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ForgotPasswordOTPView(email: _controller.emailController.text);
+            return ForgotPasswordOTPView(email: cekEmailController.emailController.text);
           }));
         } else {}
       });
+    }
+  }
+
+  void _cekEmail() async {
+    if (_registerFormKey.currentState!.validate()) {
+      // Menampilkan animasi loading
+      setState(() {
+        cekEmailController.isLoading = true;
+      });
+
+      try {
+        // Memproses API cek email
+        final response = await Future.any([
+          cekEmailController.cekEmail(),
+          Future.delayed(
+            const Duration(seconds: 10),
+            () => throw TimeoutException('API call took too long'),
+          ),
+        ]);
+
+        if (response.code == 0) {
+          // Kirim OTP ke Email
+          sendOTP(
+            cekEmailController.emailController.text,
+          );
+
+          Future.delayed(const Duration(seconds: 2), () {
+            // Menyembunyikan animasi loading
+            setState(() {
+              cekEmailController.isLoading = false;
+            });
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ForgotPasswordOTPView(email: cekEmailController.emailController.text);
+            }));
+          });
+        } else {
+          // Menampilkan pesan dari controller
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response.message)),
+          );
+        }
+      } catch (err) {
+        // Menyembunyikan animasi loading
+        setState(() {
+          cekEmailController.isLoading = false;
+        });
+
+        // Menampilkan pesan dari controller
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(err.toString())),
+        );
+
+        Logger().e(err);
+      }
+    }
+  }
+
+  void sendOTP(String email) async {
+    try {
+      // Memproses API cek email
+      final response = await Future.any([
+        registerController.sendOTP(email),
+        Future.delayed(
+          const Duration(seconds: 10),
+          () => throw TimeoutException('API call took too long'),
+        ),
+      ]);
+
+      if (response.code == 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.message)),
+        );
+      }
+    } catch (e) {
+      Logger().e(e);
     }
   }
 
@@ -82,10 +162,10 @@ class _RegisterFormState extends State<RegisterForm> {
         children: [
           EmailTextForm(
             formKey: _registerFormKey,
-            controller: _controller.emailController,
+            controller: cekEmailController.emailController,
           ),
           const Gap(20),
-          (!_controller.isLoading)
+          (!cekEmailController.isLoading)
               ? NextButton(
                   onPressed: () => _cekEmail(),
                 )

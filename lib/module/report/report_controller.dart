@@ -10,11 +10,11 @@ class ReportController {
   final ReportRepository reportRepo = ReportRepository();
 
   Future<MyArrayResponse> getRerportAll(String email) async {
-
     try {
       http.Response result = await reportRepo.getReportAll(email);
 
       Map<String, dynamic> myBody = jsonDecode(result.body);
+      // Logger().i(myBody);
 
       var myResponse = MyArrayResponse.fromJson(myBody, ReportModel.fromJson);
       if (result.statusCode == 200) {
@@ -28,7 +28,6 @@ class ReportController {
   }
 
   Future<MyArrayResponse> getRerportPowerstrip(String homeName, String pwsKey, String email) async {
-
     try {
       http.Response result = await reportRepo.getReportPws(homeName, pwsKey, email);
 
@@ -46,7 +45,6 @@ class ReportController {
   }
 
   Future<MyArrayResponse> getRerportSocket(String homeName, String pwsKey, String email) async {
-
     try {
       http.Response result = await reportRepo.getReportSocket(homeName, pwsKey, email);
 
@@ -62,5 +60,4 @@ class ReportController {
       return MyArrayResponse();
     }
   }
-
 }
