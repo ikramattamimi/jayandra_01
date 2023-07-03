@@ -85,8 +85,8 @@ class HomeProvider with ChangeNotifier {
   //   home.updateOneSocketStatus(socketId, isSocketOn);
   // }
 
-  HomeModel findHome(String email, String homeName) {
-    var home = _homes.firstWhere((element) => element.email == email && element.homeName == homeName);
+  HomeModel findHome(int homeId) {
+    var home = _homes.firstWhere((element) => element.homeId == homeId);
     return home;
   }
 }

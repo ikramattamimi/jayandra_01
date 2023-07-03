@@ -26,7 +26,7 @@ class _ScheduleViewState extends State<ScheduleView> {
         appBar: AppBar(
           elevation: 0.5,
           title: Text(
-            "Jadwal",
+            "Schedule",
             style: Styles.pageTitle,
           ),
           backgroundColor: Styles.secondaryColor,

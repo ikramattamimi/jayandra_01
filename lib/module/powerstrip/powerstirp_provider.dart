@@ -28,19 +28,19 @@ class PowerstripProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initializeData(String email, String homeName) async {
-    List<PowerstripModel> powerstripModels = await createPowerstripModelsFromApi(email, homeName);
+  Future<void> initializeData(int homeId) async {
+    List<PowerstripModel> powerstripModels = await createPowerstripModelsFromApi(homeId);
     _powerstrips = powerstripModels;
     notifyListeners();
   }
 
-  Future<List<PowerstripModel>> createPowerstripModelsFromApi(String email, String homeName) async {
+  Future<List<PowerstripModel>> createPowerstripModelsFromApi(int homeId) async {
     List<PowerstripModel> powerstripModels = [];
     var logger = Logger(
       printer: PrettyPrinter(),
     );
     try {
-      await _powerstripController.getPowerstrip(email, homeName).then((value) {
+      await _powerstripController.getPowerstrip(homeId).then((value) {
         for (var powerstrip in value!.data!) {
           powerstripModels.add(powerstrip);
           // powerstrip.logger();

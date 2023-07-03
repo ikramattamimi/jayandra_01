@@ -80,9 +80,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                 });
           },
           onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Tekan lama untuk menghapus timer")),
-            );
+            context.pushNamed("powerstrip_timer_add", extra: powerstripTimer);
           },
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -107,6 +105,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                           setState(() {
                             timerProvider.changeTimerStatus(timer!, value);
                             timer!.timerStatus = value;
+                            updateTimer(timer!.pwsKey, timer!.socketNr, timer!);
 
                             timer!.timerStatus ? setTimerOn() : cancel("changeSocketStatusTimer");
                           });
@@ -119,6 +118,10 @@ class _TimerWidgetState extends State<TimerWidget> {
                 // const Gap(4),
                 Text(
                   socketName,
+                  style: Styles.bodyTextGrey2,
+                ),
+                Text(
+                  timer!.timerName,
                   style: Styles.bodyTextGrey2,
                 ),
               ],
@@ -194,6 +197,38 @@ class _TimerWidgetState extends State<TimerWidget> {
   deleteTimer(TimerProvider timerProvider) async {
     await _timerController.deleteTimer(timer!.socketNr, "Pws-01");
     timerProvider.removeTimer(timer!);
+  }
+
+  updateTimer(String pwsKey, int socketNr, TimerModel timer) async {
+    await _timerController.updateTimer(pwsKey, socketNr, timer).then((value) {
+      TimerModel newTimer = timer;
+      // var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
+      // var socket = powerstrip!.sockets.firstWhere((element) => element.socketNr == int.parse(selectedValue));
+      // timerToChange.logger();
+      // AndroidAlarmManager.oneShotAt(
+      //   scheduledTime,
+      //   timer.socketNr ?? 12,
+      //   setTimerNotification,
+      //   params: {
+      //     'socketName': socket.name,
+      //     'socketId': socket.socketNr,
+      //     'pwsKey': socket.pwsKey,
+      //     'status': socket.status,
+      //     // 'timerId': newTimer.timerId,
+      //   },
+      // );
+
+      // timerProvider.addTimer(newTimer); // updatetimer
+      // timer.logger();
+      // newTimer.logger();
+      // Logger().i(timerProvider.timers);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Timer berhasil diupdate'),
+        ),
+      );
+    });
   }
 
   setTimerOn() {

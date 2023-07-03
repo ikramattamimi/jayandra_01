@@ -89,7 +89,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                     value: _schedule.scheduleStatus,
                     onChanged: (value) {
                       setState(() {
-                        _schedule.socketStatus = value;
+                        _schedule.scheduleStatus = value;
                         scheduleProvider.changeScheduleStatus(_schedule, value);
                         _schedule.scheduleStatus ? setScheduleOn() : cancel("changeSocketStatusSchedule");
                       });
@@ -241,7 +241,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
         'socketName': socketName,
         'socketId': _schedule.socketNr,
         'pwsKey': _schedule.pwsKey,
-        'status': _schedule.socketStatus,
+        'status': _schedule.scheduleStatus,
       },
     );
   }

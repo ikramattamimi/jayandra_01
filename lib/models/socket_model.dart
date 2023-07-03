@@ -5,7 +5,7 @@ class SocketModel {
   bool status;
 
   SocketModel({
-    this.pwsKey = "Pws-01",
+    this.pwsKey = "",
     this.socketNr = 0,
     this.name = "",
     this.status = false,
@@ -13,6 +13,7 @@ class SocketModel {
 
   factory SocketModel.fromJson(Map<String, dynamic> json) {
     return SocketModel(
+      pwsKey: json['pws_serial_key'],
       socketNr: json['socket_number'],
       name: json['socket_name'],
       status: json['socket_status'],

@@ -28,8 +28,8 @@ class ScheduleModel extends ChangeNotifier {
     return ScheduleModel(
       socketNr: json['socket_number'],
       time: time,
-      socketStatus: json['schedule_status'],
-      scheduleStatus: json['schedule_socket_status'],
+      socketStatus: json['schedule_socket_status'],
+      scheduleStatus: json['schedule_status'],
       days: days,
       scheduleName: json['schedule_name'] ?? "",
     );

@@ -29,7 +29,7 @@ class _TimerViewState extends State<TimerView> {
   Widget build(BuildContext context) {
     final timerProvider = Provider.of<TimerProvider>(context);
     final timersfromprovider = timerProvider.timers.where((element) => element.pwsKey == powerstrip.pwsKey);
-    // Logger().i(timersfromprovider);
+    // Logger().i(powerstrip.pwsKey);
 
     return Scaffold(
       appBar: AppBar(
@@ -50,14 +50,14 @@ class _TimerViewState extends State<TimerView> {
             size: 30,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.pushNamed("powerstrip_timer_add", extra: powerstrip);
-            },
-            icon: const Icon(Icons.add_rounded),
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () {
+        //       context.pushNamed("powerstrip_timer_add", extra: powerstrip);
+        //     },
+        //     icon: const Icon(Icons.add_rounded),
+        //   )
+        // ],
       ),
       backgroundColor: Styles.primaryColor,
       // body: ListView(

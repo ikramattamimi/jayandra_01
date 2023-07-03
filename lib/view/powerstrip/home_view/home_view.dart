@@ -38,7 +38,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
     // Provider var
     var powerstrips = powerstripProvider.powerstrips;
-    var myHome = homeProvider.findHome(widget.homeModel.email, widget.homeModel.homeName);
+    var myHome = homeProvider.findHome(widget.homeModel.homeId);
 
     _tabController = TabController(length: powerstrips.length, vsync: this);
 
@@ -100,6 +100,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
           PowerstripView(
             pwsKey: powerstrip.pwsKey,
             homeName: widget.homeModel.homeName,
+            homeId: widget.homeModel.homeId,
           ),
         );
       }

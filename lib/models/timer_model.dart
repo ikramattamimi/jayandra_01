@@ -5,9 +5,9 @@ import 'package:logger/logger.dart';
 class TimerModel extends ChangeNotifier {
   final int socketNr;
   final String pwsKey;
-  final TimeOfDay? time;
+  TimeOfDay? time;
   bool timerStatus;
-  final String timerName;
+  String timerName;
 
   TimerModel({
     this.socketNr = 0,
@@ -23,7 +23,13 @@ class TimerModel extends ChangeNotifier {
     final minute = int.parse(parts[1]);
     final time = TimeOfDay(hour: hour, minute: minute);
 
-    return TimerModel(pwsKey: json['pws_serial_key'], socketNr: json['socket_number'], time: time, timerStatus: json['status'], timerName: json['timer_name'] ?? "");
+    return TimerModel(
+      pwsKey: json['pws_serial_key'],
+      socketNr: json['socket_number'],
+      time: time,
+      timerStatus: json['status'],
+      timerName: json['name'] ?? "",
+    );
   }
 
   void changeTimerStatus(bool isTimerOn) {

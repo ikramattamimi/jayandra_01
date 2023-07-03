@@ -30,7 +30,7 @@ void initModels({
     if (powerstripProvider.powerstrips.isEmpty) {
       var homes = homeProvider.homes;
       for (var home in homes) {
-        powerstripProvider.initializeData(userProvider.email, home.homeName).then((value) {
+        powerstripProvider.initializeData(home.homeId).then((value) {
           // For get timer
           for (var powerstrip in powerstripProvider.powerstrips) {
             timerProvider.setPowerstrip = powerstrip;

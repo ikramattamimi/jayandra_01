@@ -36,6 +36,7 @@ void callbackDispatcher() async {
             socketNr: inputData?['socketId'],
             status: inputData?['status'],
           );
+          logger.i(inputData?['status']);
           await socketController.setSocketStatus(socket);
           // await timerRepo.deleteTimer(
           //   inputData?['timerId'],

@@ -19,11 +19,13 @@ class PowerstripView extends StatefulWidget {
     super.key,
     required this.pwsKey,
     required this.homeName,
+    required this.homeId,
     // required this.powerstrip,
   });
   // final PowerstripModel powerstrip;
   final String pwsKey;
   final String homeName;
+  final int homeId;
 
   @override
   State<PowerstripView> createState() => _PowerstripViewState();
@@ -63,10 +65,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                 ),
                 IconButton(
                   onPressed: () {
-                    powerstripProvider.initializeData(
-                      userProvider.email,
-                      widget.homeName,
-                    );
+                    powerstripProvider.initializeData(widget.homeId);
                   },
                   icon: Icon(
                     Icons.replay_circle_filled_rounded,
@@ -211,7 +210,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                       ),
                     ),
                     Text(
-                      "Jadwal",
+                      "Schedule",
                       style: Styles.bodyTextBlack3,
                     ),
                   ],

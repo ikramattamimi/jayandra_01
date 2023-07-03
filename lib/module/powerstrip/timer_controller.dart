@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/timer/timer_repository.dart';
+import 'package:logger/logger.dart';
 
 class TimerController {
   final _timerRepository = TimerRepository();
@@ -12,6 +13,7 @@ class TimerController {
 
     // Get API data timer
     await _timerRepository.getTimer(pwsKey).then((value) {
+      Logger().i(value.statusCode);
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);
@@ -31,6 +33,26 @@ class TimerController {
     MyResponse timerObjectResponse = MyResponse();
     // Get API data powerstrip
     await _timerRepository.addTimer(timer).then((value) {
+      if (value.statusCode == 200) {
+        // Parse String json ke Map
+        Map<String, dynamic> timerMapData = jsonDecode(value.body);
+
+        // Response dengan response.data berupa List dari objek Powerstrip
+        timerObjectResponse = MyResponse.fromJson(timerMapData, TimerModel.fromJson);
+        timerObjectResponse.message = "Data powerstrip berhasil dimuat";
+        return timerObjectResponse;
+      } else {
+        return MyResponse(code: 1, message: "Terjadi Masalah");
+      }
+    });
+    return timerObjectResponse;
+  }
+
+  Future<MyResponse?> updateTimer(String pwsKey, int socketNr, TimerModel timer) async {
+    MyResponse timerObjectResponse = MyResponse();
+    // Get API data powerstrip
+    await _timerRepository.updateTimer(pwsKey, socketNr, timer).then((value) {
+      print(value.statusCode);
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);

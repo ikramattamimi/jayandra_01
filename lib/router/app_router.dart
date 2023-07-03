@@ -143,9 +143,9 @@ class AppRouter {
             path: "budgeting",
             name: "budgeting_page",
             builder: (BuildContext context, GoRouterState state) => BudgetingView(
-              // notifyParent: state.extra as Function,
-              // budgetingText: state.queryParams['budgetText'] as String,
-            ),
+                // notifyParent: state.extra as Function,
+                // budgetingText: state.queryParams['budgetText'] as String,
+                ),
           ),
           GoRoute(
             path: "schedule",
@@ -171,7 +171,9 @@ class AppRouter {
           GoRoute(
             path: "add_timer",
             name: "powerstrip_timer_add",
-            builder: (BuildContext context, GoRouterState state) => AddTimerPage(powerstrip: state.extra as PowerstripModel),
+            builder: (BuildContext context, GoRouterState state) => AddTimerPage(
+              powerstripTimer: state.extra as PowerstripTimer,
+            ),
           ),
           GoRoute(
             path: "edit_timer",

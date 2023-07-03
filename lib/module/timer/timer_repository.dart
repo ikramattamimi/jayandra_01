@@ -47,4 +47,23 @@ class TimerRepository {
       ),
     );
   }
+
+  Future<http.Response> updateTimer(String pwsKey, int socketNr, TimerModel timer) async {
+    // int updateStatus = status == true ? 1 : 0;
+    String time = "${timer.time!.hour}:${timer.time!.minute}";
+
+    return http.put(
+      Uri.parse('${NetworkAPI.ip}/editTimer/$pwsKey/$socketNr'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(
+        {
+          'timer_time': time,
+          'timer_name': timer.timerName,
+          'timer_status': timer.timerStatus,
+        },
+      ),
+    );
+  }
 }

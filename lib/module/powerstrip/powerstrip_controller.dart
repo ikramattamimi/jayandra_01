@@ -18,11 +18,11 @@ class PowerstripController {
   var passwordController = TextEditingController();
   String electricityClassValue = "";
 
-  Future<MyArrayResponse?> getPowerstrip(String email, String homeName) async {
+  Future<MyArrayResponse?> getPowerstrip(int homeId) async {
     final prefs = await SharedPreferences.getInstance();
     MyArrayResponse powerstripObjectResponse;
     // Get API data powerstrip
-    http.Response response = await pwsRepo.getPowerstrip(email, homeName);
+    http.Response response = await pwsRepo.getPowerstrip(homeId);
     // Jika status 200
     try {
       if (response.statusCode == 200) {

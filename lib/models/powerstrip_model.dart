@@ -10,7 +10,7 @@ class PowerstripModel extends ChangeNotifier {
   int totalActiveSocket;
 
   PowerstripModel({
-    this.pwsKey = "Pws-01",
+    this.pwsKey = "",
     this.pwsName = "Powerstrip",
     required this.sockets,
     this.isPowerstripActive = false,
@@ -29,6 +29,7 @@ class PowerstripModel extends ChangeNotifier {
       }
     }
     return PowerstripModel(
+      pwsKey: json['pws_serial_key'],
       pwsName: json['pws_name'],
       sockets: sockets,
       isPowerstripActive: isPowerstripActive,
