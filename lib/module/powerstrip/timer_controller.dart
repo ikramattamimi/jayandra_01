@@ -59,7 +59,7 @@ class TimerController {
 
         // Response dengan response.data berupa List dari objek Powerstrip
         timerObjectResponse = MyResponse.fromJson(timerMapData, TimerModel.fromJson);
-        timerObjectResponse.message = "Data powerstrip berhasil dimuat";
+        timerObjectResponse.message = "Timer berhasil diupdate";
         return timerObjectResponse;
       } else {
         return MyResponse(code: 1, message: "Terjadi Masalah");

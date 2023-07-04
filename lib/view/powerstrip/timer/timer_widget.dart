@@ -9,6 +9,7 @@ import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/timeofday_converter.dart';
 import 'package:jayandra_01/utils/unique_int_generator.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:jayandra_01/background-task/bgtask.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -201,27 +202,7 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   updateTimer(String pwsKey, int socketNr, TimerModel timer) async {
     await _timerController.updateTimer(pwsKey, socketNr, timer).then((value) {
-      TimerModel newTimer = timer;
-      // var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
-      // var socket = powerstrip!.sockets.firstWhere((element) => element.socketNr == int.parse(selectedValue));
-      // timerToChange.logger();
-      // AndroidAlarmManager.oneShotAt(
-      //   scheduledTime,
-      //   timer.socketNr ?? 12,
-      //   setTimerNotification,
-      //   params: {
-      //     'socketName': socket.name,
-      //     'socketId': socket.socketNr,
-      //     'pwsKey': socket.pwsKey,
-      //     'status': socket.status,
-      //     // 'timerId': newTimer.timerId,
-      //   },
-      // );
-
-      // timerProvider.addTimer(newTimer); // updatetimer
-      // timer.logger();
-      // newTimer.logger();
-      // Logger().i(timerProvider.timers);
+      Logger().i(value!.message);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

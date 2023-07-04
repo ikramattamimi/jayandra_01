@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/socket_model.dart';
+import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 // import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_repository.dart';
 import 'package:jayandra_01/module/powerstrip/socket_controller.dart';
+import 'package:jayandra_01/module/powerstrip/timer_controller.dart';
 // import 'package:jayandra_01/module/timer/timer_repository.dart';
 import 'package:logger/logger.dart';
 // import 'package:provider/provider.dart';
@@ -19,6 +21,7 @@ void callbackDispatcher() async {
 
   var powerstripRepository = PowerstripRepository();
   var socketController = SocketController();
+  var timerController = TimerController();
   // var timerRepo = TimerRepository();
 
   Workmanager().executeTask((task, inputData) async {
@@ -37,7 +40,18 @@ void callbackDispatcher() async {
             status: inputData?['status'],
           );
           logger.i(inputData?['status']);
-          await socketController.setSocketStatus(socket);
+
+          await socketController.setSocketStatus(socket).then((value) {
+            Logger().i(value!.message);
+          });
+
+          var timer = TimerModel(
+            pwsKey: inputData?['pwsKey'],
+            socketNr: inputData?['socketId'],
+          );
+          await timerController.updateTimer(inputData?['pwsKey'], inputData?['socketId'], timer).then((value) {
+            Logger().i(value!.message);
+          });
           // await timerRepo.deleteTimer(
           //   inputData?['timerId'],
           // );

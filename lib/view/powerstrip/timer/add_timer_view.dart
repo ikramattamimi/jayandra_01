@@ -187,22 +187,23 @@ class _AddTimerPageState extends State<AddTimerPage> {
     timer.time = endTime;
     timer.timerName = _catatanController.text;
     await _timerController.updateTimer(pwsKey, socketNr, timer).then((value) {
-      TimerModel newTimer = timer;
-      // var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
-      // var socket = powerstrip!.sockets.firstWhere((element) => element.socketNr == int.parse(selectedValue));
-      // timerToChange.logger();
-      // AndroidAlarmManager.oneShotAt(
-      //   scheduledTime,
-      //   timer.socketNr ?? 12,
-      //   setTimerNotification,
-      //   params: {
-      //     'socketName': socket.name,
-      //     'socketId': socket.socketNr,
-      //     'pwsKey': socket.pwsKey,
-      //     'status': socket.status,
-      //     // 'timerId': newTimer.timerId,
-      //   },
-      // );
+      var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
+      var socket = powerstrip!.sockets.firstWhere((element) => element.socketNr == socketNr);
+
+      if (timer.timerStatus) {
+        AndroidAlarmManager.oneShotAt(
+          scheduledTime,
+          timer.socketNr,
+          setTimerNotification,
+          params: {
+            'socketName': socket.name,
+            'socketId': socket.socketNr,
+            'pwsKey': socket.pwsKey,
+            'status': socket.status,
+            // 'timerId': newTimer.timerId,
+          },
+        );
+      }
 
       // timerProvider.addTimer(newTimer); // updatetimer
       // timer.logger();

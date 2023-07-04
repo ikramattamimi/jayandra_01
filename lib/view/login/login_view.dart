@@ -213,14 +213,15 @@ class _LoginViewState extends State<LoginView> {
           _loginController.login(),
           Future.delayed(
             const Duration(seconds: 10),
-            () => throw TimeoutException('API call took too long'),
+            () {
+              // Menyembunyikan animasi loading
+              setState(() {
+                _loginController.isLoading = false;
+              });
+              throw TimeoutException('API call took too long');
+            },
           ),
         ]);
-
-        // Menyembunyikan animasi loading
-        // setState(() {
-        //   _loginController.isLoading = false;
-        // });
 
         // Menampilkan pesan status autentikasi
         ScaffoldMessenger.of(context).showSnackBar(

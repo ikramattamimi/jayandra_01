@@ -52,18 +52,24 @@ class TimerRepository {
     // int updateStatus = status == true ? 1 : 0;
     String time = "${timer.time!.hour}:${timer.time!.minute}";
 
+    var body;
+    if (timer.time != null && timer.timerName != "") {
+      body = {
+        'timer_time': time,
+        'timer_name': timer.timerName,
+        'timer_status': timer.timerStatus,
+      };
+    } else {
+      body = {
+        'timer_status': timer.timerStatus,
+      };
+    }
     return http.put(
       Uri.parse('${NetworkAPI.ip}/editTimer/$pwsKey/$socketNr'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
-      body: jsonEncode(
-        {
-          'timer_time': time,
-          'timer_name': timer.timerName,
-          'timer_status': timer.timerStatus,
-        },
-      ),
+      body: jsonEncode(body),
     );
   }
 }
