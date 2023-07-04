@@ -1,5 +1,6 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
@@ -42,7 +43,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
       appBar: AppBar(
         elevation: 0.5,
         title: Text(
-          "Ubah Timer",
+          "Atur Timer",
           style: Styles.pageTitle,
         ),
         backgroundColor: Styles.secondaryColor,
@@ -74,52 +75,6 @@ class _AddTimerPageState extends State<AddTimerPage> {
             padding: 16,
             child: Column(
               children: [
-                SizedBox(
-                  height: 48,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        timerStatus,
-                        style: Styles.bodyTextBlack2,
-                      ),
-                      SizedBox(
-                        width: 45,
-                        height: 30,
-                        child: Switch(
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          value: timer.timerStatus,
-                          onChanged: (value) {
-                            setState(() {
-                              timer.timerStatus = value;
-                              timerStatus = timer.timerStatus ? "Aktif" : "Nonaktif";
-                            });
-                          },
-                          activeColor: Styles.accentColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // const Gap(16),
-                // DropdownButtonFormField(
-                //   focusColor: Styles.accentColor,
-                //   decoration: const InputDecoration.collapsed(
-                //     hintText: '',
-                //   ),
-                //   alignment: Alignment.centerLeft,
-                //   padding: const EdgeInsets.symmetric(vertical: 16),
-                //   validator: (value) => value == null ? "Select a country" : "null",
-                //   // dropdownColor: Colors.blueAccent,
-                //   value: selectedValue,
-                //   onChanged: (String? newValue) {
-                //     setState(() {
-                //       selectedValue = newValue!;
-                //     });
-                //   },
-                //   items: dropdownItems,
-                // ),
                 ListTile(
                   title: Text(
                     selectedValue,
@@ -137,6 +92,7 @@ class _AddTimerPageState extends State<AddTimerPage> {
                     });
                   },
                 ),
+                const Gap(10),
                 SizedBox(
                   height: 48,
                   child: TextField(
@@ -205,78 +161,14 @@ class _AddTimerPageState extends State<AddTimerPage> {
         );
       }
 
-      // timerProvider.addTimer(newTimer); // updatetimer
-      // timer.logger();
-      // newTimer.logger();
-      // Logger().i(timerProvider.timers);
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Timer berhasil diupdate'),
         ),
       );
-    });
-  }
-
-  /// Simpan timer ke database
-  addTimer(TimerProvider timerProvider) async {
-    TimerModel timer = TimerModel(
-      pwsKey: powerstrip!.pwsKey,
-      socketNr: int.parse(selectedValue),
-      time: endTime,
-      timerStatus: isSwitched,
-    );
-
-    await _timerController.addTimer(timer).then((value) {
-      TimerModel newTimer = timer;
-      var scheduledTime = DateTime.now().add(Duration(hours: endTime.hour, minutes: endTime.minute));
-      var socket = powerstrip!.sockets.firstWhere((element) => element.socketNr == int.parse(selectedValue));
-      // timerToChange.logger();
-      AndroidAlarmManager.oneShotAt(
-        scheduledTime,
-        timer.socketNr ?? 12,
-        setTimerNotification,
-        params: {
-          'socketName': socket.name,
-          'socketId': socket.socketNr,
-          'pwsKey': socket.pwsKey,
-          'status': socket.status,
-          // 'timerId': newTimer.timerId,
-        },
-      );
-
-      timerProvider.addTimer(newTimer);
-      timer.logger();
-      newTimer.logger();
-      Logger().i(timerProvider.timers);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Timer berhasil ditambahkan'),
-        ),
-      );
 
       context.pop();
     });
-
-    // Workmanager().cancelByUniqueName(uniqueName)
-  }
-
-  /// Getter nama socket untuk dropdown
-  List<DropdownMenuItem<String>> get dropdownItems {
-    List<DropdownMenuItem<String>> menuItems = [];
-    for (var socket in powerstrip!.sockets) {
-      menuItems.add(
-        DropdownMenuItem(
-          value: socket.socketNr.toString(),
-          child: Text(
-            socket.name,
-            style: Styles.bodyTextBlack2,
-          ),
-        ),
-      );
-    }
-    return menuItems;
   }
 
   setTime(int hour, int minute) {

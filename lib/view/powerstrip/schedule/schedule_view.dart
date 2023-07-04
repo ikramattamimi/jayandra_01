@@ -41,14 +41,14 @@ class _ScheduleViewState extends State<ScheduleView> {
               size: 30,
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.pushNamed("powerstrip_schedule_add", extra: powerstrip);
-              },
-              icon: const Icon(Icons.add_rounded),
-            )
-          ],
+          // actions: [
+          //   IconButton(
+          //     onPressed: () {
+          //       context.pushNamed("powerstrip_schedule_add", extra: powerstrip);
+          //     },
+          //     icon: const Icon(Icons.add_rounded),
+          //   )
+          // ],
         ),
         backgroundColor: Styles.primaryColor,
         body: ListView.builder(

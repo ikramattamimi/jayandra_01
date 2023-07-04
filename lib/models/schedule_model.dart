@@ -4,14 +4,22 @@ import 'package:jayandra_01/models/days_indonesia.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 
 class ScheduleModel extends ChangeNotifier {
-  ScheduleModel({this.socketNr = 0, this.time, this.socketStatus = false, required this.scheduleStatus, this.scheduleName = "", required this.days, this.pwsKey = "Pws-01"});
+  ScheduleModel({
+    this.socketNr = 0,
+    this.time,
+    this.socketStatus = false,
+    required this.scheduleStatus,
+    this.scheduleName = "",
+    required this.days,
+    this.pwsKey = "",
+  });
 
   final int socketNr;
-  final TimeOfDay? time;
+  TimeOfDay? time;
   bool socketStatus;
   bool scheduleStatus;
-  final String scheduleName;
-  final List<DayModel> days;
+  String scheduleName;
+  List<String> days;
   String pwsKey;
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
@@ -19,10 +27,17 @@ class ScheduleModel extends ChangeNotifier {
     final hour = int.parse(parts[0]);
     final minute = int.parse(parts[1]);
     final time = TimeOfDay(hour: hour, minute: minute);
+    var selectedDay = <String>[];
+    var daysIndo = DaysIndonesia.getDay();
 
-    List<DayModel> days = DaysIndonesia.getDay();
     for (var element in json['Schedule_day ']) {
-      days.where((day) => day.name == element['id_day']).first.isSelected = true;
+      daysIndo.where((day) => day.name == element['id_day']).first.isSelected = true;
+    }
+
+    for (var day in daysIndo) {
+      if (day.isSelected) {
+        selectedDay.add(day.name);
+      }
     }
 
     return ScheduleModel(
@@ -30,7 +45,7 @@ class ScheduleModel extends ChangeNotifier {
       time: time,
       socketStatus: json['schedule_socket_status'],
       scheduleStatus: json['schedule_status'],
-      days: days,
+      days: selectedDay,
       scheduleName: json['schedule_name'] ?? "",
     );
   }

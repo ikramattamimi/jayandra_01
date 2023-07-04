@@ -106,8 +106,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                           setState(() {
                             timerProvider.changeTimerStatus(timer!, value);
                             timer!.timerStatus = value;
-                            updateTimer(timer!.pwsKey, timer!.socketNr, timer!);
-
+                            updateTimer(timer!.pwsKey, timer!.socketNr, value);
                             timer!.timerStatus ? setTimerOn() : cancel("changeSocketStatusTimer");
                           });
                         },
@@ -200,13 +199,13 @@ class _TimerWidgetState extends State<TimerWidget> {
     timerProvider.removeTimer(timer!);
   }
 
-  updateTimer(String pwsKey, int socketNr, TimerModel timer) async {
-    await _timerController.updateTimer(pwsKey, socketNr, timer).then((value) {
-      Logger().i(value!.message);
+  updateTimer(String pwsKey, int socketNr, bool status) async {
+    await _timerController.updateTimerStatus(pwsKey, socketNr, status).then((value) {
+      // Logger().i(value!.message);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Timer berhasil diupdate'),
+        SnackBar(
+          content: Text(value!.message),
         ),
       );
     });

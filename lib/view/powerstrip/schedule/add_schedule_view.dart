@@ -8,6 +8,7 @@ import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/schedule_controller.dart';
+import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/view/powerstrip/schedule/day_widget.dart';
 import 'package:jayandra_01/view/powerstrip/time_picker.dart';
 import 'package:jayandra_01/services/notification_service.dart';
@@ -18,9 +19,9 @@ import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 
 class AddScheduleView extends StatefulWidget {
-  const AddScheduleView({super.key, required this.powerstrip});
+  const AddScheduleView({super.key, required this.powerstripSchedule});
 
-  final PowerstripModel powerstrip;
+  final PowerstripSchedule powerstripSchedule;
 
   @override
   State<AddScheduleView> createState() => _AddScheduleViewState();
@@ -33,12 +34,13 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   @override
   Widget build(BuildContext context) {
     final scheduleProvider = Provider.of<ScheduleProvider>(context);
+    final screenSize = AppLayout.getSize(context);
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
         title: Text(
-          "Tambah Jadwal",
+          "Atur Jadwal",
           style: Styles.pageTitle,
         ),
         backgroundColor: Styles.secondaryColor,
@@ -56,7 +58,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
         actions: [
           IconButton(
             onPressed: () {
-              addSchedule(scheduleProvider);
+              updateSchedule();
             },
             icon: const Icon(Icons.check_rounded),
           ),
@@ -71,70 +73,15 @@ class _AddScheduleViewState extends State<AddScheduleView> {
             color: Styles.secondaryColor,
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Jadwal Untuk",
-                    style: Styles.bodyTextBlack2,
-                  ),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () => changeRadioStatusSelection(socketOn),
-                        child: Row(
-                          children: [
-                            Radio(
-                              value: socketOn,
-                              groupValue: isSocketOn,
-                              onChanged: (bool? value) {
-                                // setState(() {
-                                changeRadioStatusSelection(value);
-                                // });
-                              },
-                            ),
-                            Text(
-                              "Aktif",
-                              style: Styles.bodyTextBlack2,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Gap(10),
-                      InkWell(
-                        onTap: () => changeRadioStatusSelection(socketOff),
-                        child: Row(
-                          children: [
-                            Radio(
-                              value: socketOff,
-                              groupValue: isSocketOn,
-                              onChanged: (bool? value) {
-                                // setState(() {
-                                changeRadioStatusSelection(value);
-                                // });
-                              },
-                            ),
-                            Text(
-                              "Nonaktif",
-                              style: Styles.bodyTextBlack2,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Card(
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
-            elevation: 0,
-            color: Styles.secondaryColor,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
+                  ListTile(
+                    title: Text(
+                      selectedSocket,
+                      style: Styles.bodyTextBlack2,
+                    ),
+                    contentPadding: EdgeInsets.zero,
+                  ),
                   MyTimePicker(
                     title: "Waktu",
                     ifPickedTime: true,
@@ -163,7 +110,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                       ],
                     ),
                   ),
-                  const Gap(10),
+                  const Gap(25),
                   SizedBox(
                     height: 48,
                     child: TextField(
@@ -176,23 +123,6 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                     ),
                   ),
                   const Gap(10),
-                  DropdownButtonFormField(
-                    focusColor: Colors.white,
-                    decoration: const InputDecoration.collapsed(
-                      hintText: '',
-                    ),
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    validator: (value) => value == null ? "Select a country" : "null",
-                    // dropdownColor: Colors.blueAccent,
-                    value: selectedSocket,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedSocket = newValue!;
-                      });
-                    },
-                    items: dropdownItems,
-                  ),
                 ],
               ),
             ),
@@ -206,10 +136,10 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   /// Variable Init
   /// ==========================================================================
   TimeOfDay startTime = TimeOfDay.now();
-  int dayOfWeek = DateTime.now().weekday;
-  bool isSocketOn = true;
+  late bool isSocketOn;
   bool socketOn = true;
   bool socketOff = false;
+
   List<String> repeatDay = [];
   List<DayModel> daysIndo = DaysIndonesia.getDay();
   int jumlahrepeatDay = 0;
@@ -218,6 +148,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   final _catatanController = TextEditingController();
   String selectedSocket = "";
   late PowerstripModel powerstrip;
+  late ScheduleModel schedule;
   final _scheduleController = ScheduleController();
 
   /// ==========================================================================
@@ -228,16 +159,23 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   @override
   void initState() {
     super.initState();
-    powerstrip = widget.powerstrip;
-    selectedSocket = widget.powerstrip.sockets[0].socketNr.toString();
-    daysIndo[dayOfWeek - 1].isSelected = true;
-    getRepeatDay();
+    powerstrip = widget.powerstripSchedule.powerstrip;
+    schedule = widget.powerstripSchedule.schedule;
+    startTime = schedule.time!;
+    selectedSocket = powerstrip.sockets.firstWhere((element) => element.socketNr == schedule.socketNr).name;
+    for (var dayName in schedule.days) {
+      var schDay = daysIndo.firstWhere((element) => element.name == dayName);
+      schDay.isSelected = true;
+      addScheduleDay(schDay);
+    }
+    _catatanController.text = schedule.scheduleName;
+    isSocketOn = schedule.socketStatus;
   }
 
   /// Change Radio
   void changeRadioStatusSelection(value) {
     setState(() {
-      isSocketOn = value;
+      schedule.socketStatus = value;
     });
   }
 
@@ -250,21 +188,27 @@ class _AddScheduleViewState extends State<AddScheduleView> {
       } else {
         repeatAmount != 0 ? daysIndo[day.id].isSelected = false : daysIndo[day.id].isSelected = true;
       }
-      getRepeatDay();
+      getRepeatDayName();
     });
   }
 
   /// Get Schedule Repeat Day
-  void getRepeatDay() {
-    repeatDay = [];
+  void getRepeatDayName() {
+    setState(() {
+      repeatDay = [];
+    });
     var repeatAmount = daysIndo.where((element) => element.isSelected == true).length;
     if (repeatAmount == 7) {
-      repeatDay.add("Setiap hari");
+      setState(() {
+        repeatDay.add("Setiap hari");
+      });
       return;
     }
     for (var element in daysIndo) {
       if (element.isSelected) {
-        repeatDay.add(element.name);
+        setState(() {
+          repeatDay.add(element.name);
+        });
       }
     }
   }
@@ -295,35 +239,61 @@ class _AddScheduleViewState extends State<AddScheduleView> {
     return menuItems;
   }
 
-  /// Panggil API addSchedule
-  addSchedule(ScheduleProvider scheduleProvider) async {
-    ScheduleModel schedule = ScheduleModel(
-      socketNr: int.parse(selectedSocket),
+  /// Panggil API updateSchedule
+  updateSchedule() async {
+    ScheduleModel newValSchedule = ScheduleModel(
+      pwsKey: powerstrip.pwsKey,
+      socketNr: schedule.socketNr,
       time: startTime,
       socketStatus: isSocketOn,
       scheduleStatus: true,
-      days: daysIndo,
+      days: repeatDay.isNotEmpty && repeatDay[0] == "Setiap hari"
+          ? [
+              "Senin",
+              "Selasa",
+              "Rabu",
+              "Kamis",
+              "Jumat",
+              "Sabtu",
+              "Minggu",
+            ]
+          : repeatDay,
       scheduleName: _catatanController.text,
-      pwsKey: powerstrip.pwsKey,
     );
 
-    await _scheduleController.addSchedule(schedule).then((value) {
-      var scheduledTime = DateTime.now().add(Duration(hours: startTime.hour - DateTime.now().hour, minutes: startTime.minute - DateTime.now().minute));
-      Logger().i(scheduledTime);
-      var socket = powerstrip.sockets.firstWhere((element) => element.socketNr == int.parse(selectedSocket));
-      AndroidAlarmManager.oneShotAt(
-        scheduledTime,
-        UniqueIntGenerator().generateUniqueInt(),
-        getScheduleNotification,
-        params: {
-          'socketName': socket.name,
-          'socketId': socket.socketNr,
-          'pwsKey': socket.pwsKey,
-          'status': schedule.socketStatus,
-        },
-      );
+    schedule.days = newValSchedule.days;
+    schedule.time = newValSchedule.time;
+    schedule.scheduleName = newValSchedule.scheduleName;
+    schedule.scheduleStatus = true;
 
-      scheduleProvider.addSchedule(schedule);
+    await _scheduleController.updateSchedule(newValSchedule).then((value) {
+      // var scheduledTime = DateTime.now().add(Duration(hours: startTime.hour - DateTime.now().hour, minutes: startTime.minute - DateTime.now().minute));
+      var now = DateTime.now();
+      var scheduledTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        startTime.hour,
+        startTime.minute,
+      );
+      var socket = powerstrip.sockets.firstWhere((element) => element.socketNr == schedule.socketNr);
+      Logger().i(value!.code);
+
+      // Jika schedule aktif
+      if (newValSchedule.scheduleStatus) {
+        // Atur Schedule
+        AndroidAlarmManager.oneShotAt(
+          scheduledTime,
+          UniqueIntGenerator().generateUniqueInt(),
+          getScheduleNotification,
+          params: {
+            'socketName': socket.name,
+            'socketId': socket.socketNr,
+            'pwsKey': socket.pwsKey,
+            'status': newValSchedule.socketStatus,
+          },
+        );
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -333,7 +303,6 @@ class _AddScheduleViewState extends State<AddScheduleView> {
 
       context.pop();
     });
-    await _scheduleController.addSchedule(schedule);
   }
 }
 

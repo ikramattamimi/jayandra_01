@@ -63,9 +63,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
               });
         },
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Tekan lama untuk menghapus jadwal")),
-          );
+          context.pushNamed("powerstrip_schedule_add", extra: _powerstripSchedule);
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -90,6 +88,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                     onChanged: (value) {
                       setState(() {
                         _schedule.scheduleStatus = value;
+                        updateScheduleStatus();
                         scheduleProvider.changeScheduleStatus(_schedule, value);
                         _schedule.scheduleStatus ? setScheduleOn() : cancel("changeSocketStatusSchedule");
                       });
@@ -146,15 +145,13 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
 
   void getRepeatDay() {
     repeatDay = [];
-    var repeatAmount = _schedule.days.where((element) => element.isSelected == true).length;
+    var repeatAmount = _schedule.days.length;
     if (repeatAmount == 7) {
       repeatDay.add("Setiap hari");
       return;
     }
-    for (var element in _schedule.days) {
-      if (element.isSelected) {
-        repeatDay.add(element.name);
-      }
+    for (var dayName in _schedule.days) {
+      repeatDay.add(dayName);
     }
   }
 
@@ -244,6 +241,10 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
         'status': _schedule.scheduleStatus,
       },
     );
+  }
+
+  void updateScheduleStatus() async {
+    await _scheduleController.updateSchedule(_schedule);
   }
 }
 

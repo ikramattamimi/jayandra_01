@@ -16,29 +16,35 @@ class ScheduleRepository {
     );
   }
 
-  Future<http.Response> addSchedule(ScheduleModel schedule) async {
-    // int updateStatus = status == true ? 1 : 0;
+  Future<http.Response> updateSchedule(ScheduleModel schedule) async {
+    int status = schedule.socketStatus == true ? 1 : 0;
     String time = "${schedule.time!.hour}:${schedule.time!.minute}";
-    List<String> days = [];
-    for (var element in schedule.days) {
-      if (element.isSelected) {
-        days.add(element.name);
-      }
-    }
-    return http.post(
-      Uri.parse('${NetworkAPI.ip}/addschedule'),
+    return http.put(
+      Uri.parse('${NetworkAPI.ip}/editSchedule/${schedule.pwsKey}/${schedule.socketNr}/$status'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
       body: jsonEncode(
         {
-          "socket_number": schedule.socketNr,
-          "pws_serial_key": schedule.pwsKey,
-          "schedule_status": schedule.scheduleStatus,
-          "schedule_socket_status": schedule.socketStatus,
           "schedule_time": time,
           "schedule_name": schedule.scheduleName,
-          "day": days
+          "day": schedule.days,
+          "schedule_status": schedule.scheduleStatus,
+        },
+      ),
+    );
+  }
+
+  Future<http.Response> updateScheduleStatus(ScheduleModel schedule) async {
+    int status = schedule.socketStatus == true ? 1 : 0;
+    return http.put(
+      Uri.parse('${NetworkAPI.ip}/editSchedule/${schedule.pwsKey}/${schedule.socketNr}/$status'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+      body: jsonEncode(
+        {
+          "schedule_status": schedule.socketStatus,
         },
       ),
     );

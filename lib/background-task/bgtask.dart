@@ -27,52 +27,21 @@ void callbackDispatcher() async {
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
       case "changeSocketStatusTimer":
-        // final providerContainer = ProviderContainer();
-        // var powerstripProvider = Provider.of<PowerstripProvider>(
-        //   context,
-        //   listen: false,
-        // );
-
         try {
           var socket = SocketModel(
             pwsKey: inputData?['pwsKey'],
             socketNr: inputData?['socketId'],
             status: inputData?['status'],
           );
-          logger.i(inputData?['status']);
 
           await socketController.setSocketStatus(socket).then((value) {
             Logger().i(value!.message);
           });
-
-          var timer = TimerModel(
-            pwsKey: inputData?['pwsKey'],
-            socketNr: inputData?['socketId'],
-          );
-          await timerController.updateTimer(inputData?['pwsKey'], inputData?['socketId'], timer).then((value) {
-            Logger().i(value!.message);
-          });
-          // await timerRepo.deleteTimer(
-          //   inputData?['timerId'],
-          // );
-
-          // TODO: Ganti Provider dengan Riverpod
-          // powerstripProvider.setOneSocketStatus(
-          //   inputData?['socketId'],
-          //   inputData?['termminalId'],
-          //   inputData?['status'],
-          // );
         } catch (err) {
           logger.e(err);
         }
         break;
       case "changeSocketStatusSchedule":
-        // final providerContainer = ProviderContainer();
-        // var powerstripProvider = Provider.of<PowerstripProvider>(
-        //   context,
-        //   listen: false,
-        // );
-
         try {
           var socket = SocketModel(
             pwsKey: inputData?['pwsKey'],
@@ -80,16 +49,6 @@ void callbackDispatcher() async {
             status: inputData?['status'],
           );
           await socketController.setSocketStatus(socket);
-          // await timerRepo.deleteTimer(
-          //   inputData?['timerId'],
-          // );
-
-          // TODO: Ganti Provider dengan Riverpod
-          // powerstripProvider.setOneSocketStatus(
-          //   inputData?['socketId'],
-          //   inputData?['termminalId'],
-          //   inputData?['status'],
-          // );
         } catch (err) {
           logger.e(err);
         }

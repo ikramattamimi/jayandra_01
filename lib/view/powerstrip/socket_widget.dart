@@ -102,7 +102,7 @@ class _SocketState extends State<SocketWidget> {
                         child: Wrap(
                           children: [
                             Text(
-                              mySocket.name.isNotEmpty ? mySocket.name : "Socket ${widget.socketId}",
+                              mySocket.name,
                               style: Styles.title,
                             ),
                           ],

@@ -27,19 +27,40 @@ class ScheduleController {
     return scheduleObjectResponse;
   }
 
-  Future<MyResponse?> addSchedule(ScheduleModel schedule) async {
+  Future<MyResponse?> updateSchedule(ScheduleModel schedule) async {
     // final prefs = await SharedPreferences.getInstance();
     MyResponse scheduleObjectResponse = MyResponse();
 
     // Get API data powerstrip
-    await _scheduleRepository.addSchedule(schedule).then((value) {
+    await _scheduleRepository.updateSchedule(schedule).then((value) {
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
 
         // Response dengan response.data berupa List dari objek Powerstrip
         scheduleObjectResponse = MyResponse.fromJson(scheduleMapData, ScheduleModel.fromJson);
-        scheduleObjectResponse.message = "Data powerstrip berhasil dimuat";
+        scheduleObjectResponse.message = "Schedule Berhasil Diupdate";
+        return scheduleObjectResponse;
+      } else {
+        return MyResponse(code: 1, message: "Terjadi Masalah");
+      }
+    });
+    return scheduleObjectResponse;
+  }
+
+  Future<MyResponse?> updateScheduleStatus(ScheduleModel schedule) async {
+    // final prefs = await SharedPreferences.getInstance();
+    MyResponse scheduleObjectResponse = MyResponse();
+
+    // Get API data powerstrip
+    await _scheduleRepository.updateScheduleStatus(schedule).then((value) {
+      if (value.statusCode == 200) {
+        // Parse String json ke Map
+        Map<String, dynamic> scheduleMapData = jsonDecode(value.body);
+
+        // Response dengan response.data berupa List dari objek Powerstrip
+        scheduleObjectResponse = MyResponse.fromJson(scheduleMapData, ScheduleModel.fromJson);
+        scheduleObjectResponse.message = "Schedule Berhasil Diupdate";
         return scheduleObjectResponse;
       } else {
         return MyResponse(code: 1, message: "Terjadi Masalah");

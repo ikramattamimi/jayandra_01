@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/home_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
+import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/view/golongan_listrik/electricity_class_addhome_view.dart';
 import 'package:jayandra_01/view/pairing/pairing_view.dart';
@@ -158,7 +159,7 @@ class AppRouter {
             path: "add_schedule",
             name: "powerstrip_schedule_add",
             builder: (BuildContext context, GoRouterState state) => AddScheduleView(
-              powerstrip: state.extra as PowerstripModel,
+              powerstripSchedule: state.extra as PowerstripSchedule,
             ),
           ),
           GoRoute(

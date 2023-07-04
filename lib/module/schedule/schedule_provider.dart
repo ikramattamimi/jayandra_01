@@ -77,4 +77,6 @@ class ScheduleProvider with ChangeNotifier {
     schedule.changeScheduleStatus(isScheduleOn);
     notifyListeners();
   }
+
+  
 }

@@ -18,7 +18,7 @@ class TimerModel extends ChangeNotifier {
   });
 
   factory TimerModel.fromJson(Map<String, dynamic> json) {
-    final parts = json['time'].split(':');
+    final parts = json['timer_time'].split(':');
     final hour = int.parse(parts[0]);
     final minute = int.parse(parts[1]);
     final time = TimeOfDay(hour: hour, minute: minute);
@@ -27,8 +27,8 @@ class TimerModel extends ChangeNotifier {
       pwsKey: json['pws_serial_key'],
       socketNr: json['socket_number'],
       time: time,
-      timerStatus: json['status'],
-      timerName: json['name'] ?? "",
+      timerStatus: json['timer_status'],
+      timerName: json['timer_name'] ?? "",
     );
   }
 
