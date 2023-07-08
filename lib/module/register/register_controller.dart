@@ -24,7 +24,7 @@ class RegisterController {
     );
     http.Response result = await repository.register(user);
 
-    if (result.statusCode == 200) {
+    if (result.statusCode == 201) {
       Map<String, dynamic> myBody = jsonDecode(result.body);
       MyResponse<UserModel> myResponse = MyResponse.fromJson(myBody, UserModel.fromJson);
 

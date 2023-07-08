@@ -51,35 +51,35 @@ class _TimerWidgetState extends State<TimerWidget> {
         margin: const EdgeInsets.only(left: 16, right: 16, top: 16),
         color: Styles.secondaryColor,
         child: InkWell(
-          // onTap: () => context.pushNamed('powerstrip_timer_edit', extra: powerstripTimer),
-          onLongPress: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        onTap: () {
-                          Navigator.pop(context);
-                          _deleteTimerDialogBuilder(context, timerProvider);
-                        },
-                        title: Text(
-                          "Hapus Timer",
-                          style: TextStyle(
-                            color: Colors.red.shade400,
-                            fontSize: 14,
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.delete_outline_rounded,
-                          color: Colors.red.shade400,
-                        ),
-                      ),
-                    ],
-                  );
-                });
-          },
+          // delete timer
+          // onLongPress: () {
+          //   showModalBottomSheet(
+          //       context: context,
+          //       builder: (context) {
+          //         return Column(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: <Widget>[
+          //             ListTile(
+          //               onTap: () {
+          //                 Navigator.pop(context);
+          //                 _deleteTimerDialogBuilder(context, timerProvider);
+          //               },
+          //               title: Text(
+          //                 "Hapus Timer",
+          //                 style: TextStyle(
+          //                   color: Colors.red.shade400,
+          //                   fontSize: 14,
+          //                 ),
+          //               ),
+          //               trailing: Icon(
+          //                 Icons.delete_outline_rounded,
+          //                 color: Colors.red.shade400,
+          //               ),
+          //             ),
+          //           ],
+          //         );
+          //       });
+          // },
           onTap: () {
             context.pushNamed("powerstrip_timer_add", extra: powerstripTimer);
           },
@@ -106,7 +106,7 @@ class _TimerWidgetState extends State<TimerWidget> {
                           setState(() {
                             timerProvider.changeTimerStatus(timer!, value);
                             timer!.timerStatus = value;
-                            updateTimer(timer!.pwsKey, timer!.socketNr, value);
+                            updateTimer(timer!.pwsKey, timer!.socketNr, timer!);
                             timer!.timerStatus ? setTimerOn() : cancel("changeSocketStatusTimer");
                           });
                         },
@@ -199,8 +199,8 @@ class _TimerWidgetState extends State<TimerWidget> {
     timerProvider.removeTimer(timer!);
   }
 
-  updateTimer(String pwsKey, int socketNr, bool status) async {
-    await _timerController.updateTimerStatus(pwsKey, socketNr, status).then((value) {
+  updateTimer(String pwsKey, int socketNr, TimerModel timer) async {
+    await _timerController.updateTimer(pwsKey, socketNr, timer).then((value) {
       // Logger().i(value!.message);
 
       ScaffoldMessenger.of(context).showSnackBar(

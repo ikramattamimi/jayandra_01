@@ -40,7 +40,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
       appBar: AppBar(
         elevation: 0.5,
         title: Text(
-          "Atur Jadwal",
+          "Atur Schedule",
           style: Styles.pageTitle,
         ),
         backgroundColor: Styles.secondaryColor,

@@ -67,26 +67,6 @@ class TimerController {
     return timerObjectResponse;
   }
 
-  Future<MyResponse?> updateTimerStatus(String pwsKey, int socketNr, bool status) async {
-    MyResponse timerObjectResponse = MyResponse();
-    // Get API data powerstrip
-    await _timerRepository.updateTimerStatus(pwsKey, socketNr, status).then((value) {
-      print(value.statusCode);
-      if (value.statusCode == 200) {
-        // Parse String json ke Map
-        Map<String, dynamic> timerMapData = jsonDecode(value.body);
-
-        // Response dengan response.data berupa List dari objek Powerstrip
-        timerObjectResponse = MyResponse.fromJson(timerMapData, TimerModel.fromJson);
-        timerObjectResponse.message = "Timer berhasil diupdate";
-        return timerObjectResponse;
-      } else {
-        return MyResponse(code: 1, message: "Terjadi Masalah");
-      }
-    });
-    return timerObjectResponse;
-  }
-
   Future<MyResponse?> deleteTimer(int socketNr, String pwsKey) async {
     MyResponse timerObjectResponse = MyResponse();
     // Get API data powerstrip

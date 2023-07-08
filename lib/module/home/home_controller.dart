@@ -48,4 +48,21 @@ class HomeController {
     var myResponse = MyArrayResponse.fromJson(myBody, HomeModel.fromJson);
     return myResponse;
   }
+
+    Future<MyResponse> updateHome(HomeModel home) async {
+    try {
+      http.Response result = await homeRepo.updateHome(home);
+
+      Map<String, dynamic> myBody = jsonDecode(result.body);
+
+      MyResponse<HomeModel> myResponse = MyResponse.fromJson(myBody, HomeModel.fromJson);
+      if (result.statusCode == 200) {
+        myResponse.message = "Home Berhasil Ditambahkan";
+      }
+      return myResponse;
+    } catch (e) {
+      Logger().e(e);
+      return MyResponse();
+    }
+  }
 }

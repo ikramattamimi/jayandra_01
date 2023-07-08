@@ -3,11 +3,14 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/custom_widget/circle_icon_container.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
+import 'package:jayandra_01/models/home_model.dart';
+import 'package:jayandra_01/module/home/home_controller.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
 class BudgetingView extends StatefulWidget {
-  const BudgetingView({super.key, this.notifyParent, this.budgetingText});
+  const BudgetingView({super.key, this.notifyParent, this.budgetingText, this.home});
   final Function? notifyParent;
+  final HomeModel? home;
   final String? budgetingText;
 
   @override
@@ -39,6 +42,8 @@ class _BudgetingViewState extends State<BudgetingView> {
         actions: [
           IconButton(
             onPressed: () {
+              widget.home!.budget = double.parse(budgetController.text);
+              homeController.updateHome(widget.home!);
               context.pop();
               // widget.notifyParent(budgetController.text);
             },
@@ -101,10 +106,11 @@ class _BudgetingViewState extends State<BudgetingView> {
   }
 
   var budgetController = TextEditingController();
+  final homeController = HomeController();
 
   @override
   void initState() {
     super.initState();
-    // budgetController.text = widget.budgetingText;
+    budgetController.text = widget.budgetingText ?? "";
   }
 }

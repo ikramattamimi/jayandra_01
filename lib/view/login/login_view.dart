@@ -257,6 +257,10 @@ class _LoginViewState extends State<LoginView> {
           );
           goToDashboard();
         }
+        // Menyembunyikan animasi loading
+        setState(() {
+          _loginController.isLoading = false;
+        });
       } catch (err) {
         // Menyembunyikan animasi loading
         // setState(() {

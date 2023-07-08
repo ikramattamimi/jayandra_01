@@ -14,14 +14,12 @@ class PowerstripRepository {
   Future<http.Response> setSocketStatus(int socketNr, String pwsKey, bool socketStatus) async {
     // Logger(printer: PrettyPrinter()).i("API set socket status");
     return http.put(
-      Uri.parse('${NetworkAPI.ip}/updateSocketStatus/'),
+      Uri.parse('${NetworkAPI.ip}/updateSocketStatus/$pwsKey/$socketNr'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
       body: jsonEncode(
         {
-          'socket_number': socketNr,
-          'pws_serial_key': pwsKey,
           'socket_status': socketStatus,
         },
       ),

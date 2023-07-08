@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:jayandra_01/models/home_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/module/home/home_provider.dart';
@@ -62,6 +63,48 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
             size: 30,
           ),
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              // Handle dropdown item selection
+              print(value);
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<String>(
+                value: 'Kelas Listrik',
+                onTap: () {
+                  context.pushNamed(
+                    "electricity_class_page",
+                    extra: widget.homeModel.homeId,
+                  );
+                },
+                child: Text(
+                  'Kelas Listrik : ${widget.homeModel.className}',
+                  style: Styles.bodyTextBlack,
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'Budgeting',
+                onTap: () {
+                  context.pushNamed(
+                    "budgeting_page",
+                    extra: widget.homeModel,
+                    queryParams: {
+                      'budgetText': widget.homeModel.budget.toInt().toString(),
+                    },
+                  );
+                },
+                child: Text(
+                  NumberFormat.currency(
+                    symbol: "Budget : Rp ",
+                    decimalDigits: 2,
+                  ).format(widget.homeModel.budget),
+                  style: Styles.bodyTextBlack,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       backgroundColor: Styles.primaryColor,
       body: Container(

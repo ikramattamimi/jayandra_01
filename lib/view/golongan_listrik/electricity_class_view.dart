@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/home/home_controller.dart';
+import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/circle_icon_container.dart';
+import 'package:provider/provider.dart';
 
 class ElectricityClassView extends StatefulWidget {
-  const ElectricityClassView({super.key});
+  const ElectricityClassView({super.key, required this.homeId});
+
+  final int homeId;
 
   @override
   State<ElectricityClassView> createState() => _ElectricityClassViewState();
@@ -20,32 +26,30 @@ class _ElectricityClassViewState extends State<ElectricityClassView> {
       'biaya': 1352.00,
     },
     {
-      'nama': 'R1 / 1.300 VA',
+      'nama': 'R1 / 1300 VA',
       'biaya': 1444.70,
     },
     {
-      'nama': 'R1 / 2.200 VA',
+      'nama': 'R1 / 2200 VA',
       'biaya': 1444.70,
     },
     {
-      'nama': 'R2 / 3.500 VA',
+      'nama': 'R2 / 3500 VA',
       'biaya': 1699.53,
     },
     {
-      'nama': 'R2 / 5.500 VA',
+      'nama': 'R2 / 5500 VA',
       'biaya': 1699.53,
     },
     {
-      'nama': 'R3 / 6.600',
-      'biaya': 1699.53,
-    },
-    {
-      'nama': 'Lainnya (Di atas R3)',
+      'nama': 'R3 / 6600',
       'biaya': 1699.53,
     },
   ];
 
-  String? electricityClass;
+  String? selectedElClass;
+
+  final homeController = HomeController();
 
   @override
   void initState() {
@@ -55,12 +59,15 @@ class _ElectricityClassViewState extends State<ElectricityClassView> {
 
   void selectRadio(value) {
     setState(() {
-      electricityClass = value.toString();
+      selectedElClass = value.toString();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    var homeProvider = Provider.of<HomeProvider>(context);
+    var selectedHome = homeProvider.findHome(widget.homeId);
+    selectedElClass = selectedHome.className;
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,
@@ -123,10 +130,13 @@ class _ElectricityClassViewState extends State<ElectricityClassView> {
                           items['nama'].toString(),
                           style: Styles.bodyTextBlack2,
                         ),
+                        selected: selectedElClass == items['nama'].toString(),
                         value: items['nama'].toString(),
-                        groupValue: electricityClass,
+                        groupValue: selectedElClass,
                         onChanged: (value) {
                           selectRadio(value);
+                          selectedHome.className = selectedElClass ?? selectedHome.className;
+                          homeController.updateHome(selectedHome);
                         },
                       );
                     }).toList(),

@@ -114,7 +114,9 @@ class AppRouter {
           GoRoute(
             path: "electricity_class",
             name: "electricity_class_page",
-            builder: (BuildContext context, GoRouterState state) => const ElectricityClassView(),
+            builder: (BuildContext context, GoRouterState state) => ElectricityClassView(
+              homeId: state.extra as int,
+            ),
           ),
           GoRoute(
             path: "electricity_class_add_home",
@@ -144,9 +146,10 @@ class AppRouter {
             path: "budgeting",
             name: "budgeting_page",
             builder: (BuildContext context, GoRouterState state) => BudgetingView(
-                // notifyParent: state.extra as Function,
-                // budgetingText: state.queryParams['budgetText'] as String,
-                ),
+              // notifyParent: state.extra as Function,
+              budgetingText: state.queryParams['budgetText'] as String,
+              home: state.extra as HomeModel,
+            ),
           ),
           GoRoute(
             path: "schedule",

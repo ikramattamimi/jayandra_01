@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
+import 'package:jayandra_01/module/report/report_provider.dart';
+import 'package:jayandra_01/module/schedule/schedule_provider.dart';
+import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/custom_widget/list_tile_view.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
@@ -30,6 +34,11 @@ class _UserViewState extends State<UserView> {
     // final size = AppLayout.getSize(context);
     var userProvider = Provider.of<UserModel>(context);
     var userName = userProvider.name;
+
+    final powerstripProvider = Provider.of<PowerstripProvider>(context, listen: false);
+    final timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
+    final reportProvider = Provider.of<ReportProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Styles.primaryColor,

@@ -60,18 +60,7 @@ class TimerRepository {
       body: jsonEncode({
         'timer_time': time,
         'timer_name': timer.timerName,
-      }),
-    );
-  }
-
-  Future<http.Response> updateTimerStatus(String pwsKey, int socketNr, bool status) async {
-    return http.put(
-      Uri.parse('${NetworkAPI.ip}/editTimer/$pwsKey/$socketNr'),
-      headers: <String, String>{
-        'Content-Type': "application/json; charset=UTF-8",
-      },
-      body: jsonEncode({
-        'timer_status': status,
+        'timer_status' : timer.timerStatus
       }),
     );
   }
