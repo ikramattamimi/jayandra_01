@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/custom_widget/custom_text_form_field.dart';
-import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/module/register/cek_email_controller.dart';
 import 'package:jayandra_01/module/register/register_controller.dart';
 import 'package:jayandra_01/view/forgot_password/forgot_pw_otp_view.dart';
@@ -47,38 +46,6 @@ class _RegisterFormState extends State<RegisterForm> {
   // late String? _password;
   // bool _showPassword = false;
 
-  void _cekEmailOld() async {
-    if (_registerFormKey.currentState!.validate()) {
-      // Menampilkan animasi loading
-      setState(() {
-        cekEmailController.isLoading = true;
-      });
-
-      // Memproses API cek email
-      MyResponse response = await cekEmailController.cekEmail();
-
-      // Menyembunyikan animasi loading
-      setState(() {
-        cekEmailController.isLoading = false;
-      });
-
-      // Menampilkan pesan dari controller
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response.message)),
-      );
-
-      Future.delayed(const Duration(seconds: 2), () {
-        if (response.code == 1) {
-          // context.pushNamed("register_page_2");
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return ForgotPasswordOTPView(email: cekEmailController.emailController.text);
-          }));
-        } else {}
-      });
-    }
-  }
-
   void _cekEmail() async {
     if (_registerFormKey.currentState!.validate()) {
       // Menampilkan animasi loading
@@ -113,6 +80,7 @@ class _RegisterFormState extends State<RegisterForm> {
           });
         } else {
           // Menampilkan pesan dari controller
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(response.message)),
           );
@@ -145,6 +113,7 @@ class _RegisterFormState extends State<RegisterForm> {
       ]);
 
       if (response.code == 0) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(response.message)),
         );

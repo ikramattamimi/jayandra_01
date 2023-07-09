@@ -24,7 +24,6 @@ import 'package:jayandra_01/view/powerstrip/schedule/add_schedule_view.dart';
 import 'package:jayandra_01/view/powerstrip/timer/add_timer_view.dart';
 import 'package:jayandra_01/view/powerstrip/timer/edit_timer_view.dart';
 import 'package:jayandra_01/view/powerstrip/schedule/schedule_view.dart';
-import 'package:jayandra_01/view/powerstrip/powerstrip_view.dart';
 import 'package:jayandra_01/view/powerstrip/timer/timer_view.dart';
 import 'package:jayandra_01/screens/about_page.dart';
 import 'package:jayandra_01/screens/main_screen.dart';

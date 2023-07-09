@@ -5,7 +5,6 @@ import 'package:jayandra_01/models/my_response.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/timer/timer_repository.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class TimerProvider with ChangeNotifier {

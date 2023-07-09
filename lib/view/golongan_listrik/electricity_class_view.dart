@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:jayandra_01/models/user_model.dart';
 import 'package:jayandra_01/module/home/home_controller.dart';
 import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/utils/app_styles.dart';

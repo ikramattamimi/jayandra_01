@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:jayandra_01/view/report/budgeting/budgeting_widget.dart';
-import 'package:jayandra_01/view/report/home_report_widget.dart';
-import 'package:jayandra_01/view/report/socket_report_widget.dart';
-import 'package:jayandra_01/view/report/powerstrip_report_widget.dart';
+import 'package:jayandra_01/view/report/report_all_widget.dart';
+import 'package:jayandra_01/view/report/report_powerstrip_widget.dart';
+import 'package:jayandra_01/view/report/report_home_widget.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 
 class ReportView extends StatefulWidget {
@@ -49,18 +49,18 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                                   indicatorColor: Styles.accentColor,
                                   unselectedLabelColor: Styles.accentColor2,
                                   tabs: const [
+                                    Tab(text: 'Semua'),
                                     Tab(text: 'Rumah'),
                                     Tab(text: 'Powerstrip'),
-                                    Tab(text: 'Socket'),
                                   ],
                                 ),
                                 Expanded(
                                   child: TabBarView(
                                     controller: _tabController,
                                     children: const [
-                                      HomeReportWidget(),
-                                      PowerstripReportWidget(),
-                                      SocketReportWidget(),
+                                      ReportAllWidget(),
+                                      ReportHomeWidget(),
+                                      ReportPowerstripWidget(),
                                     ],
                                   ),
                                 ),

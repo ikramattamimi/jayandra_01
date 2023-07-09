@@ -26,20 +26,14 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   }
 
   @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // Provider
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
 
     // Provider var
-    var powerstrips = powerstripProvider.powerstrips;
     var myHome = homeProvider.findHome(widget.homeModel.homeId);
+    var powerstrips = powerstripProvider.powerstrips.where((element) => element.homeId == myHome.homeId).toList();
 
     _tabController = TabController(length: powerstrips.length, vsync: this);
 
@@ -66,8 +60,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
-              // Handle dropdown item selection
-              print(value);
             },
             itemBuilder: (BuildContext context) => [
               PopupMenuItem<String>(
@@ -107,30 +99,27 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         ],
       ),
       backgroundColor: Styles.primaryColor,
-      body: Container(
-        // padding: const EdgeInsets.only(left: 16),
-        child: Column(
-          children: [
-            TabBar(
+      body: Column(
+        children: [
+          TabBar(
+            controller: _tabController,
+            labelColor: Styles.accentColor,
+            dividerColor: Styles.accentColor,
+            indicatorColor: Styles.accentColor,
+            unselectedLabelColor: Styles.accentColor2,
+            tabs: getTabs(powerstrips),
+            // final myPowerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == 1);
+          ),
+          Expanded(
+            child: TabBarView(
               controller: _tabController,
-              labelColor: Styles.accentColor,
-              dividerColor: Styles.accentColor,
-              indicatorColor: Styles.accentColor,
-              unselectedLabelColor: Styles.accentColor2,
-              tabs: getTabs(powerstrips),
-              // final myPowerstrip = powerstripProvider.powerstrips.firstWhere((element) => element.id == 1);
+              children: getPowerstripWidget(powerstrips),
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: getPowerstripWidget(powerstrips),
-              ),
-            ),
-            // Row(
-            //   children: getPowerstripWidget(powerstrips),
-            // )
-          ],
-        ),
+          ),
+          // Row(
+          //   children: getPowerstripWidget(powerstrips),
+          // )
+        ],
       ),
     );
   }
@@ -157,5 +146,11 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       tabs.add(Tab(text: powerstrip.pwsName.isEmpty ? "Powerstrip" : powerstrip.pwsName));
     }
     return tabs;
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }

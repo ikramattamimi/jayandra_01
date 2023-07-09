@@ -28,9 +28,14 @@ class PowerstripProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void emptyPowerstripAtHome(int homeId) {
+    _powerstrips.removeWhere((element) => element.homeId == homeId);
+  }
+
   Future<void> initializeData(int homeId) async {
     List<PowerstripModel> powerstripModels = await createPowerstripModelsFromApi(homeId);
-    _powerstrips = powerstripModels;
+    emptyPowerstripAtHome(homeId);
+    _powerstrips.addAll(powerstripModels);
     notifyListeners();
   }
 
@@ -43,7 +48,6 @@ class PowerstripProvider with ChangeNotifier {
       await _powerstripController.getPowerstrip(homeId).then((value) {
         for (var powerstrip in value!.data!) {
           powerstripModels.add(powerstrip);
-          // powerstrip.logger();
         }
       });
     } catch (e) {

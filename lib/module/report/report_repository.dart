@@ -1,46 +1,44 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jayandra_01/utils/network_api.dart';
 
 class ReportRepository {
   Future<http.Response> getReportAll(String email) async {
     // Logger().i("budget: ${budget.length}");
-    return http.post(
-      Uri.parse('${NetworkAPI.ip}/reportAll'),
+    return http.get(
+      Uri.parse('${NetworkAPI.ip}/reportAll/$email'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
-      body: jsonEncode(<String?, dynamic>{
-        'email' : email
-      }),
     );
   }
-  Future<http.Response> getReportPws(String homeName, String pwsKey, String email) async {
+
+  Future<http.Response> getReportHome(String email, int homeId) async {
     // Logger().i("budget: ${budget.length}");
-    return http.post(
-      Uri.parse('${NetworkAPI.ip}/reportPerHome'),
+    return http.get(
+      Uri.parse('${NetworkAPI.ip}/reportPerHome/$email/$homeId'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
-      body: jsonEncode(<String?, dynamic>{
-        'home_name' : homeName,
-        'pws_serial_key' : pwsKey,
-        'email' : email
-      }),
     );
   }
-  Future<http.Response> getReportSocket(String homeName, String pwsKey, String email) async {
+
+  Future<http.Response> getReportPowerstrip(String pwsKey) async {
     // Logger().i("budget: ${budget.length}");
-    return http.post(
-      Uri.parse('${NetworkAPI.ip}/reportPerPowerstrip'),
+    return http.get(
+      Uri.parse('${NetworkAPI.ip}/reportPerPowerstrip/$pwsKey'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
-      body: jsonEncode(<String?, dynamic>{
-        'home_name' : homeName,
-        'pws_serial_key' : pwsKey,
-        'email' : email
-      }),
+    );
+  }
+
+  Future<http.Response> getReportDashboard(String email) async {
+    // Logger().i("budget: ${budget.length}");
+    return http.get(
+      Uri.parse('${NetworkAPI.ip}/dashboard/$email'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
     );
   }
 

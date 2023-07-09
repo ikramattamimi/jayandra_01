@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/socket_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
-import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/powerstrip/socket_controller.dart';
@@ -39,7 +38,6 @@ class _PowerstripViewState extends State<PowerstripView> {
   Widget build(BuildContext context) {
     final powerstripProvider = Provider.of<PowerstripProvider>(context);
     var myPowerstrip = powerstripProvider.findPowerstrip(widget.pwsKey);
-    final userProvider = Provider.of<UserModel>(context);
 
     return Scaffold(
       backgroundColor: Styles.primaryColor,
@@ -327,6 +325,7 @@ class _PowerstripViewState extends State<PowerstripView> {
                         userEmail,
                       );
 
+                      // ignore: use_build_context_synchronously
                       context.pop();
                     },
                     style: ElevatedButton.styleFrom(

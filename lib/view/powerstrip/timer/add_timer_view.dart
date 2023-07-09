@@ -5,14 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
 import 'package:jayandra_01/models/timer_model.dart';
 import 'package:jayandra_01/module/powerstrip/timer_controller.dart';
-import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/view/powerstrip/time_picker.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/unique_int_generator.dart';
 import 'package:jayandra_01/custom_widget/white_container.dart';
-import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 
 // import 'package:timezone/timezone.dart' as tz;
@@ -37,8 +34,6 @@ class _AddTimerPageState extends State<AddTimerPage> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
-    final timerProvider = Provider.of<TimerProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,

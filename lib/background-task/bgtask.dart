@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/socket_model.dart';
-import 'package:jayandra_01/models/timer_model.dart';
-import 'package:jayandra_01/module/powerstrip/powerstrip_controller.dart';
 // import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
-import 'package:jayandra_01/module/powerstrip/powerstrip_repository.dart';
 import 'package:jayandra_01/module/powerstrip/socket_controller.dart';
-import 'package:jayandra_01/module/powerstrip/timer_controller.dart';
 // import 'package:jayandra_01/module/timer/timer_repository.dart';
 import 'package:logger/logger.dart';
 // import 'package:provider/provider.dart';
@@ -19,10 +15,7 @@ void callbackDispatcher() async {
     printer: PrettyPrinter(),
   );
 
-  var powerstripRepository = PowerstripRepository();
   var socketController = SocketController();
-  var timerController = TimerController();
-  // var timerRepo = TimerRepository();
 
   Workmanager().executeTask((task, inputData) async {
     switch (task) {

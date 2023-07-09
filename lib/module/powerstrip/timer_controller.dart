@@ -51,7 +51,6 @@ class TimerController {
     MyResponse timerObjectResponse = MyResponse();
     // Get API data powerstrip
     await _timerRepository.updateTimer(pwsKey, socketNr, timer).then((value) {
-      print(value.statusCode);
       if (value.statusCode == 200) {
         // Parse String json ke Map
         Map<String, dynamic> timerMapData = jsonDecode(value.body);

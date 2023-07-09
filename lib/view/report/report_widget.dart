@@ -1,7 +1,5 @@
 import 'package:gap/gap.dart';
 import 'package:jayandra_01/models/user_model.dart';
-import 'package:jayandra_01/module/home/home_provider.dart';
-import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/report/report_provider.dart';
 import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -21,15 +19,10 @@ class _ReportWidgetState extends State<ReportWidget> {
   Widget build(BuildContext context) {
     final reportProvider = Provider.of<ReportProvider>(context);
     final userProvider = Provider.of<UserModel>(context);
-    final homeProvider = Provider.of<HomeProvider>(context);
-    final powerstripProvider = Provider.of<PowerstripProvider>(context);
 
-    final reportAll = reportProvider.reportAll;
-    var homes = homeProvider.homes;
-    var powerstrips = powerstripProvider.powerstrips;
-
+    final reportDashboard = reportProvider.reportDashboard;
     var total = 0.0;
-    for (var report in reportAll) {
+    for (var report in reportDashboard) {
       total += report.usage;
     }
     final size = AppLayout.getSize(context);
@@ -55,15 +48,7 @@ class _ReportWidgetState extends State<ReportWidget> {
                 ),
                 IconButton(
                   onPressed: () {
-                    for (var home in homes) {
-                      for (var pws in powerstrips) {
-                        reportProvider.initializeData(
-                          home.homeName,
-                          pws.pwsKey,
-                          userProvider.email,
-                        );
-                      }
-                    }
+                    reportProvider.createReportDashboardModelsFromApi(userProvider.email);
                   },
                   icon: const Icon(
                     Icons.replay_circle_filled_rounded,
@@ -71,36 +56,6 @@ class _ReportWidgetState extends State<ReportWidget> {
                     size: 26,
                   ),
                 ),
-                // SizedBox(
-                //   width: 115,
-                //   height: 24,
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       color: Styles.secondaryColor,
-                //       borderRadius: const BorderRadius.all(
-                //         Radius.circular(20),
-                //       ),
-                //     ),
-                //     padding: const EdgeInsets.symmetric(
-                //       vertical: 3,
-                //       horizontal: 8,
-                //     ),
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //       children: [
-                //         Text(
-                //           "Selengkapnya",
-                //           style: Styles.bodyTextBlack3,
-                //         ),
-                //         Icon(
-                //           Icons.keyboard_arrow_right_rounded,
-                //           size: 20,
-                //           color: Styles.textColor2,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // )
               ],
             ),
             Expanded(
@@ -120,7 +75,7 @@ class _ReportWidgetState extends State<ReportWidget> {
                   ),
                   const Gap(8),
                   Text(
-                    "Biaya digunakan oleh powerstrip",
+                    "Digunakan hari ini",
                     style: Styles.bodyTextWhite3,
                   ),
                   const Gap(16),

@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 class PowerstripModel extends ChangeNotifier {
   String pwsKey;
   String pwsName;
+  int homeId;
   final List<SocketModel> sockets;
   bool isPowerstripActive;
   int totalActiveSocket;
@@ -12,6 +13,7 @@ class PowerstripModel extends ChangeNotifier {
   PowerstripModel({
     this.pwsKey = "",
     this.pwsName = "Powerstrip",
+    this.homeId = 0,
     required this.sockets,
     this.isPowerstripActive = false,
     this.totalActiveSocket = 0,
@@ -31,6 +33,7 @@ class PowerstripModel extends ChangeNotifier {
     return PowerstripModel(
       pwsKey: json['pws_serial_key'],
       pwsName: json['pws_name'],
+      homeId: json['id_home'],
       sockets: sockets,
       isPowerstripActive: isPowerstripActive,
       totalActiveSocket: totalActiveSoccket,
@@ -41,6 +44,7 @@ class PowerstripModel extends ChangeNotifier {
   void logger() {
     Logger().i({
       'name': pwsName,
+      'home_id': homeId,
       'sockets': sockets,
       'isPowerstripActive': isPowerstripActive,
       'totalActiveSocket': totalActiveSocket,

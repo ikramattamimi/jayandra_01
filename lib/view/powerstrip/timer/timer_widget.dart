@@ -9,7 +9,6 @@ import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/timeofday_converter.dart';
 import 'package:jayandra_01/utils/unique_int_generator.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:jayandra_01/background-task/bgtask.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -132,6 +131,8 @@ class _TimerWidgetState extends State<TimerWidget> {
     );
   }
 
+  // buat pengembangan?
+  // ignore: unused_element
   Future<void> _deleteTimerDialogBuilder(BuildContext context, TimerProvider timerProvider) {
     return showDialog<String>(
       context: context,
@@ -215,7 +216,7 @@ class _TimerWidgetState extends State<TimerWidget> {
     var scheduledTime = DateTime.now().add(Duration(hours: timer!.time!.hour, minutes: timer!.time!.minute));
     AndroidAlarmManager.oneShotAt(
       scheduledTime,
-      timer!.socketNr ?? 12,
+      timer!.socketNr,
       setTimerNotification,
       params: {
         'socketName': socketName,

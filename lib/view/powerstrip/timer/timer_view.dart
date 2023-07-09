@@ -6,7 +6,6 @@ import 'package:jayandra_01/module/powerstrip/timer_controller.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
 import 'package:jayandra_01/view/powerstrip/timer/timer_widget.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class TimerView extends StatefulWidget {

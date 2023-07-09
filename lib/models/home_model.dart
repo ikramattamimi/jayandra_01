@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class HomeModel extends ChangeNotifier {
   int homeId;
@@ -21,5 +22,14 @@ class HomeModel extends ChangeNotifier {
       homeName: json['home_name'],
       budget: json['budget'] != 0 ? double.parse(json['budget'].toString()) : 0,
     );
+  }
+
+  logger() {
+    Logger().i({
+      'homeId': homeId,
+      'homeName': homeName,
+      'className': className,
+      'budget': budget,
+    });
   }
 }

@@ -14,7 +14,6 @@ import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
-import 'package:jayandra_01/models/init_models.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:workmanager/workmanager.dart';
 
@@ -74,20 +73,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // For get powerstrip
-    final userModel = Provider.of<UserModel>(context, listen: false);
-    final powerstripProvider = Provider.of<PowerstripProvider>(context, listen: false);
-    final timerProvider = Provider.of<TimerProvider>(context, listen: false);
-    final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
-    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    final reportProvider = Provider.of<ReportProvider>(context, listen: false);
-    initModels(
-      userProvider: userModel,
-      powerstripProvider: powerstripProvider,
-      timerProvider: timerProvider,
-      scheduleProvider: scheduleProvider,
-      homeProvider: homeProvider,
-      reportProvider: reportProvider,
-    );
+    // final userModel = Provider.of<UserModel>(context, listen: false);
+    // final powerstripProvider = Provider.of<PowerstripProvider>(context, listen: false);
+    // final timerProvider = Provider.of<TimerProvider>(context, listen: false);
+    // final scheduleProvider = Provider.of<ScheduleProvider>(context, listen: false);
+    // final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    // final reportProvider = Provider.of<ReportProvider>(context, listen: false);
+    // initModels(
+    //   userProvider: userModel,
+    //   powerstripProvider: powerstripProvider,
+    //   timerProvider: timerProvider,
+    //   scheduleProvider: scheduleProvider,
+    //   homeProvider: homeProvider,
+    //   reportProvider: reportProvider,
+    // );
 
     _router = _appRouter.getRouter();
     return MaterialApp.router(

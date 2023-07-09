@@ -268,7 +268,7 @@ class _LoginViewState extends State<LoginView> {
         // });
 
         // Menampilkan pesan dari controller
-        // ignore: use_build_context_synchronously
+        // ignore: 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(err.toString())),
         );

@@ -6,7 +6,6 @@ import 'package:jayandra_01/view/dashboard/dashboard_view.dart';
 import 'package:jayandra_01/view/user/user_view.dart';
 import 'package:jayandra_01/view/report/report_view.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatelessWidget {
   // final User user;

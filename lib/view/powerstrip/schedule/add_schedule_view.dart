@@ -6,16 +6,13 @@ import 'package:jayandra_01/models/day_model.dart';
 import 'package:jayandra_01/models/days_indonesia.dart';
 import 'package:jayandra_01/models/schedule_model.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
-import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/schedule_controller.dart';
-import 'package:jayandra_01/utils/app_layout.dart';
 import 'package:jayandra_01/view/powerstrip/schedule/day_widget.dart';
 import 'package:jayandra_01/view/powerstrip/time_picker.dart';
 import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
 import 'package:jayandra_01/utils/unique_int_generator.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 
 class AddScheduleView extends StatefulWidget {
@@ -33,9 +30,6 @@ class _AddScheduleViewState extends State<AddScheduleView> {
   /// ==========================================================================
   @override
   Widget build(BuildContext context) {
-    final scheduleProvider = Provider.of<ScheduleProvider>(context);
-    final screenSize = AppLayout.getSize(context);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,

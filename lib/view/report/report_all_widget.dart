@@ -2,24 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:jayandra_01/models/chart_item_model.dart';
 import 'package:jayandra_01/models/report_model.dart';
+import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/report/report_provider.dart';
 import 'package:jayandra_01/view/report/bar_chart_widget.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
-import 'package:jayandra_01/custom_widget/custom_dropdown.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-class HomeReportWidget extends StatefulWidget {
-  const HomeReportWidget({super.key});
+class ReportAllWidget extends StatefulWidget {
+  const ReportAllWidget({super.key});
 
   @override
-  State<HomeReportWidget> createState() => _HomeReportWidgetState();
+  State<ReportAllWidget> createState() => _ReportAllWidgetState();
 }
 
-class _HomeReportWidgetState extends State<HomeReportWidget> {
+class _ReportAllWidgetState extends State<ReportAllWidget> {
   @override
   Widget build(BuildContext context) {
     final reportProvider = Provider.of<ReportProvider>(context);
+    final pwsProvider = Provider.of<PowerstripProvider>(context);
+
     final reportAll = reportProvider.reportAll;
     var total = 0.0;
     for (var report in reportAll) {
@@ -49,20 +51,6 @@ class _HomeReportWidgetState extends State<HomeReportWidget> {
                   )
                 ],
               ),
-              const CustomDropDown(list: [
-                'Januari',
-                'Februari',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni',
-                'Juli',
-                'Agustus',
-                'September',
-                'Oktober',
-                'November',
-                'Desember',
-              ])
             ],
           ),
         ),
@@ -76,7 +64,7 @@ class _HomeReportWidgetState extends State<HomeReportWidget> {
             child: Padding(
               padding: const EdgeInsets.only(right: 16, top: 5),
               child: BarChartWidget(
-                barData: getBarData(reportAll),
+                barData: getBarData(reportAll, pwsProvider),
               ),
             ),
           ),
@@ -85,13 +73,15 @@ class _HomeReportWidgetState extends State<HomeReportWidget> {
     );
   }
 
-  List<ChartItemModel> getBarData(List<ReportModel> reportAll) {
+  List<ChartItemModel> getBarData(List<ReportModel> reportAll, PowerstripProvider pwsProvider) {
     List<ChartItemModel> barDataRumah = [];
-    for (var report in reportAll) {
+    for (var i = 0; i < reportAll.length; i++) {
+      var report = reportAll[i];
+      var pwsName = pwsProvider.powerstrips.firstWhere((element) => element.pwsKey == report.pwsKey).pwsName;
       barDataRumah.add(
         ChartItemModel(
-          id: 0,
-          name: "Rumah 1",
+          id: i,
+          name: pwsName,
           y: report.usage ~/ 1000,
           color: Styles.accentColor,
         ),
