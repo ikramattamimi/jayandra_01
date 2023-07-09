@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:jayandra_01/view/report/budgeting/budgeting_widget.dart';
 import 'package:jayandra_01/view/report/report_all_widget.dart';
 import 'package:jayandra_01/view/report/report_powerstrip_widget.dart';
 import 'package:jayandra_01/view/report/report_home_widget.dart';
@@ -69,7 +68,6 @@ class _ReportViewState extends State<ReportView> with SingleTickerProviderStateM
                           ),
                         ),
                         const Divider(height: 0),
-                        const BudgetingWidget(progress: 0.5),
                       ],
                     ),
                   ),

@@ -1,11 +1,14 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:gap/gap.dart';
 import 'package:jayandra_01/models/home_model.dart';
 import 'package:jayandra_01/models/user_model.dart';
+import 'package:jayandra_01/module/home/home_controller.dart';
 import 'package:jayandra_01/module/home/home_provider.dart';
 import 'package:jayandra_01/module/report/report_provider.dart';
 import 'package:jayandra_01/module/schedule/schedule_provider.dart';
 import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/timer/timer_provider.dart';
+import 'package:jayandra_01/services/notification_service.dart';
 import 'package:jayandra_01/view/powerstrip/home_view/home_widget.dart';
 import 'package:jayandra_01/view/report/report_widget.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
@@ -44,6 +47,9 @@ class _DashboardViewState extends State<DashboardView> {
       homeProvider: homeProvider,
       reportProvider: reportProvider,
     );
+    for (var home in homes) {
+      getLimit(home.homeId, home.homeName);
+    }
 
     return Scaffold(
       backgroundColor: Styles.primaryColor,
@@ -61,31 +67,6 @@ class _DashboardViewState extends State<DashboardView> {
                       'Halo ${userModel.name}!',
                       style: Styles.headingStyle1,
                     ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: [
-                    //     IconButton(
-                    //       padding: EdgeInsets.zero,
-                    //       onPressed: () async {
-                    //         await Workmanager().cancelAll();
-                    //       },
-                    //       icon: Icon(
-                    //         Icons.notifications_rounded,
-                    //         size: 30,
-                    //         color: Styles.textColor3,
-                    //       ),
-                    //     ),
-                    //     IconButton(
-                    //       padding: EdgeInsets.zero,
-                    //       onPressed: () => context.pushNamed('add_device'),
-                    //       icon: Icon(
-                    //         CarbonIcons.add_filled,
-                    //         size: 30,
-                    //         color: Styles.accentColor,
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
                   ],
                 ),
                 const Gap(16),
@@ -140,33 +121,36 @@ class _DashboardViewState extends State<DashboardView> {
         homeModel: home,
       ));
     }
-    // homeWidgets.add(
-    //   Padding(
-    //     padding: const EdgeInsets.only(
-    //       left: 16,
-    //       bottom: 16,
-    //     ),
-    //     child: InkWell(
-    //       onTap: () {
-    //         context.goNamed("add_home");
-    //       },
-    //       child: SizedBox(
-    //         width: screenSize.width / 2.5,
-    //         height: screenSize.height / 5.5,
-    //         child: Card(
-    //           elevation: 0,
-    //           child: Center(
-    //             child: Icon(
-    //               Icons.add_circle_rounded,
-    //               size: 60,
-    //               color: Styles.textColor2,
-    //             ),
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
     return homeWidgets;
   }
+
+  getLimit(int homeId, String homeName) async {
+    var now = DateTime.now();
+
+    HomeController homeController = HomeController();
+    var limit = await homeController.getLimit(homeId);
+
+    if (now.hour < 12) {
+      AndroidAlarmManager.oneShotAt(
+        DateTime(now.year, now.month, now.day, 12, 0),
+        120 + homeId,
+        setLimitNotification,
+        params: {
+          'homeId' : homeId,
+          'limit': limit.toInt(),
+          'homeName': homeName,
+          // 'timerId': newTimer.timerId,
+        },
+      );
+    }
+  }
+}
+
+setLimitNotification(int idTimer, Map<String, dynamic> home) async {
+
+  NotificationService().showNotification(
+    id: home['homeId'],
+    title: "Pengingat penggunaan listrik ${home['homeName']}",
+    body: "Penggunaan sudah mencapai ${home['limit']}% dari batas budgeting!",
+  );
 }

@@ -9,6 +9,7 @@ import 'package:jayandra_01/module/powerstrip/powerstirp_provider.dart';
 import 'package:jayandra_01/module/report/report_provider.dart';
 import 'package:jayandra_01/view/report/bar_chart_widget.dart';
 import 'package:jayandra_01/utils/app_styles.dart';
+import 'package:jayandra_01/view/report/budgeting/budgeting_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -52,6 +53,7 @@ class _ReportHomeWidgetState extends State<ReportHomeWidget> {
                   selectedHome = homes.firstWhere((element) => element.homeName == selectedOption);
                   getReportHome(powerstrips, reports);
                   calculateTotal();
+                  progress = selectedHome.budget != 0.0 ? total / selectedHome.budget * 100 : 0;
                 });
               },
               items: homeNames.map<DropdownMenuItem<String>>((String value) {
@@ -81,6 +83,11 @@ class _ReportHomeWidgetState extends State<ReportHomeWidget> {
             ),
           ),
         ),
+        BudgetingWidget(
+          progress: progress,
+          usage: total,
+          home: selectedHome,
+        ),
       ],
     );
   }
@@ -99,6 +106,7 @@ class _ReportHomeWidgetState extends State<ReportHomeWidget> {
   late List<PowerstripModel> powerstrips;
   late List<ReportModel> reports;
   late List<String> homeNames;
+  var progress = 0.0;
 
   @override
   void initState() {
@@ -112,6 +120,7 @@ class _ReportHomeWidgetState extends State<ReportHomeWidget> {
     homeNames = homes.map((e) => e.homeName).toList();
     selectedOption = homeNames.first;
     selectedHome = homes.firstWhere((element) => element.homeName == selectedOption);
+    progress = selectedHome.budget != 0.0 ? total / selectedHome.budget * 100 : 0;
     getReportHome(powerstrips, reports);
     calculateTotal();
   }

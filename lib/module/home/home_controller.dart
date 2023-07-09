@@ -49,7 +49,14 @@ class HomeController {
     return myResponse;
   }
 
-    Future<MyResponse> updateHome(HomeModel home) async {
+  Future<double> getLimit(int homeId) async {
+    http.Response result = await homeRepo.getLimit(homeId);
+    Map<String, dynamic> myBody = jsonDecode(result.body);
+    double limit = myBody['percentage'];
+    return limit;
+  }
+
+  Future<MyResponse> updateHome(HomeModel home) async {
     try {
       http.Response result = await homeRepo.updateHome(home);
 

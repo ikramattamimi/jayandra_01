@@ -130,8 +130,12 @@ class _ReportPowerstripWidgetState extends State<ReportPowerstripWidget> {
   }
 
   List<ChartItemModel> getBarData() {
+    var limit = reportPws.length;
     List<ChartItemModel> barDataPws = [];
-    for (var i = 0; i < reportPws.length; i++) {
+    if (reportPws.length > 4) {
+      limit = 4;
+    }
+    for (var i = 0; i < limit; i++) {
       var report = reportPws[i];
       var pwsName = selectedPws.sockets.firstWhere((element) => element.socketNr == report.socketNr).name;
       barDataPws.add(

@@ -78,13 +78,12 @@ class ReportProvider with ChangeNotifier {
   }
 
   createReportPowerstripModelsFromApi(String pwsKey) async {
-
     try {
       await _reportController.getRerportPowerstrip(pwsKey).then((repPws) {
         for (var report in repPws.data!) {
           _reportPowerstrip.add(report);
         }
-    Logger().i({"pws report": _reportPowerstrip.length});
+        // Logger().i({"pws report": _reportPowerstrip.length});
       });
     } catch (e) {
       // Tangani pengecualian "Connection refused"

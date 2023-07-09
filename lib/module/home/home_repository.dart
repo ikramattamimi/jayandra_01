@@ -38,4 +38,15 @@ class HomeRepository {
       }),
     );
   }
+
+  
+  Future<http.Response> getLimit(int homeId) async {
+    return http.get(
+      Uri.parse('${NetworkAPI.ip}/limit/$homeId'),
+      headers: <String, String>{
+        'Content-Type': "application/json; charset=UTF-8",
+      },
+    );
+  }
+
 }
