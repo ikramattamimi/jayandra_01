@@ -246,8 +246,7 @@ class _LoginViewState extends State<LoginView> {
             prefs.setString('user_name', user.name),
             prefs.setString('email', user.email),
           ]);
-
-          initModels(
+          initModelsAlter(
             userProvider: userProvider,
             powerstripProvider: powerstripProvider,
             timerProvider: timerProvider,
@@ -255,6 +254,7 @@ class _LoginViewState extends State<LoginView> {
             homeProvider: homeProvider,
             reportProvider: reportProvider,
           );
+
           goToDashboard();
         }
         // Menyembunyikan animasi loading
@@ -268,7 +268,7 @@ class _LoginViewState extends State<LoginView> {
         // });
 
         // Menampilkan pesan dari controller
-        // ignore: 
+        // ignore:
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(err.toString())),
         );

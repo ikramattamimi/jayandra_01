@@ -75,6 +75,16 @@ class _ReportAllWidgetState extends State<ReportAllWidget> {
 
   List<ChartItemModel> getBarData(List<ReportModel> reportAll, PowerstripProvider pwsProvider) {
     List<ChartItemModel> barDataRumah = [];
+    if (reportAll.isEmpty) {
+      barDataRumah.add(
+        ChartItemModel(
+          id: 0,
+          name: "",
+          y: 0,
+          color: Styles.accentColor,
+        ),
+      );
+    }
     for (var i = 0; i < reportAll.length; i++) {
       var report = reportAll[i];
       var pwsName = pwsProvider.powerstrips.firstWhere((element) => element.pwsKey == report.pwsKey).pwsName;

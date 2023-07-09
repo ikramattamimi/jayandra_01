@@ -89,7 +89,7 @@ class _ReportPowerstripWidgetState extends State<ReportPowerstripWidget> {
   String selectedOption = '';
   var reportPws = <ReportModel>[];
   var total = 0.0;
-  late PowerstripModel selectedPws;
+  late PowerstripModel? selectedPws;
   late ReportProvider reportProvider;
   late PowerstripProvider pwsProvider;
   late List<PowerstripModel> powerstrips;
@@ -105,8 +105,8 @@ class _ReportPowerstripWidgetState extends State<ReportPowerstripWidget> {
     reports = reportProvider.reportPowerstrip;
     pwsNames = powerstrips.map((e) => e.pwsName).toList();
 
-    selectedOption = pwsNames.first;
-    selectedPws = powerstrips.firstWhere((element) => element.pwsName == selectedOption);
+    selectedOption = pwsNames.isNotEmpty ? pwsNames.first : "";
+    selectedPws = powerstrips.isNotEmpty ? powerstrips.firstWhere((element) => element.pwsName == selectedOption) : null;
 
     getReportPws();
     calculateTotal();
@@ -115,7 +115,7 @@ class _ReportPowerstripWidgetState extends State<ReportPowerstripWidget> {
   getReportPws() {
     reportPws.clear();
     for (var pws in powerstrips) {
-      if (pws.pwsKey == selectedPws.pwsKey) {
+      if (pws.pwsKey == selectedPws!.pwsKey) {
         reportPws.addAll(reports.where((element) => element.pwsKey == pws.pwsKey));
       }
     }
@@ -135,9 +135,19 @@ class _ReportPowerstripWidgetState extends State<ReportPowerstripWidget> {
     if (reportPws.length > 4) {
       limit = 4;
     }
+    if (reportPws.isEmpty) {
+      barDataPws.add(
+        ChartItemModel(
+          id: 0,
+          name: "",
+          y: 0,
+          color: Styles.accentColor,
+        ),
+      );
+    }
     for (var i = 0; i < limit; i++) {
       var report = reportPws[i];
-      var pwsName = selectedPws.sockets.firstWhere((element) => element.socketNr == report.socketNr).name;
+      var pwsName = selectedPws!.sockets.firstWhere((element) => element.socketNr == report.socketNr).name;
       barDataPws.add(
         ChartItemModel(
           id: i,

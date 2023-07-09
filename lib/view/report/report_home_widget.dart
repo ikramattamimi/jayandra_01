@@ -118,8 +118,8 @@ class _ReportHomeWidgetState extends State<ReportHomeWidget> {
     powerstrips = pwsProvider.powerstrips;
     reports = reportProvider.reportHome;
     homeNames = homes.map((e) => e.homeName).toList();
-    selectedOption = homeNames.first;
-    selectedHome = homes.firstWhere((element) => element.homeName == selectedOption);
+    selectedOption = homeNames.isEmpty ? "" : homeNames.first;
+    selectedHome = homes.isNotEmpty ? homes.firstWhere((element) => element.homeName == selectedOption) : HomeModel();
     progress = selectedHome.budget != 0.0 ? total / selectedHome.budget * 100 : 0;
     getReportHome(powerstrips, reports);
     calculateTotal();
@@ -128,7 +128,7 @@ class _ReportHomeWidgetState extends State<ReportHomeWidget> {
   getReportHome(List<PowerstripModel> powerstrips, List<ReportModel> reports) {
     reportHome.clear();
     for (var pws in powerstrips) {
-      if (pws.homeId == selectedHome.homeId) {
+      if (pws.homeId == selectedHome.homeId && reportHome.isNotEmpty) {
         reportHome.add(reports.firstWhere((element) => element.pwsKey == pws.pwsKey));
       }
     }
@@ -144,6 +144,16 @@ class _ReportHomeWidgetState extends State<ReportHomeWidget> {
 
   List<ChartItemModel> getBarData(List<ReportModel> reports, PowerstripProvider pwsProvider) {
     List<ChartItemModel> barDataRumah = [];
+    if (reports.isEmpty) {
+      barDataRumah.add(
+        ChartItemModel(
+          id: 0,
+          name: "",
+          y: 0,
+          color: Styles.accentColor,
+        ),
+      );
+    }
     for (var i = 0; i < reports.length; i++) {
       var report = reports[i];
       var pwsName = pwsProvider.powerstrips.firstWhere((element) => element.pwsKey == report.pwsKey).pwsName;

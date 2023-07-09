@@ -36,13 +36,17 @@ class ScheduleProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initializeData() async {
-    final scheduleModels = await createScheduleModelsFromApi();
-    _schedules.addAll(scheduleModels);
+  clearSchedules() {
+    _schedules.clear();
     notifyListeners();
   }
 
-  Future<List<ScheduleModel>> createScheduleModelsFromApi() async {
+  Future<void> initializeData() async {
+    await createScheduleModelsFromApi();
+    notifyListeners();
+  }
+
+  createScheduleModelsFromApi() async {
     var scheduleObjectResponse = MyArrayResponse();
 
     // Logika pemanggilan API untuk mendapatkan data schedule
@@ -58,14 +62,12 @@ class ScheduleProvider with ChangeNotifier {
         // return scheduleObjectResponse.data;
       }
     });
-
-    List<ScheduleModel> scheduleModels = [];
     for (ScheduleModel scheduleData in scheduleObjectResponse.data!) {
-      scheduleData.pwsKey = _powerstrip.pwsKey;
-      scheduleModels.add(scheduleData);
+      if (scheduleData.pwsKey == _powerstrip.pwsKey) {
+        // scheduleData.logger();
+        _schedules.add(scheduleData);
+      }
     }
-
-    return scheduleModels;
   }
 
   static ScheduleProvider of(BuildContext context, {bool listen = true}) {
@@ -77,6 +79,4 @@ class ScheduleProvider with ChangeNotifier {
     schedule.changeScheduleStatus(isScheduleOn);
     notifyListeners();
   }
-
-  
 }

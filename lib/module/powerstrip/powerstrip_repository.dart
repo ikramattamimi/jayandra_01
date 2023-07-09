@@ -28,14 +28,12 @@ class PowerstripRepository {
 
   Future<http.Response> updateSocketName(SocketModel socket) async {
     return await http.put(
-      Uri.parse('${NetworkAPI.ip}/updateSocketName/'),
+      Uri.parse('${NetworkAPI.ip}/updateSocketName/${socket.pwsKey}/${socket.socketNr}'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
       body: jsonEncode(
         {
-          'socket_number': socket.socketNr,
-          'pws_serial_key': socket.pwsKey,
           'socket_name': socket.name,
         },
       ),
@@ -44,16 +42,13 @@ class PowerstripRepository {
 
   Future<http.Response> updatePowerstripName(PowerstripModel pwsModel, String homeName, String email) async {
     return http.put(
-      Uri.parse('${NetworkAPI.ip}/updatePowerstripName/'),
+      Uri.parse('${NetworkAPI.ip}/updatePowerstripName/${pwsModel.pwsKey}'),
       headers: <String, String>{
         'Content-Type': "application/json; charset=UTF-8",
       },
       body: jsonEncode(
         {
-          'pws_serial_key': pwsModel.pwsKey,
           'pws_name': pwsModel.pwsName,
-          'home_name': homeName,
-          'email': email,
         },
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jayandra_01/models/days_indonesia.dart';
 import 'package:jayandra_01/models/powerstrip_model.dart';
+import 'package:logger/logger.dart';
 
 class ScheduleModel extends ChangeNotifier {
   ScheduleModel({
@@ -38,11 +39,11 @@ class ScheduleModel extends ChangeNotifier {
         selectedDay.add(day.name);
       }
     }
-
     return ScheduleModel(
+      pwsKey: json['pws_serial_key'],
       socketNr: json['socket_number'],
-      time: time,
       socketStatus: json['schedule_socket_status'],
+      time: time,
       scheduleStatus: json['schedule_status'],
       days: selectedDay,
       scheduleName: json['schedule_name'] ?? "",
@@ -52,6 +53,18 @@ class ScheduleModel extends ChangeNotifier {
   void changeScheduleStatus(bool isScheduleOn) {
     scheduleStatus = isScheduleOn;
     notifyListeners();
+  }
+
+  logger() {
+    Logger().i({
+      "pwsKey": pwsKey,
+      "socketNr": socketNr,
+      "socketStatus": socketStatus,
+      "time": time,
+      "scheduleStatus": scheduleStatus,
+      "days": days,
+      "scheduleName": scheduleName,
+    });
   }
 }
 

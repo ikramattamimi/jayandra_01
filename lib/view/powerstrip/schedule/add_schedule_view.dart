@@ -317,10 +317,9 @@ getScheduleNotification(int idTimer, Map<String, dynamic> socket) async {
     backoffPolicyDelay: const Duration(seconds: 10),
   );
 
-  UniqueIntGenerator generator = UniqueIntGenerator();
   var status = socket['status'] ? "aktif" : "nonaktif";
   NotificationService().showNotification(
-    id: generator.generateUniqueInt(),
+    id: 20 + int.parse(socket['socketId'].toString()),
     title: "Jadwal untuk ${status}kan socket ${socket['socketName']}",
     body: "Schedule selesai untuk Socket ${socket['socketName']}. Socket sudah $status",
   );

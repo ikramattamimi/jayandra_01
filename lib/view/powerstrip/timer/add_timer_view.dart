@@ -191,9 +191,8 @@ setTimerNotification(int idTimer, Map<String, dynamic> socket) async {
     backoffPolicyDelay: const Duration(seconds: 10),
   );
 
-  var generator = UniqueIntGenerator();
   NotificationService().showNotification(
-    id: generator.generateUniqueInt(),
+    id: 10 + int.parse(socket['socketId'].toString()),
     title: "Timer selesai",
     body: "Timer selesai untuk Socket ${socket['socketName']}. Socket sudah dimatikan",
   );

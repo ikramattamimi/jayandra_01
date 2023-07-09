@@ -20,7 +20,9 @@ class _ScheduleViewState extends State<ScheduleView> {
   @override
   Widget build(BuildContext context) {
     final scheduleProvider = Provider.of<ScheduleProvider>(context);
-    final schedulesfromprovider = scheduleProvider.schedules.where((element) => element.pwsKey == powerstrip.pwsKey);
+    final schedulesfromprovider = scheduleProvider.schedules.where((element) => element.pwsKey == powerstrip.pwsKey).toList();
+    print(schedulesfromprovider.length);
+
     return Scaffold(
         appBar: AppBar(
           elevation: 0.5,
@@ -54,6 +56,7 @@ class _ScheduleViewState extends State<ScheduleView> {
           itemCount: schedulesfromprovider.length,
           itemBuilder: (context, index) {
             final scheduleModel = schedulesfromprovider.elementAt(index);
+            // scheduleModel.logger();
             return ScheduleWidget(powerstripSchedule: PowerstripSchedule(powerstrip: powerstrip, schedule: scheduleModel));
           },
         ));
